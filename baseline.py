@@ -5,6 +5,7 @@
 import os
 import glob
 import cdo as cdo_module
+from cmip_files import LAND_FRAC_FILE, get_filename
 
 cdo = cdo_module.Cdo(tempdir='.')
 
@@ -19,23 +20,9 @@ VARIABLES = {
         # ACCESS does not have nep
         'Emon': ['cSoil']}
 ENSEMBLES = [str(e) for e in range(1,11)]
-LAND_FRAC_FILE = '/g/data/fs38/publications/CMIP6/LUMIP/CSIRO/ACCESS-ESM1-5/esm-ssp585-ssp126Lu/'\
-        'r10i1p1f1/fx/sftlf/gn/latest/sftlf_fx_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_r10i1p1f1_gn.nc'
 KG_IN_PG = 1000000000000
 SEC_IN_YEAR = 60*60*24*365
 NEW_UNITS_FACTOR = SEC_IN_YEAR/KG_IN_PG
-
-
-def get_filename(mip, exp, ens, table, var):
-    """Insert MIP experiment, ensemble, table, and variable strings into a CMOR directory tree 
-    and filename string. Automatically detects the period for the file name.
-    """
-    # The ensemble field is specific to ACCESS. There may be other models that use a different
-    # ensemble type.
-    directory = f'/g/data/fs38/publications/CMIP6/{mip}/CSIRO/ACCESS-ESM1-5/{exp}/r{ens}i1p1f1/'\
-            f'{table}/{var}/gn/latest/'
-    files = os.listdir(directory)
-    return [directory+f for f in files]
 
 
 def reference_period(infile1, infile2, outfile, pyear=[2005, 2024]):
