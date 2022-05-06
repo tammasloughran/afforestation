@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # plot_afforestation.py generates plots for the afforestation simulation.
-import numpy as np
-import matplotlib.pyplot as plt
+import glob
+
 import cdo as cdo_module
+import matplotlib.pyplot as plt
+import numpy as np
 from baseline import global_sum_baselines
 from cmip_files import get_filename
 
@@ -26,6 +28,14 @@ KG_IN_PG = 1000000000000
 SEC_IN_YEAR = 60*60*24*365
 SEC_IN_DAY = 60*60*24
 NEW_UNITS_FACTOR = SEC_IN_YEAR/KG_IN_PG
+COLORS = {'gpp':'green',
+        'npp':'olive',
+        'ra':'orange',
+        'rh':'saddlebrown',
+        'nbp':'purple',
+        'cVeg':'darkgreen',
+        'cLitter':'chocolate',
+        'cSoil':'black'}
 
 for table in TABLES:
     for var in VARIABLES[table]:
@@ -57,18 +67,19 @@ for table in TABLES:
         years = [y for y in range(2015,2101)]
         plt.figure()
         for ens in ENSEMBLES:
-            plt.plot(years, data_anomaly[int(ens)-1], color='gray', linewidth=0.6)
-        plt.plot(years, data_ens_mean, color='black', label="Ensemble mean")
-        plt.plot(years, data_ens_mean+data_ens_std, color='green', label="+-1$\sigma$")
-        plt.plot(years, data_ens_mean-data_ens_std, color='green')
+            plt.plot(years, data_anomaly[int(ens)-1], color='lightgray', linewidth=0.6)
+        plt.plot(years, data_ens_mean, color=COLORS[var], label="Ensemble mean")
+        plt.plot(years, data_ens_mean+data_ens_std, color=COLORS[var], linewidth=0.8,
+                label="+-1$\sigma$")
+        plt.plot(years, data_ens_mean-data_ens_std, color=COLORS[var], linewidth=0.8)
         plt.hlines(0, years[0], years[-1], colors='black', linestyles='dotted')
         plt.xlabel('Year')
         plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
         plt.title(f"ACCESS-ESM1-5 {var.upper()}")
-        plt.savefig(f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png')
+        plt.savefig(f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
 
 # Clean up
-temp_files = glob.glob('./cdoPy*')
-os.remove(temp_files)
+#temp_files = glob.glob('./cdoPy*')
+#os.remove(temp_files)
 #plt.show()
 
