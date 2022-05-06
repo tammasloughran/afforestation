@@ -5,9 +5,9 @@ import glob
 import cdo as cdo_module
 import matplotlib.pyplot as plt
 import numpy as np
-from baseline import global_sum_baselines
-from cmip_files import get_filename
-from constants import TABLES, VARIABLES, ENSEMBLES, SEC_IN_YEAR, KG_IN_PG
+from analysis.baseline import global_sum_baselines
+from analysis.cmip_files import get_filename
+from analysis.constants import TABLES, VARIABLES, ENSEMBLES, SEC_IN_YEAR, KG_IN_PG
 
 cdo = cdo_module.Cdo(tempdir='.')
 #cdo.debug = True

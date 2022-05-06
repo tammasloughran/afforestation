@@ -6,8 +6,8 @@ import glob
 import os
 
 import cdo as cdo_module
-from cmip_files import LAND_FRAC_FILE, get_filename
-from constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
+from analysis.cmip_files import LAND_FRAC_FILE, get_filename
+from analysis.constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
 
 cdo = cdo_module.Cdo(tempdir='.')
 
