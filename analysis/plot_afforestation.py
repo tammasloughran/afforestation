@@ -24,6 +24,7 @@ COLORS = {'gpp':'green',
         'cVeg':'darkgreen',
         'cLitter':'chocolate',
         'cSoil':'black'}
+PLOTS_DIR = 'plots'
 
 for table in TABLES:
     for var in VARIABLES[table]:
@@ -64,7 +65,7 @@ for table in TABLES:
         plt.xlabel('Year')
         plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
         plt.title(f"ACCESS-ESM1-5 {var.upper()}")
-        plt.savefig(f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
+        plt.savefig(f'{PLOTS_DIR}/{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
 
 # Clean up
 #temp_files = glob.glob('./cdoPy*')

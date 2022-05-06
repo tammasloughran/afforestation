@@ -2,11 +2,12 @@
 # baseline.py calculate a baseline value for several variables over a base period.
 # For historical to scenario simulations, the base period should be a 20 year mean centred at the
 # start of the future simulation.
-import os
 import glob
+import os
+
 import cdo as cdo_module
 from cmip_files import LAND_FRAC_FILE, get_filename
-from constants import TABLES, VARIABLES, ENSEMBLES, SEC_IN_YEAR, KG_IN_PG
+from constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
 
 cdo = cdo_module.Cdo(tempdir='.')
 
@@ -22,6 +23,7 @@ def reference_period(infile1, infile2, outfile, pyear=[2005, 2024]):
 # Options.
 ## Recalculate the ensemble means from the CMORized CMIP6 data. If not, assume it's been done.
 recalculate_ens_mean = False
+DATA_DIR = 'data'
 
 # Local variables.
 global_sum_baselines = {}
@@ -38,7 +40,7 @@ for table in TABLES:
             # The analysis for all ensemble members should be with respect to the same baseline
             # value. So I calculate the ensemble mean here.
             cdo.ensmean(input=f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc',
-                    output=f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
+                    output=f'{DATA_DIR}/{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
             # Clean up unneeded ensemble files.
             efiles = glob.glob(f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc')
             for f in efiles:
@@ -53,7 +55,7 @@ for table in TABLES:
             time_units = SEC_IN_YEAR
         global_sum_baselines[var] = cdo.divc(str(KG_IN_PG),
                 input=f'-mulc,{time_units} -fldsum -mul -mul '\
-                        f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc '\
+                        f'{DATA_DIR}/{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc '\
                         f'-divc,100 {LAND_FRAC_FILE} -gridarea {LAND_FRAC_FILE}',
                 options='-L',
                 returnCdf=True).variables[var][:][0,0,0]
