@@ -1,1 +1,1 @@
-import plot_afforestation
+import analysis.plot_afforestation
