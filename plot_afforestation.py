@@ -7,27 +7,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from baseline import global_sum_baselines
 from cmip_files import get_filename
+from constants import TABLES, VARIABLES, ENSEMBLES, SEC_IN_YEAR, KG_IN_PG
 
 cdo = cdo_module.Cdo(tempdir='.')
 #cdo.debug = True
 
-# Constants.
-MIPS = ['CMIP', 'LUMIP']
-EXPERIMENTS = {
-        'CMIP': ['esm-hist'],
-        'LUMIP': ['esm-ssp585-ssp126Lu']}
-TABLES = ['Lmon', 'Emon']
-VARIABLES = {
-        'Lmon': ['gpp', 'npp', 'ra', 'rh', 'nbp', 'cVeg', 'cLitter'],
-        # ACCESS does not have nep
-        'Emon': ['cSoil']}
-ENSEMBLES = [str(e) for e in range(1,11)]
+# Local constants
 LAND_FRAC_FILE = '/g/data/fs38/publications/CMIP6/LUMIP/CSIRO/ACCESS-ESM1-5/esm-ssp585-ssp126Lu/'\
         'r10i1p1f1/fx/sftlf/gn/latest/sftlf_fx_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_r10i1p1f1_gn.nc'
-KG_IN_PG = 1000000000000
-SEC_IN_YEAR = 60*60*24*365
 SEC_IN_DAY = 60*60*24
-NEW_UNITS_FACTOR = SEC_IN_YEAR/KG_IN_PG
 COLORS = {'gpp':'green',
         'npp':'olive',
         'ra':'orange',
