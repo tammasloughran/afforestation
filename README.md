@@ -12,9 +12,8 @@
 ├── data                        Location of output data files.
 ├── plots                       Location of output plots.
 ├── README.md
-├── requirements.txt
-├── setup.py
-└── tags
+├── pyproject.toml
+└── setup.cfg
 ```
 
 ## Setup and run
