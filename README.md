@@ -21,7 +21,7 @@
 ```bash
 virtualenv affenv
 source ./affenv/bin/activate
-python setup.py install
+pip install .
 python -m analysis
 ```
 
