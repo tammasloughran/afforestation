@@ -6,16 +6,13 @@ import cdo as cdo_module
 import matplotlib.pyplot as plt
 import numpy as np
 from analysis.baseline import global_sum_baselines
-from analysis.cmip_files import get_filename
-from analysis.constants import TABLES, VARIABLES, ENSEMBLES, SEC_IN_YEAR, KG_IN_PG
+from analysis.cmip_files import get_filename, LAND_FRAC_FILE
+from analysis.constants import TABLES, VARIABLES, ENSEMBLES, SEC_IN_DAY, KG_IN_PG
 
 cdo = cdo_module.Cdo(tempdir='.')
 #cdo.debug = True
 
 # Local constants
-LAND_FRAC_FILE = '/g/data/fs38/publications/CMIP6/LUMIP/CSIRO/ACCESS-ESM1-5/esm-ssp585-ssp126Lu/'\
-        'r10i1p1f1/fx/sftlf/gn/latest/sftlf_fx_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_r10i1p1f1_gn.nc'
-SEC_IN_DAY = 60*60*24
 COLORS = {'gpp':'green',
         'npp':'olive',
         'ra':'orange',
