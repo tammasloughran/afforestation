@@ -2,6 +2,7 @@
 MIPS = ['CMIP', 'LUMIP']
 EXPERIMENTS = {
         'CMIP': ['esm-hist'],
+        'C4MIP': ['esm-ssp585'],
         'LUMIP': ['esm-ssp585-ssp126Lu']}
 TABLES = ['Lmon', 'Emon']
 VARIABLES = {

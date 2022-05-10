@@ -12,7 +12,7 @@ from analysis.constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABL
 cdo = cdo_module.Cdo(tempdir='.')
 
 
-def reference_period(infile1, infile2, outfile, pyear=[2005, 2024]):
+def reference_period(infile1: str, infile2: str, outfile: str, pyear: list=[2005, 2024]):
     """Extract a map of the mean over the reference period using CDO.
     The reference period spans 20 years centred on the start of the future simulation (2015), so
     [2005, 2024].

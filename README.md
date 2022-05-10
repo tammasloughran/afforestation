@@ -17,6 +17,8 @@
 ```
 
 ## Setup and run
+The following install the analysis scripts as a package in a virtual environment and runs the
+analysis.
 ```bash
 virtualenv affenv
 source ./affenv/bin/activate
@@ -24,5 +26,5 @@ pip install .
 python -m analysis
 ```
 
-## Generate ctags:
-    ctags --recursive --python-kinds=-i *.py
+## Generate ctags
+    ctags --recurse --python-kinds=-i analysis
