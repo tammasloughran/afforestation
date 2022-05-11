@@ -14,7 +14,6 @@ else:
     from analysis.constants import (ENSEMBLES, KG_IN_PG, SEC_IN_DAY, TABLES,
                                     VARIABLES)
 
-
 cdo = cdo_module.Cdo(tempdir='.')
 cdo.debug = False
 
@@ -95,7 +94,7 @@ def cdo_flux_load(cdo_file: str, var: str):
     @cdo_yearsum
     @cdo_kg2pg
     """
-    ncfile = cdo.copy(input=cdo_file, options='-L', returnCdf=True).variables[var][:].squeeze()
+    return cdo.copy(input=cdo_file, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
 @cdo_mul_land_area
