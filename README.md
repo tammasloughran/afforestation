@@ -5,15 +5,20 @@
 .
 ├── analysis
 │   ├── baseline.py             Calculate baseline values over a base period.
+│   ├── cdo_calc_load.py        CDO calculations and data loading.
 │   ├── cmip_files.py           Locations and function for CMIP files.
-│   ├── constants.py            Constants
-│   ├── __main__.py
+│   ├── constants.py            Constants definitions.
+│   ├── __main__.py             Main entry point program.
 │   └── plot_afforestation.py   Plotting script.
 ├── data                        Location of output data files.
+│   └── README.md
+├── LICENCE                     CSIRO Non-Commercial Source Code Licence Agreement v1.0
 ├── plots                       Location of output plots.
-├── README.md
+│   └── README.md
 ├── pyproject.toml
-└── setup.cfg
+├── README.md
+├── setup.cfg
+└── tags
 ```
 
 ## Setup and run
