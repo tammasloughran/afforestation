@@ -33,6 +33,7 @@ COLORS = {'gpp':'green',
         'cSoil':'black'}
 PLOTS_DIR = 'plots'
 
+
 def make_plots():
     for table in TABLES:
         for var in VARIABLES[table]:
@@ -74,7 +75,8 @@ if __name__ != 'analysis.plot_afforestation':
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
-    os.remove(temp_files)
+    for f in temp_files:
+        os.remove(f)
 
     #plt.show()
 

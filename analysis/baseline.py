@@ -18,6 +18,7 @@ else:
                                     VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
+cdo.debug = False
 
 
 def reference_period(infile1: str, infile2: str, outfile: str, pyear: list=[2005, 2024]):
@@ -49,7 +50,8 @@ for table in TABLES:
             # The analysis for all ensemble members should be with respect to the same baseline
             # value. So I calculate the ensemble mean here.
             cdo.ensmean(input=f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc',
-                    output=f'{DATA_DIR}/{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
+                    output=f'{DATA_DIR}/' \
+                            '{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
             # Clean up unneeded ensemble files.
             efiles = glob.glob(f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc')
             for f in efiles:
@@ -63,12 +65,13 @@ for table in TABLES:
         else:
             time_units = SEC_IN_YEAR
         global_sum_baselines[var] = cdo.divc(str(KG_IN_PG),
-                input=f'-mulc,{time_units} -fldsum -mul -mul '\
-                        f'{DATA_DIR}/{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc '\
+                input=f'-mulc,{time_units} -fldsum -mul -mul ' \
+                        f'{DATA_DIR}/' \
+                        f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc ' \
                         f'-divc,100 {LAND_FRAC_FILE} -gridarea {LAND_FRAC_FILE}',
                 options='-L',
                 returnCdf=True).variables[var][:][0,0,0]
 
-print("Global sum baseline vales:")
+print("Global sum baseline values:")
 print(global_sum_baselines)
 
