@@ -6,8 +6,16 @@ import glob
 import os
 
 import cdo as cdo_module
-from analysis.cmip_files import LAND_FRAC_FILE, get_filename
-from analysis.constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
+
+if __name__ != 'analysis.baseline':
+    # baseline.py is main program or imported as a module from another script.
+    from cmip_files import LAND_FRAC_FILE, get_filename
+    from constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
+else:
+    # baseline.py imported as a module of the analysis package.
+    from analysis.cmip_files import LAND_FRAC_FILE, get_filename
+    from analysis.constants import (ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES,
+                                    VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
 
@@ -29,6 +37,7 @@ DATA_DIR = 'data'
 global_sum_baselines = {}
 
 # Calculate the maps of base period means for each variable and ensemble member.
+print("\rCalculating baseline values.")
 for table in TABLES:
     for var in VARIABLES[table]:
         if recalculate_ens_mean:
