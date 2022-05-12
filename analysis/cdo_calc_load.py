@@ -39,12 +39,11 @@ def cdo_kg2pg(cdo_func):
 
 
 def cdo_mul_land_area(cdo_func):
-    """Wrapper to add multiplication of the landa area and land cover fractions to the CDO command.
+    """Wrapper to add multiplication of the land area and land cover fractions to the CDO command.
     """
     @functools.wraps(cdo_func)
     def wrapper_mul_land_area(cdo_string: str, var: str):
-        cdo_string = '-mul -mul ' \
-                + cdo_string + \
+        cdo_string = '-mul -mul ' + cdo_string + \
                 f' -divc,100 {LAND_FRAC_FILE} -gridarea {LAND_FRAC_FILE}'
         return cdo_func(cdo_string, var)
     return wrapper_mul_land_area

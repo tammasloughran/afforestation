@@ -68,7 +68,9 @@ def make_plots():
             plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
             plt.title(f"ACCESS-ESM1-5 {var.upper()}")
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    '{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
+                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
+
+            # Plot the graphs for anomalies relative to the esm-ssp585
 
 if __name__ != 'analysis.plot_afforestation':
     make_plots()
