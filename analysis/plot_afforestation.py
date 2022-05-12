@@ -34,6 +34,22 @@ COLORS = {'gpp':'green',
 PLOTS_DIR = 'plots'
 
 
+def plot_ensembles(years, data, data_mean, data_std, var):
+    """Plot all ensemble members with ensemble mean and standard deviation.
+    """
+    plt.figure()
+    for ens in ENSEMBLES:
+        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6)
+    plt.plot(years, data_mean, color=COLORS[var], label="Ensemble mean")
+    plt.plot(years, data_mean+data_std, color=COLORS[var], linewidth=0.8,
+            label="+-1$\sigma$")
+    plt.plot(years, data_mean-data_std, color=COLORS[var], linewidth=0.8)
+    plt.hlines(0, years[0], years[-1], colors='black', linestyles='dotted')
+    plt.xlabel('Year')
+    plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
+    plt.title(f"ACCESS-ESM1-5 {var.upper()}")
+
+
 def make_plots():
     for table in TABLES:
         for var in VARIABLES[table]:
@@ -50,27 +66,21 @@ def make_plots():
 
             # Anomaly relative to the esm-ssp585 scenario from C4MIP. Domenstrates only the changes
             # due to afforestation.
-            data_aff_diff = ssp585_data - aff_data
+            data_aff_diff = aff_data - ssp585_data
             data_aff_diff_mean = np.mean(data_aff_diff, axis=0)
             data_aff_diff_std = np.std(data_aff_diff, axis=0, ddof=1)
 
             # Plot the graphs for anomalies relative to 2015.
             years = [y for y in range(2015, 2101)]
-            plt.figure()
-            for ens in ENSEMBLES:
-                plt.plot(years, data_anomaly[int(ens)-1], color='lightgray', linewidth=0.6)
-            plt.plot(years, data_ens_mean, color=COLORS[var], label="Ensemble mean")
-            plt.plot(years, data_ens_mean+data_ens_std, color=COLORS[var], linewidth=0.8,
-                    label="+-1$\sigma$")
-            plt.plot(years, data_ens_mean-data_ens_std, color=COLORS[var], linewidth=0.8)
-            plt.hlines(0, years[0], years[-1], colors='black', linestyles='dotted')
-            plt.xlabel('Year')
-            plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
-            plt.title(f"ACCESS-ESM1-5 {var.upper()}")
+            plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
                     f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
 
             # Plot the graphs for anomalies relative to the esm-ssp585
+            plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
+            plt.savefig(f'{PLOTS_DIR}/'+ \
+                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg')
+
 
 if __name__ != 'analysis.plot_afforestation':
     make_plots()
