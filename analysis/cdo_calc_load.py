@@ -49,6 +49,26 @@ def cdo_mul_land_area(cdo_func):
     return wrapper_mul_land_area
 
 
+def cdo_mul_grid_area(cdo_func):
+    """Wrapper to add multiplication of the grid area to the CDO command.
+    """
+    @functools.wraps(cdo_func)
+    def wrapper_mul_grid_area(cdo_string: str, var: str):
+        cdo_string = '-mul ' + cdo_string + f' -gridarea {LAND_FRAC_FILE}'
+        return cdo_func(cdo_string, var)
+    return wrapper_mul_grid_area
+
+
+def cdo_div_100(cdo_func):
+    """Wrapper to add division by 100 to the CDO command. I.e. converts percentage into a fraction.
+    """
+    @functools.wraps(cdo_func)
+    def wrapper_div_100(cdo_string: str, var: str):
+        cdo_string = '-divc,100 ' + cdo_string
+        return cdo_func(cdo_string, var)
+    return wrapper_div_100
+
+
 def cdo_sec2mon(cdo_func):
     """Wrapper to add conversion factor from per seconds to per month to the CDO command.
     """
@@ -107,6 +127,19 @@ def cdo_pool_load(cdo_file: str, var: str):
     @cdo_fldsum
     @cdo_yearmonmean
     @cdo_kg2pg
+    """
+    return cdo.copy(input=cdo_file, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+@cdo_div_100
+@cdo_mul_land_area
+@cdo_fldsum
+@cdo_yearmonmean
+def cdo_cover_area_load(cdo_file: str, var: str):
+    """Load a land cover fraction variable and express as an area using CDO. Please refer to the
+    following decorators:
+    @cdo_div_100
+    @cdo_mul_grid_area
+    @cdo_fldsum
     """
     return cdo.copy(input=cdo_file, options='-L', returnCdf=True).variables[var][:].squeeze()
 

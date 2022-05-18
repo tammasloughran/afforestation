@@ -9,6 +9,11 @@ VARIABLES = {
         'Lmon': ['gpp', 'npp', 'ra', 'rh', 'nbp', 'cVeg', 'cLitter'],
         # ACCESS does not have nep
         'Emon': ['cSoil']}
+FRAC_VARIABLES = {
+        'Lmon': ['cropFrac',
+            'treeFrac',
+            #'shrubFrac', # There isn't much difference in shrub between experiments.
+            'grassFrac']}
 ENSEMBLES = [str(e) for e in range(1,11)]
 KG_IN_PG = 1000000000000
 SEC_IN_YEAR = 60*60*24*365
