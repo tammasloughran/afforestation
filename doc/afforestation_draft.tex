@@ -1,15 +1,21 @@
 \documentclass[]{article}
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[a4paper, total={170mm,257mm}, left=20mm, top=20mm,]{geometry}
 \usepackage{svg}
 \usepackage{subcaption}
+\usepackage{lineno}
+\linenumbers
+\usepackage{textcomp}
+
+\title{Afforestation in ACCESS-ESM1.5}
+\author{Tammas Loughran}
 
 \begin{document}
 
-\section{Afforestation in ACCESS-ESM1.5}
+\maketitle
 
-\subsection{Introduction}
+\section{Introduction}
 
-\subsection{Methods}
+\section{Methods}
 
 \begin{figure}[!ht]
     \centering
@@ -24,15 +30,23 @@
 \end{figure}
 
 By the end of the century:
-- Forrest expands by: 1.5942004244479975 million km² 
-- Abandonment: -1.1107754311679994 million km²
-- Mid-century crop minimum: -2.7356246835199975 million km²
+\begin{itemize}
+    \item Forrest expands by: 1.59 million km² (1.5942004244479975)
+    \item Abandonment: -1.11 million km² (-1.1107754311679994)
+\end{itemize}
 
-\subsection{Results}
+Mid-century crop minimum: -2.74 million km² (-2.7356246835199975)
 
-\subsubsection{Climate}
+\section{Results}
+
+\subsection{Climate}
+
+Climate warms about 4 \textcelsius{} by 2100 and precip increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
+
+There isn't much difference between the afforestation scenario and ssp585.
 
 \begin{figure}[!ht]
+    \centering
     \begin{subfigure}[b]{0.45\linewidth}
         \includesvg[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
     \end{subfigure}
@@ -50,9 +64,16 @@ By the end of the century:
 \end{figure}
 
 
-\subsubsection{Carbon cycle}
+\subsection{Carbon cycle}
+
+There is an increase in vegetation carbon of about 30 Pg C by the end of the century.
+
+The increased co2 drawdown from the combined effect of Afforestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
+
+Csoil is lower than SSP585 by about 4 Pg carbon.
 
 \begin{figure}[!ht]
+    \centering
     \begin{subfigure}[b]{0.4\linewidth}
         \includesvg[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
@@ -76,6 +97,7 @@ By the end of the century:
 \end{figure}
 
 \begin{figure}[!ht]
+    \centering
     \begin{subfigure}[b]{0.4\linewidth}
         \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
