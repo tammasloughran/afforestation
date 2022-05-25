@@ -120,7 +120,7 @@ def cdo_clim_load(cdo_file:str, var:str):
 
 
 @cdo_div_100
-@cdo_mul_land_area
+@cdo_mul_grid_area
 @cdo_fldsum
 @cdo_yearmonmean
 def cdo_cover_area_load(cdo_file:str, var:str):

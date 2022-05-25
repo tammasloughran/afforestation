@@ -32,6 +32,7 @@ LABELS = {
                 'cropFrac': 'crop SSP5-8.5',
                 'shrubFrac': 'shrub SSP5-8.5',
                 'grassFrac': 'grass SSP5-8.5'}}
+PLOTS_DIR = 'plots'
 
 
 def make_land_cover_plot():
@@ -42,15 +43,33 @@ def make_land_cover_plot():
     ssp585_areas = {}
     for var in FRAC_VARIABLES[table]:
         frac_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', table, var)
-        aff_areas[var] = cdo_cover_area_load(frac_file[0], var)
-        plt.plot(years, aff_areas[var]/M2_IN_MILKM2, color=COLORS[var], label=LABELS['AFF'][var])
+        aff_areas[var] = cdo_cover_area_load(frac_file[0], var)/M2_IN_MILKM2
+        plt.plot(years, aff_areas[var], color=COLORS[var], label=LABELS['AFF'][var])
         frac_file = get_filename('C4MIP', 'esm-ssp585', '1', table, var)
-        ssp585_areas[var] = cdo_cover_area_load(frac_file[0], var)
-        plt.plot(years, ssp585_areas[var]/M2_IN_MILKM2, color=COLORS[var], linestyle='dashed',
+        ssp585_areas[var] = cdo_cover_area_load(frac_file[0], var)/M2_IN_MILKM2
+        plt.plot(years, ssp585_areas[var], color=COLORS[var], linestyle='dashed',
                 label=LABELS['esm-ssp585'][var])
     plt.ylabel("Area (million km$^2$)")
     plt.xlabel("Year")
     plt.legend()
+    plt.savefig(f'{PLOTS_DIR}/land_areas.svg')
+
+    plt.figure()
+    for var in FRAC_VARIABLES[table]:
+        plt.plot(years, aff_areas[var]-ssp585_areas[var], color=COLORS[var],
+                label=f'{LABELS["AFF"][var]}-SSP585')
+    plt.ylabel("Area difference (million km$^2$)")
+    plt.xlabel("Year")
+    plt.hlines(y=0, xmin=years[0], xmax=years[-1], linestyle='dashed', color='black')
+    plt.legend(loc='lower right')
+    plt.savefig(f'{PLOTS_DIR}/land_areas_diff.svg')
+
+    print("By the end of the century:")
+    print(f"Forrest expansion: {(aff_areas['treeFrac']-ssp585_areas['treeFrac'])[-1]}")
+    print(f"Abandonment: {(aff_areas['cropFrac']-ssp585_areas['cropFrac'])[-1]}")
+    print("")
+    imin = np.argmin(aff_areas['cropFrac']-ssp585_areas['cropFrac'])
+    print(f"Crop minimum: {(aff_areas['cropFrac']-ssp585_areas['cropFrac'])[imin]}")
 
 
 if __name__ != 'analysis.plot_land_cover_fractions':
