@@ -25,7 +25,7 @@ def cdo_mul_land_area(cdo_func):
     @functools.wraps(cdo_func)
     def wrapper_mul_land_area(*args, **kwargs):
         kwargs['input'] = f'-mul -mul {kwargs["input"]} -divc,100 {LAND_FRAC_FILE} '\
-                '-gridarea {LAND_FRAC_FILE}'
+                f'-gridarea {LAND_FRAC_FILE}'
         return cdo_func(*args, **kwargs)
     return wrapper_mul_land_area
 

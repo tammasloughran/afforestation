@@ -97,6 +97,7 @@ def make_veg_plots():
             plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
                     f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg')
+            plt.close()
 
 
 def make_clim_plots():
@@ -127,6 +128,7 @@ def make_clim_plots():
                 aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
                 f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg')
+        plt.close()
 
 
 if __name__ != 'analysis.plot_afforestation':
