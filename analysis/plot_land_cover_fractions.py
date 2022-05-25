@@ -43,10 +43,10 @@ def make_land_cover_plot():
     ssp585_areas = {}
     for var in FRAC_VARIABLES[table]:
         frac_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', table, var)
-        aff_areas[var] = cdo_cover_area_load(frac_file[0], var)/M2_IN_MILKM2
+        aff_areas[var] = cdo_cover_area_load(var, input=frac_file[0])/M2_IN_MILKM2
         plt.plot(years, aff_areas[var], color=COLORS[var], label=LABELS['AFF'][var])
         frac_file = get_filename('C4MIP', 'esm-ssp585', '1', table, var)
-        ssp585_areas[var] = cdo_cover_area_load(frac_file[0], var)/M2_IN_MILKM2
+        ssp585_areas[var] = cdo_cover_area_load(var, input=frac_file[0])/M2_IN_MILKM2
         plt.plot(years, ssp585_areas[var], color=COLORS[var], linestyle='dashed',
                 label=LABELS['esm-ssp585'][var])
     plt.ylabel("Area (million km$^2$)")

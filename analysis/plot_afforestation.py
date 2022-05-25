@@ -130,7 +130,7 @@ def make_clim_plots():
 
 
 if __name__ != 'analysis.plot_afforestation':
-    #make_veg_plots()
+    make_veg_plots()
     make_clim_plots()
 
     # Clean up
