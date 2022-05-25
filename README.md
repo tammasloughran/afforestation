@@ -12,6 +12,7 @@
 │   └── plot_afforestation.py   Plotting script.
 ├── data                        Location of output data files.
 │   └── README.md
+├── doc
 ├── LICENCE                     CSIRO Non-Commercial Source Code Licence Agreement v1.0
 ├── plots                       Location of output plots.
 │   └── README.md

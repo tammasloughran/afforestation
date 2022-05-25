@@ -1,0 +1,107 @@
+\documentclass[]{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{svg}
+\usepackage{subcaption}
+
+\begin{document}
+
+\section{Afforestation in ACCESS-ESM1.5}
+
+\subsection{Introduction}
+
+\subsection{Methods}
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includesvg[width=\linewidth]{../plots/land_areas.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includesvg[width=\linewidth]{../plots/land_areas_diff.svg}
+    \end{subfigure}
+    \caption{Land use areas in ACCESS-ESM1.5.}
+    \label{fig:land_use}
+\end{figure}
+
+By the end of the century:
+- Forrest expands by: 1.5942004244479975 million km² 
+- Abandonment: -1.1107754311679994 million km²
+- Mid-century crop minimum: -2.7356246835199975 million km²
+
+\subsection{Results}
+
+\subsubsection{Climate}
+
+\begin{figure}[!ht]
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includesvg[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includesvg[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includesvg[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includesvg[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
+    \end{subfigure}
+    \caption{Climate in esm-ssp585-ssp126Lu.}
+    \label{fig:climate}
+\end{figure}
+
+
+\subsubsection{Carbon cycle}
+
+\begin{figure}[!ht]
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \caption{Carbon pools in esm-ssp585-ssp126Lu. Left: relative to 2005–2025. Right: relative to ssp-585.}
+    \label{fig:cpools}
+\end{figure}
+
+\begin{figure}[!ht]
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
+    \caption{Carbon fluxes in esm-ssp585-ssp126Lu.  Left: relative to 2005–2025. Right: relative to ssp-585.}
+    \label{fig:cflux}
+\end{figure}
+
+\end{document}

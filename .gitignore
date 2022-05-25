@@ -3,3 +3,9 @@ tags
 *.nc
 *.png
 *.svg
+*.aux
+*.log
+*.pdf
+*.gz
+svg-inkscape
+
