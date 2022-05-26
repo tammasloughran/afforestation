@@ -1,13 +1,16 @@
 \documentclass[]{article}
 \usepackage[a4paper, total={170mm,257mm}, left=20mm, top=20mm,]{geometry}
 \usepackage{svg}
+%\usepackage{float}
 \usepackage{subcaption}
 \usepackage{lineno}
 \linenumbers
 \usepackage{textcomp}
+\usepackage[style=numeric]{biblatex}
+\addbibresource{'afforestation_references.bib'}
 
-\title{Afforestation in ACCESS-ESM1.5}
-\author{Tammas Loughran}
+\title{Afforestation in ACCESS-ESM1.5 \& maybe other models too... dunno yet}
+\author{Tammas Loughran et al.}
 
 \begin{document}
 
@@ -15,9 +18,18 @@
 
 \section{Introduction}
 
+\begin{itemize}
+    \item existing studies on MPI-ESM CMIP5 version using RCP8.5 emissions with RCP4.5 land use. \cite{sonntag_reforestation_2016} \cite{sonntag_quantifying_2018}
+
+    \item esm-hist: emissions-driven simulations are itialized at 2015 using the esm-hist. \cite{eyring_overview_2016}
+    \item esm-ssp585: High emissions scenario that assumes that development is driven by fossil fuels. \cite{oneill_scenario_2016}
+    \item esm-ssp585-ssp126Lu: High emissions scenario from SSP5-8.5 but with the land use from SSP1-2.6. \cite{lawrence_land_2016}
+    \item SSP1-2.6: Challenges to adaptation and mitigation are both low. Land use changes characterized by decrease in pasture and crop and increase in natural lands. \cite{van_vuuren_energy_2017}
+\end{itemize}
+
 \section{Methods}
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
         \includesvg[width=\linewidth]{../plots/land_areas.svg}
@@ -25,25 +37,27 @@
     \begin{subfigure}[b]{0.45\linewidth}
         \includesvg[width=\linewidth]{../plots/land_areas_diff.svg}
     \end{subfigure}
-    \caption{Land use areas in ACCESS-ESM1.5.}
+    \caption{Land use areas in ACCESS-ESM1.5. Left: ssp585 (dashed) and afforestation scenario (solid). Difference between ssp585 and afforestation scenario.}
     \label{fig:land_use}
 \end{figure}
 
 By the end of the century:
 \begin{itemize}
-    \item Forrest expands by: 1.59 million km² (1.5942004244479975)
-    \item Abandonment: -1.11 million km² (-1.1107754311679994)
+    \item Forrest expands by: 1.59 million km²
+    \item Abandonment: -1.11 million km²
 \end{itemize}
 
-Mid-century crop minimum: -2.74 million km² (-2.7356246835199975)
+Mid-century crop minimum: -2.74 million km²
 
 \section{Results}
 
 \subsection{Climate}
 
-Climate warms about 4 \textcelsius{} by 2100 and precip increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
+\begin{itemize}
+    \item Climate warms about 4 \textcelsius{} by 2100 and precip increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
 
-There isn't much difference between the afforestation scenario and ssp585.
+    \item There isn't much difference between the afforestation scenario and ssp585.
+\end{itemize}
 
 \begin{figure}[!ht]
     \centering
@@ -59,18 +73,20 @@ There isn't much difference between the afforestation scenario and ssp585.
     \begin{subfigure}[b]{0.45\linewidth}
         \includesvg[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
     \end{subfigure}
-    \caption{Climate in esm-ssp585-ssp126Lu.}
+    \caption{Climate in esm-ssp585-ssp126Lu. Left: from the afforestation simulation. Right: difference between esm-ssp585-ssp126Lu simulation and esm-ssp585}
     \label{fig:climate}
 \end{figure}
 
 
 \subsection{Carbon cycle}
 
-There is an increase in vegetation carbon of about 30 Pg C by the end of the century.
+\begin{itemize}
+\item There is an increase in vegetation carbon of about 30 Pg C by the end of the century.
 
-The increased co2 drawdown from the combined effect of Afforestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
+\item The increased co2 drawdown from the combined effect of Afforestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
 
-Csoil is lower than SSP585 by about 4 Pg carbon.
+\item Csoil is lower than SSP585 by about 4 Pg carbon.
+\end{itemize}
 
 \begin{figure}[!ht]
     \centering
@@ -96,7 +112,9 @@ Csoil is lower than SSP585 by about 4 Pg carbon.
     \label{fig:cpools}
 \end{figure}
 
-\begin{figure}[!ht]
+\pagebreak
+
+\begin{figure}[!h]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
@@ -105,10 +123,10 @@ Csoil is lower than SSP585 by about 4 Pg carbon.
         \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         \includesvg[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
@@ -122,8 +140,26 @@ Csoil is lower than SSP585 by about 4 Pg carbon.
     \begin{subfigure}[b]{0.4\linewidth}
         \includesvg[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+    \end{subfigure}
     \caption{Carbon fluxes in esm-ssp585-ssp126Lu.  Left: relative to 2005–2025. Right: relative to ssp-585.}
     \label{fig:cflux}
 \end{figure}
+
+\pagebreak
+
+\subsection{Regional analysis: Australia?}
+
+
+\subsection{Model intercomparrison}
+
+
+\section{Conclusion?}
+
+\printbibliography
 
 \end{document}

@@ -8,4 +8,11 @@ tags
 *.pdf
 *.gz
 svg-inkscape
+doc/afforestation_draft.aux.bbl
+doc/afforestation_draft.aux.blg
+doc/afforestation_draft.bbl
+doc/afforestation_draft.bcf
+doc/afforestation_draft.blg
+doc/afforestation_draft.run.xml
+doc/temp.bib
 
