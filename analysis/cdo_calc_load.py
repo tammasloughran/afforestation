@@ -19,6 +19,42 @@ cdo = cdo_module.Cdo(tempdir='.')
 cdo.debug = False
 
 
+# Using a class
+class BoxRegion(object):
+
+    def __init__(self, north, east, south, west):
+        self.north = north
+        self.east = east
+        self.south = south
+        self.west = west
+        self.northwest = (west, north)
+        self.northeast = (east, north)
+        self.southeast = (east, south)
+        self.southwest = (west, south)
+
+    def box_x_y(self):
+        return zip(self.northwest, self.northeast, self.southeast, self.southwest, self.northwest)
+
+
+# Australian box boundaries
+aus_north = -10 # degrees north
+aus_east = 110  # degrees east
+aus_south = -45 # degrees north
+aus_west = 155  # Degrees east
+aus_region = BoxRegion(aus_north, aus_east, aus_south, aus_west)
+aus_x, aus_y = aus_region.box_x_y()
+
+
+#@cdod.cdo_sellonlatbox(str(aus_west), str(aus_east), str(aus_south), str(aus_north))
+@cdo_mul_land_area
+@cdod.cdo_selregion('dcw:AU')
+@cdod.cdo_fldsum
+@cdod.cdo_yearmonmean
+@cdod.cdo_divc(str(KG_IN_PG))
+def load_aus_pool(var:str, input:str):
+    return cdo.copy(input=input, returnCdf=True).variables[var][:].squeeze()
+
+
 def cdo_mul_land_area(cdo_func):
     """Wrapper to add multiplication of the land area and land cover fractions to the CDO command.
     """
