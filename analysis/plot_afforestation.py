@@ -140,5 +140,5 @@ if __name__ != 'analysis.plot_afforestation':
     for f in temp_files:
         os.remove(f)
 
-    #plt.show()
+    plt.show()
 

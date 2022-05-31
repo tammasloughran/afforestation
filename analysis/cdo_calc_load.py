@@ -45,16 +45,6 @@ aus_region = BoxRegion(aus_north, aus_east, aus_south, aus_west)
 aus_x, aus_y = aus_region.box_x_y()
 
 
-#@cdod.cdo_sellonlatbox(str(aus_west), str(aus_east), str(aus_south), str(aus_north))
-@cdo_mul_land_area
-@cdod.cdo_selregion('dcw:AU')
-@cdod.cdo_fldsum
-@cdod.cdo_yearmonmean
-@cdod.cdo_divc(str(KG_IN_PG))
-def load_aus_pool(var:str, input:str):
-    return cdo.copy(input=input, returnCdf=True).variables[var][:].squeeze()
-
-
 def cdo_mul_land_area(cdo_func):
     """Wrapper to add multiplication of the land area and land cover fractions to the CDO command.
     """
@@ -64,6 +54,16 @@ def cdo_mul_land_area(cdo_func):
                 f'-gridarea {LAND_FRAC_FILE}'
         return cdo_func(*args, **kwargs)
     return wrapper_mul_land_area
+
+
+#@cdod.cdo_sellonlatbox(str(aus_west), str(aus_east), str(aus_south), str(aus_north))
+@cdo_mul_land_area
+@cdod.cdo_selregion('dcw:AU')
+@cdod.cdo_fldsum
+@cdod.cdo_yearmonmean
+@cdod.cdo_divc(str(KG_IN_PG))
+def load_aus_pool(var:str, input:str):
+    return cdo.copy(input=input, returnCdf=True).variables[var][:].squeeze()
 
 
 ## Decorator to add multiplication of the grid area to the CDO command
