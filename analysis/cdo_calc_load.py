@@ -19,7 +19,7 @@ cdo = cdo_module.Cdo(tempdir='.')
 cdo.debug = False
 
 
-# Using a class
+# Box region definition
 class BoxRegion(object):
 
     def __init__(self, north, east, south, west):
@@ -56,14 +56,14 @@ def cdo_mul_land_area(cdo_func):
     return wrapper_mul_land_area
 
 
-#@cdod.cdo_sellonlatbox(str(aus_west), str(aus_east), str(aus_south), str(aus_north))
+#@cdod.cdo_selregion('dcw:AU') # I think this command is only in newer verion of CDO.
 @cdo_mul_land_area
-@cdod.cdo_selregion('dcw:AU')
+@cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
 @cdod.cdo_fldsum
 @cdod.cdo_yearmonmean
 @cdod.cdo_divc(str(KG_IN_PG))
 def load_aus_pool(var:str, input:str):
-    return cdo.copy(input=input, returnCdf=True).variables[var][:].squeeze()
+    return cdo.copy(input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
 
 
 ## Decorator to add multiplication of the grid area to the CDO command

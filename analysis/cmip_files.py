@@ -5,7 +5,7 @@ LAND_FRAC_FILE = '/g/data/fs38/publications/CMIP6/LUMIP/CSIRO/ACCESS-ESM1-5/esm-
         'r10i1p1f1/fx/sftlf/gn/latest/sftlf_fx_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_r10i1p1f1_gn.nc'
 
 
-def get_filename(mip: str, exp: str, ens: str, table: str, var: str):
+def get_filename(mip:str, exp:str, ens:str, table:str, var:str):
     """Insert MIP experiment, ensemble, table, and variable strings into a CMOR directory tree 
     and filename string. Automatically detects the period for the file name.
     """
