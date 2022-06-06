@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ != 'analysis.plot_australia':
@@ -12,10 +13,17 @@ else:
     from analysis.cmip_files import get_filename
     from analysis.cdo_calc_load import load_aus_pool
 
-for ens in ENSEMBLES:
+NTIMES = 86
+NENS = 10
+
+var = np.ones((NENS,NTIMES))*np.nan
+for i,ens in enumerate(ENSEMBLES):
     filename = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Lmon', 'cVeg')[0]
-    data = load_aus_pool(input=filename, var='cVeg')
-    plt.plot(data)
+    var[i,...] = load_aus_pool(input=filename, var='cVeg')
+    plt.plot(var[i,...], color='grey')
+
+var_mean = var.mean(axis=0)
+plt.plot(var_mean, color='black')
 
 plt.show()
 
