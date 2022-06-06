@@ -57,6 +57,7 @@ def cdo_mul_land_area(cdo_func):
 
 
 #@cdod.cdo_selregion('dcw:AU') # I think this command is only in newer verion of CDO.
+@cdod.cdo_cat(input2_string='')
 @cdo_mul_land_area
 @cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
 @cdod.cdo_fldsum
@@ -80,6 +81,7 @@ def cdo_sec2mon(cdo_func):
     return wrapper_sec2mon
 
 
+@cdod.cdo_cat(input2_string='')
 @cdod.cdo_fldmean
 @cdod.cdo_yearmonmean
 def cdo_clim_load(var:str, input:str):
@@ -105,6 +107,7 @@ def cdo_cover_area_load(var:str, input:str):
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
+@cdod.cdo_cat(input2_string='')
 @cdo_mul_land_area
 @cdod.cdo_fldsum
 @cdod.cdo_mulc(str(SEC_IN_DAY))
@@ -124,6 +127,7 @@ def cdo_flux_load(var:str, input:str):
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
+@cdod.cdo_cat(input2_string='')
 @cdo_mul_land_area
 @cdod.cdo_fldsum
 @cdod.cdo_yearmonmean
@@ -146,14 +150,15 @@ def cdo_fetch_ensembles(mip:str, exp:str, table:str, var:str):
     exp_data = np.ones((len(ENSEMBLES), 86))*np.nan
     for ens in ENSEMBLES:
         # Get file names
-        exp_files = get_filename(mip, exp, ens, table, var)
+        exp_files = ' '.join(get_filename(mip, exp, ens, table, var))
+        exp_files = '[ '+exp_files+' ]'
         if var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
             # Load flux variable
-            exp_data[int(ens)-1,:] = cdo_flux_load(var, input=exp_files[0])
+            exp_data[int(ens)-1,:] = cdo_flux_load(var, input=exp_files)
         elif var in ['cVeg', 'cLitter', 'cSoil']:
             # Load pool variable
-            exp_data[int(ens)-1,:] = cdo_pool_load(var, input=exp_files[0])
+            exp_data[int(ens)-1,:] = cdo_pool_load(var, input=exp_files)
         elif var in CLIM_VARIABLES[table]:
-            exp_data[int(ens)-1,:] = cdo_clim_load(var, input=exp_files[0])
+            exp_data[int(ens)-1,:] = cdo_clim_load(var, input=exp_files)
     return exp_data
 

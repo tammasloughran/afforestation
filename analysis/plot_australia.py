@@ -20,8 +20,9 @@ years = list(range(2015, 2101))
 
 data = np.ones((NENS,NTIMES))*np.nan
 for i,ens in enumerate(ENSEMBLES):
-    filename = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Lmon', 'cVeg')[0]
-    data[i,...] = load_aus_pool(input=filename, var='cVeg')
+    filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Lmon', 'cVeg'))
+    filenames = '[ '+filenames+' ]'
+    data[i,...] = load_aus_pool(input=filenames, var='cVeg')
     plt.plot(years, data[i,...], color='grey')
 
 data_mean = data.mean(axis=0)
