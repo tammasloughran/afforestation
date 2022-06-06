@@ -16,14 +16,18 @@ else:
 NTIMES = 86
 NENS = 10
 
-var = np.ones((NENS,NTIMES))*np.nan
+years = list(range(2015, 2101))
+
+data = np.ones((NENS,NTIMES))*np.nan
 for i,ens in enumerate(ENSEMBLES):
     filename = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Lmon', 'cVeg')[0]
-    var[i,...] = load_aus_pool(input=filename, var='cVeg')
-    plt.plot(var[i,...], color='grey')
+    data[i,...] = load_aus_pool(input=filename, var='cVeg')
+    plt.plot(years, data[i,...], color='grey')
 
-var_mean = var.mean(axis=0)
-plt.plot(var_mean, color='black')
+data_mean = data.mean(axis=0)
+data_std = data.std(axis=0, ddof=1)
+plt.fill_between(years, data_mean+data_std, data_mean-data_std, color='grey', alpha=0.4)
+plt.plot(years, data_mean, color='black')
 
 plt.show()
 
