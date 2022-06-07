@@ -32,7 +32,7 @@ COLORS = {'gpp':'green',
 years = list(range(2015, 2101))
 
 
-def plot_veg_region(years, data, data_mean, data_std, var):
+def plot_veg_region(years, data, data_mean, data_std, var, label=''):
     plt.figure()
     for i,ens in enumerate(ENSEMBLES):
         plt.plot(years, data[i,...], color='grey', alpha=0.4)
@@ -43,7 +43,7 @@ def plot_veg_region(years, data, data_mean, data_std, var):
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 Australia {var}")
-    #plt.show()
+    plt.savefig('plots/'+var+'_aus_'+label+'.svg')
 
 
 for table in TABLES:
@@ -90,11 +90,11 @@ for table in TABLES:
         # Plot
         anom_data_mean = anom_data.mean(axis=0)
         anom_data_std = anom_data.std(axis=0, ddof=1)
-        plot_veg_region(years, anom_data, anom_data_mean, anom_data_std, var)
+        plot_veg_region(years, anom_data, anom_data_mean, anom_data_std, var, label='anom')
 
         diff_data_mean = diff_data.mean(axis=0)
         diff_data_std = diff_data.std(axis=0, ddof=1)
-        plot_veg_region(years, diff_data, diff_data_mean, diff_data_std, var)
+        plot_veg_region(years, diff_data, diff_data_mean, diff_data_std, var, label='diff')
 
 plt.show()
 

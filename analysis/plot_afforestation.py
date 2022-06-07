@@ -15,12 +15,12 @@ if __name__ != 'analysis.plot_afforestation':
     # plot_afforestation.py is main program or imported as a module from another script.
     from baseline import global_sum_baselines
     from cdo_calc_load import cdo_fetch_ensembles
-    from constants import ENSEMBLES, TABLES, VARIABLES, CLIM_VARIABLES
+    from constants import ENSEMBLES, TABLES, VARIABLES, CLIM_VARIABLES, SEC_IN_DAY
 else:
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.baseline import global_sum_baselines
     from analysis.cdo_calc_load import cdo_fetch_ensembles
-    from analysis.constants import ENSEMBLES, TABLES, VARIABLES, CLIM_VARIABLES
+    from analysis.constants import ENSEMBLES, TABLES, VARIABLES, CLIM_VARIABLES, SEC_IN_DAY
 
 # Local constants
 COLORS = {'gpp':'green',
@@ -41,12 +41,12 @@ def plot_ensembles(years, data, data_mean, data_std, var):
     """
     plt.figure()
     for ens in ENSEMBLES:
-        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6)
+        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
     plt.plot(years, data_mean, color=COLORS[var], label="Ensemble mean")
-    plt.plot(years, data_mean+data_std, color=COLORS[var], linewidth=0.8,
-            label="+-1$\sigma$")
-    plt.plot(years, data_mean-data_std, color=COLORS[var], linewidth=0.8)
+    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var],
+            label="+-1$\sigma$", alpha=0.4)
     plt.hlines(0, years[0], years[-1], colors='black', linestyles='dotted')
+    plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
     plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
     plt.title(f"ACCESS-ESM1-5 {var.upper()}")
@@ -57,13 +57,16 @@ def plot_ensembles_clim(years, data, data_mean, data_std, var):
     """
     plt.figure()
     for ens in ENSEMBLES:
-        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6)
+        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
     plt.plot(years, data_mean, color=COLORS[var], label="Ensemble mean")
-    plt.plot(years, data_mean+data_std, color=COLORS[var], linewidth=0.8,
-            label="+-1$\sigma$")
-    plt.plot(years, data_mean-data_std, color=COLORS[var], linewidth=0.8)
+    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var],
+            label="+-1$\sigma$", alpha=0.4)
+    plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
-    plt.ylabel(f'{var.upper()}')
+    if var=='tas':
+        plt.ylabel(var.upper()+' ($^{\circ}$C)')
+    elif var=='pr':
+        plt.ylabel(f'{var.upper()} (mm/day)')
     plt.title(f"ACCESS-ESM1-5 {var.upper()}")
 
 
@@ -81,7 +84,7 @@ def make_veg_plots():
             data_ens_mean = np.mean(data_anomaly, axis=0)
             data_ens_std = np.std(data_anomaly, axis=0, ddof=1)
 
-            # Anomaly relative to the esm-ssp585 scenario from C4MIP. Domenstrates only the changes
+            # Anomaly relative to the esm-ssp585 scenario from C4MIP. Demonstrates only the changes
             # due to afforestation.
             data_aff_diff = aff_data - ssp585_data
             data_aff_diff_mean = np.mean(data_aff_diff, axis=0)
@@ -92,6 +95,7 @@ def make_veg_plots():
             plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
                     f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
+            plt.close()
 
             # Plot the graphs for anomalies relative to the esm-ssp585
             plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
@@ -111,6 +115,9 @@ def make_clim_plots():
         if var == 'tas':
             aff_data -= 273.15
             ssp585_data -= 273.15
+        elif var=='pr':
+            aff_data *= SEC_IN_DAY
+            ssp585_data *= SEC_IN_DAY
         aff_mean = np.mean(aff_data, axis=0)
         ssp585_mean = np.mean(ssp585_data, axis=0)
         aff_std = np.std(aff_data, axis=0, ddof=1)
@@ -121,9 +128,11 @@ def make_clim_plots():
         plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
                 f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles.svg')
+        plt.close()
         plot_ensembles_clim(years, ssp585_data, ssp585_mean, ssp585_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
                 f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles.svg')
+        plt.close()
         plot_ensembles_clim(years, ssp585_data-aff_data, ssp585_mean-aff_mean,
                 aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
