@@ -18,6 +18,14 @@
 
 \section{Introduction}
 
+A considerable amount of anthropogenic carbon emissions comes from agricultural activities.
+In order to effectively limit global warming to below 2°C (or even 3°C), there must be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
+This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
+This study is motivated by existing studies on afforestation by Sonntag et al. (2016) where the potential of afforestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "afforestation" land use from a low emissions scenario (taken from RCP4.5).
+This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways. This study aims to quantify the CO2 removal potential of the afforestation strategy using updated models at both the global scale and for Australia specifically.
+As part of the contributions to the CMIP5 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar afforestation scenario.
+This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6. ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
+
 \begin{itemize}
     \item existing studies on MPI-ESM CMIP5 version using RCP8.5 emissions with RCP4.5 land use. \cite{sonntag_reforestation_2016} \cite{sonntag_quantifying_2018}
 
@@ -32,10 +40,10 @@
 \begin{figure}[!h]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        \includesvg[width=\linewidth]{../plots/land_areas.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/land_areas.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includesvg[width=\linewidth]{../plots/land_areas_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/land_areas_diff.svg}
     \end{subfigure}
     \caption{Land use areas in ACCESS-ESM1.5. Left: ssp585 (dashed) and afforestation scenario (solid). Right: difference between ssp585 and afforestation scenario.}
     \label{fig:land_use}
@@ -62,16 +70,16 @@ Mid-century crop minimum: -2.74 million km²
 \begin{figure}[!ht]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        \includesvg[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includesvg[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includesvg[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includesvg[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
     \end{subfigure}
     \caption{Climate in esm-ssp585-ssp126Lu. Left: from the afforestation simulation. Right: difference between esm-ssp585-ssp126Lu simulation and esm-ssp585}
     \label{fig:climate}
@@ -91,22 +99,22 @@ Mid-century crop minimum: -2.74 million km²
 \begin{figure}[!ht]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \caption{Carbon pools in esm-ssp585-ssp126Lu. Left: relative to 2005–2025. Right: relative to ssp-585.}
     \label{fig:cpools}
@@ -117,34 +125,34 @@ Mid-century crop minimum: -2.74 million km²
 \begin{figure}[!h]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includesvg[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includesvg[inkscape=force,width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
     \end{subfigure}
     \caption{Carbon fluxes in esm-ssp585-ssp126Lu.  Left: relative to 2005–2025. Right: relative to ssp-585.}
     \label{fig:cflux}
@@ -154,6 +162,33 @@ Mid-century crop minimum: -2.74 million km²
 
 \subsection{Regional analysis: Australia?}
 
+\begin{itemize}
+    \item Australian cVeg increases by ~0.25 PgC in the afforestation scenario. But the difference from the reference simulation is 0.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cLitter_aus_anom.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cLitter_aus_diff.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cSoil_aus_anom.svg}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includesvg[width=\linewidth]{../plots/cSoil_aus_diff.svg}
+    \end{subfigure}
+    \caption{Caption}
+    \label{fig:aus_region}
+\end{figure}
 
 \subsection{Model intercomparison}
 
