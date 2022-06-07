@@ -88,7 +88,7 @@ def make_veg_plots():
             data_aff_diff_std = np.std(data_aff_diff, axis=0, ddof=1)
 
             # Plot the graphs for anomalies relative to 2015.
-            years = [y for y in range(2015, 2101)]
+            years = list(range(2015, 2101))
             plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
                     f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
@@ -117,7 +117,7 @@ def make_clim_plots():
         ssp585_std = np.std(ssp585_data, axis=0, ddof=1)
 
         # Plot
-        years = [y for y in range(2015, 2101)]
+        years = list(range(2015, 2101))
         plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
                 f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles.svg')

@@ -8,11 +8,12 @@ import cdo_decorators as cdod
 if __name__ != 'analysis.cdo_calc_load':
     # cdo_calc_load.py imported as a module from other scripts.
     from cmip_files import LAND_FRAC_FILE, get_filename
-    from constants import ENSEMBLES, KG_IN_PG, SEC_IN_DAY, TABLES, VARIABLES, CLIM_VARIABLES
+    from constants import (ENSEMBLES, KG_IN_PG, SEC_IN_DAY, SEC_IN_YEAR, TABLES, VARIABLES,
+                           CLIM_VARIABLES)
 else:
     # cdo_calc_load.py imported as a module of the analysis package.
     from analysis.cmip_files import LAND_FRAC_FILE, get_filename
-    from analysis.constants import (ENSEMBLES, KG_IN_PG, SEC_IN_DAY, TABLES,
+    from analysis.constants import (ENSEMBLES, KG_IN_PG, SEC_IN_DAY, SEC_IN_YEAR, TABLES,
                                     VARIABLES, CLIM_VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
@@ -65,6 +66,31 @@ def cdo_mul_land_area(cdo_func):
 @cdod.cdo_divc(str(KG_IN_PG))
 def load_aus_pool(var:str, input:str):
     return cdo.copy(input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
+
+
+@cdod.cdo_cat(input2_string='')
+@cdo_mul_land_area
+@cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
+@cdod.cdo_fldsum
+@cdod.cdo_mulc(str(SEC_IN_DAY))
+@cdod.cdo_muldpm
+@cdod.cdo_yearsum
+@cdod.cdo_divc(str(KG_IN_PG))
+def load_aus_flux(var:str, input:str):
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+@cdod.cdo_cat(input2_string='')
+@cdo_mul_land_area
+@cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
+@cdod.cdo_fldsum
+@cdod.cdo_mulc(str(SEC_IN_YEAR))
+@cdod.cdo_divc(str(KG_IN_PG))
+def load_aus_base_flux(var:str, input:str):
+    """Load baseline flux data. Similar to load_aus_flux but without the temporal aggregation.
+    Temporal aggregation has already been done in `analysis.baseline`.
+    """
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
 ## Decorator to add multiplication of the grid area to the CDO command
