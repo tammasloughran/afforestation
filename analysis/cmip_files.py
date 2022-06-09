@@ -16,3 +16,14 @@ def get_filename(mip:str, exp:str, ens:str, table:str, var:str):
     files = os.listdir(directory)
     return [directory+f for f in files]
 
+
+def get_filenames(mip:str, inst:str, model:str, exp:str, ens:str, table:str, var:str):
+    """Insert MIP, model, experiment, ensemble, table, and variable strings into a CMOR directory
+    tree and filename string. Automatically detects the period for the file name.
+    """
+    directory = f'/g/data/p66/tfl561/CMIP6/{mip}/{inst}/{model}/{exp}/{ens}/{table}/{var}'\
+            '/gn/latest/'
+    files = os.listdir(directory)
+    files.sort()
+    return [directory+f for f in files]
+
