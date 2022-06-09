@@ -60,7 +60,7 @@ def cdo_mul_land_area(cdo_func):
 
 
 #@cdod.cdo_selregion('dcw:AU') # I think this command is only in a newer verion of CDO.
-@cdod.cdo_cat(input2='') # Concatenate all files in input1
+@cdod.cdo_cat(input2='') # Concatenate all files in input1.
 @cdo_mul_land_area
 @cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
 @cdod.cdo_fldsum
@@ -77,6 +77,22 @@ def load_aus_pool(var:str, input:str)->np.ma.MaskedArray:
     @cdod.cdo_divc(str(KG_IN_PG))
     """
     return cdo.copy(input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
+
+
+@cdod.cdo_cat(input2='')
+@cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+@cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
+@cdod.cdo_fldmean
+@cdod.cdo_yearmonmean
+def load_aus_clim(var:str, input:str)->np.ma.MaskedArray:
+    """Load global climate variable using CDO. Please refer to the following decorators:
+    @cdod.cdo_cat(input2='')
+    @cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+    @cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
+    @cdod.cdo_fldmean
+    @cdod.cdo_yearmonmean
+    """
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
 @cdod.cdo_cat(input2='')
@@ -143,8 +159,7 @@ def cdo_sec2mon(cdo_func:FunctionType)->np.ma.MaskedArray:
 def cdo_clim_load(var:str, input:str)->np.ma.MaskedArray:
     """Load global climate variable using CDO. Please refer to the following decorators:
     @cdod.cdo_cat(input2='')
-    @cdod.cdo_mul(input2=LAND_FRAC_FILE) # Mask for climate over land only.
-    @cdod.cdo_divc(str(100)) # LAND_FRAC_FILE units is in %.
+    @cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
     @cdod.cdo_fldmean
     @cdod.cdo_yearmonmean
     """

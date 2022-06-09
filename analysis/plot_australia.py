@@ -7,15 +7,15 @@ import numpy as np
 
 if __name__ != 'analysis.plot_australia':
     # plot_afforestation.py is main program or imported as a module from another script.
-    from cdo_calc_load import load_aus_base_flux, load_aus_flux, load_aus_pool
+    from cdo_calc_load import load_aus_base_flux, load_aus_flux, load_aus_pool, load_aus_clim
     from cmip_files import get_filename
-    from constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES
+    from constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES, SEC_IN_DAY
 else:
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cdo_calc_load import (load_aus_base_flux, load_aus_flux,
-                                        load_aus_pool)
+                                        load_aus_pool, load_aus_clim)
     from analysis.cmip_files import get_filename
-    from analysis.constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES
+    from analysis.constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES, SEC_IN_DAY
 
 NTIMES = 86
 NENS = 10
@@ -47,6 +47,22 @@ def plot_veg_region(years, data, data_mean, data_std, var, label=''):
     plt.savefig('plots/'+var+'_aus_'+label+'.svg')
 
 
+def plot_clim_region(years, data, data_mean, data_std, var, label=''):
+    plt.figure()
+    for i,ens in enumerate(ENSEMBLES):
+        plt.plot(years, data[i,...], color='grey', alpha=0.4)
+    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var], alpha=0.4)
+    plt.plot(years, data_mean, color=COLORS[var])
+    plt.xlim(left=years[0], right=years[-1])
+    if var=='pr':
+        plt.ylabel('mm/day')
+    elif var=='tas':
+        plt.ylabel('$^\circ$C')
+    plt.xlabel('Time (Year)')
+    plt.title(f"ACCES-ESM1.5 Australia {var}")
+    plt.savefig('plots/'+var+'_aus_'+label+'.svg')
+
+
 for table in TABLES:
     for var in VARIABLES[table]:
         # Get the reference period value.
@@ -55,8 +71,6 @@ for table in TABLES:
             reference = load_aus_pool(input=ref_file, var=var)
         elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
             reference = load_aus_base_flux(input=ref_file, var=var)
-        else:
-            continue # TODO: I'll do this later.
 
         # Load the afforestation data.
         aff_data = np.ones((NENS,NTIMES))*np.nan
@@ -67,8 +81,6 @@ for table in TABLES:
                 aff_data[i,...] = load_aus_pool(input=filenames, var=var)
             elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
                 aff_data[i,...] = load_aus_flux(input=filenames, var=var)
-            elif var in ['pr', 'tas']:
-                continue # TODO: I'll do this later.
 
         # Calculate anomaly.
         anom_data = aff_data - reference
@@ -82,8 +94,6 @@ for table in TABLES:
                 ssp585_data[i,...] = load_aus_pool(input=filenames, var=var)
             elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
                 ssp585_data[i,...] = load_aus_flux(input=filenames, var=var)
-            elif var in ['pr', 'tas']:
-                continue # TODO: I'll do this later.
 
         # Clalculate the difference.
         diff_data = aff_data - ssp585_data
@@ -96,6 +106,36 @@ for table in TABLES:
         diff_data_mean = diff_data.mean(axis=0)
         diff_data_std = diff_data.std(axis=0, ddof=1)
         plot_veg_region(years, diff_data, diff_data_mean, diff_data_std, var, label='diff')
+
+for var in ['tas', 'pr']:
+    # Load the afforestation data
+    aff_data = np.ones((NENS,NTIMES))*np.nan
+    ssp585_data = np.ones((NENS,NTIMES))*np.nan
+    for i, ens in enumerate(ENSEMBLES):
+        filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var))
+        filenames = '[ '+filenames+' ]'
+        aff_data[i,...] = load_aus_clim(input=filenames, var=var)
+        filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var))
+        filenames = '[ '+filenames+' ]'
+        ssp585_data[i,...] = load_aus_clim(input=filenames, var=var)
+
+    if var=='tas':
+        aff_data -= 273.15
+        ssp585_data -= 273.15
+    elif var=='pr':
+        aff_data *= SEC_IN_DAY
+        ssp585_data *= SEC_IN_DAY
+
+    # Calculate the difference
+    diff_data = aff_data - ssp585_data
+
+    # Plot
+    plot_clim_region(years, aff_data, aff_data.mean(axis=0), aff_data.std(axis=0, ddof=1),
+            var, label='aff_'+var)
+    plot_clim_region(years, ssp585_data, ssp585_data.mean(axis=0),
+            ssp585_data.std(axis=0, ddof=1), var, label='ssp585_'+var)
+    plot_clim_region(years, diff_data, diff_data.mean(axis=0), diff_data.std(axis=0, ddof=1),
+            var, label='diff_'+var)
 
 plt.show()
 
