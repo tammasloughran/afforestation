@@ -2,7 +2,7 @@
 import os
 import sys
 
-from analysis.plot_afforestation import make_veg_plots, make_clim_plots
+from analysis.plot_afforestation import make_clim_plots, make_veg_plots
 from analysis.plot_land_cover_fractions import make_land_cover_plot
 
 files = os.listdir('.')

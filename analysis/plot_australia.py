@@ -7,12 +7,13 @@ import numpy as np
 
 if __name__ != 'analysis.plot_australia':
     # plot_afforestation.py is main program or imported as a module from another script.
-    from cdo_calc_load import load_aus_pool, load_aus_flux, load_aus_base_flux
+    from cdo_calc_load import load_aus_base_flux, load_aus_flux, load_aus_pool
     from cmip_files import get_filename
     from constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES
 else:
     # plot_afforestation.py imported as a module of the analysis package.
-    from analysis.cdo_calc_load import load_aus_pool, load_aus_flux, load_aus_base_flux
+    from analysis.cdo_calc_load import (load_aus_base_flux, load_aus_flux,
+                                        load_aus_pool)
     from analysis.cmip_files import get_filename
     from analysis.constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES
 

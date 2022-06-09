@@ -5,6 +5,7 @@
 # esm-ssp585 simulation (high fossil fuel emisssions scenario).
 import glob
 import os
+import pdb
 import sys
 
 import cdo as cdo_module
@@ -15,12 +16,14 @@ if __name__ != 'analysis.plot_afforestation':
     # plot_afforestation.py is main program or imported as a module from another script.
     from baseline import global_sum_baselines
     from cdo_calc_load import cdo_fetch_ensembles
-    from constants import ENSEMBLES, TABLES, VARIABLES, CLIM_VARIABLES, SEC_IN_DAY
+    from constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY, TABLES,
+                           VARIABLES)
 else:
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.baseline import global_sum_baselines
     from analysis.cdo_calc_load import cdo_fetch_ensembles
-    from analysis.constants import ENSEMBLES, TABLES, VARIABLES, CLIM_VARIABLES, SEC_IN_DAY
+    from analysis.constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY,
+                                    TABLES, VARIABLES)
 
 # Local constants
 COLORS = {'gpp':'green',
