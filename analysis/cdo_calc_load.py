@@ -49,7 +49,7 @@ aus_x, aus_y = aus_region.box_x_y()
 
 
 def cdo_mul_land_area(cdo_func):
-    """Wrapper to add multiplication of the land area and land cover fractions to the CDO command.
+    """Decorator to add multiplication of the land area and land cover fractions to the CDO command.
     """
     @functools.wraps(cdo_func)
     def wrapper_mul_land_area(*args, **kwargs):
@@ -59,7 +59,7 @@ def cdo_mul_land_area(cdo_func):
     return wrapper_mul_land_area
 
 
-#@cdod.cdo_selregion('dcw:AU') # I think this command is only in newer verion of CDO.
+#@cdod.cdo_selregion('dcw:AU') # I think this command is only in a newer verion of CDO.
 @cdod.cdo_cat(input2='') # Concatenate all files in input1
 @cdo_mul_land_area
 @cdod.cdo_sellonlatbox(str(aus_east), str(aus_west), str(aus_south), str(aus_north))
