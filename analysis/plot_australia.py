@@ -29,6 +29,22 @@ COLORS = {'gpp':'green',
         'cSoil':'black',
         'tas':'black',
         'pr':'blue'}
+PLOTS_DIR = './plots'
+DATA_DIR = './data'
+
+files = glob.glob('./*')
+if PLOTS_DIR not in files:
+    os.mkdir(PLOTS_DIR)
+if DATA_DIR not in files:
+    os.mkdir(DATA_DIR)
+
+# Control flag
+files = glob.glob('./data/*')
+if any(['.npy' in f for f in files]):
+    load_npy_files = True
+else:
+    load_npy_files = False
+#load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -65,6 +81,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, label=''):
 
 for table in TABLES:
     for var in VARIABLES[table]:
+        print("Plotting region australia for ", var)
         # Get the reference period value.
         ref_file = '[ data/'+var+'_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc ]'
         if var in ['cVeg', 'cLitter', 'cSoil']:
@@ -73,27 +90,35 @@ for table in TABLES:
             reference = load_aus_base_flux(input=ref_file, var=var)
 
         # Load the afforestation data.
-        aff_data = np.ones((NENS,NTIMES))*np.nan
-        for i, ens in enumerate(ENSEMBLES):
-            filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
-            filenames = '[ '+filenames+' ]'
-            if var in ['cVeg', 'cLitter', 'cSoil']:
-                aff_data[i,...] = load_aus_pool(input=filenames, var=var)
-            elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
-                aff_data[i,...] = load_aus_flux(input=filenames, var=var)
+        if load_npy_files:
+            aff_dat = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy')
+        else:
+            aff_data = np.ones((NENS,NTIMES))*np.nan
+            for i, ens in enumerate(ENSEMBLES):
+                filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
+                filenames = '[ '+filenames+' ]'
+                if var in ['cVeg', 'cLitter', 'cSoil']:
+                    aff_data[i,:] = load_aus_pool(input=filenames, var=var)
+                elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                    aff_data[i,:] = load_aus_flux(input=filenames, var=var)
+            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy', aff_data)
 
         # Calculate anomaly.
         anom_data = aff_data - reference
 
         # Load the ssp585 data.
-        ssp585_data = np.ones((NENS,NTIMES))*np.nan
-        for i, ens in enumerate(ENSEMBLES):
-            filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, table, var))
-            filenames = '[ '+filenames+' ]'
-            if var in ['cVeg', 'cLitter', 'cSoil']:
-                ssp585_data[i,...] = load_aus_pool(input=filenames, var=var)
-            elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
-                ssp585_data[i,...] = load_aus_flux(input=filenames, var=var)
+        if load_npy_files:
+                ssp585_data[i,:] = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
+        else:
+            ssp585_data = np.ones((NENS,NTIMES))*np.nan
+            for i, ens in enumerate(ENSEMBLES):
+                filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, table, var))
+                filenames = '[ '+filenames+' ]'
+                if var in ['cVeg', 'cLitter', 'cSoil']:
+                    ssp585_data[i,:] = load_aus_pool(input=filenames, var=var)
+                elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                    ssp585_data[i,:] = load_aus_flux(input=filenames, var=var)
+            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy', ssp585_data)
 
         # Clalculate the difference.
         diff_data = aff_data - ssp585_data
@@ -108,16 +133,23 @@ for table in TABLES:
         plot_veg_region(years, diff_data, diff_data_mean, diff_data_std, var, label='diff')
 
 for var in ['tas', 'pr']:
+    print("Plotting region australia for ", var)
     # Load the afforestation data
-    aff_data = np.ones((NENS,NTIMES))*np.nan
-    ssp585_data = np.ones((NENS,NTIMES))*np.nan
-    for i, ens in enumerate(ENSEMBLES):
-        filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var))
-        filenames = '[ '+filenames+' ]'
-        aff_data[i,...] = load_aus_clim(input=filenames, var=var)
-        filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var))
-        filenames = '[ '+filenames+' ]'
-        ssp585_data[i,...] = load_aus_clim(input=filenames, var=var)
+    if load_npy_files:
+        aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
+        ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
+    else:
+        aff_data = np.ones((NENS,NTIMES))*np.nan
+        ssp585_data = np.ones((NENS,NTIMES))*np.nan
+        for i, ens in enumerate(ENSEMBLES):
+            filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var))
+            filenames = '[ '+filenames+' ]'
+            aff_data[i,:] = load_aus_clim(input=filenames, var=var)
+            filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var))
+            filenames = '[ '+filenames+' ]'
+            ssp585_data[i,:] = load_aus_clim(input=filenames, var=var)
+        np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy', aff_data)
+        np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy', ssp585_data)
 
     if var=='tas':
         aff_data -= 273.15

@@ -36,8 +36,22 @@ COLORS = {'gpp':'green',
         'cSoil':'black',
         'tas':'black',
         'pr':'blue'}
-PLOTS_DIR = 'plots'
+PLOTS_DIR = './plots'
+DATA_DIR = './data'
 
+files = glob.glob('./*')
+if PLOTS_DIR not in files:
+    os.mkdir(PLOTS_DIR)
+if DATA_DIR not in files:
+    os.mkdir(DATA_DIR)
+
+# Control flag
+files = glob.glob('./data/*')
+if any(['.npy' in f for f in files]):
+    load_npy_files = True
+else:
+    load_npy_files = False
+#load_npy_files = True # Uncomment to override previous check.
 
 def plot_ensembles(years, data, data_mean, data_std, var):
     """Plot all ensemble members with ensemble mean and standard deviation.
@@ -78,8 +92,15 @@ def make_veg_plots():
         for var in VARIABLES[table]:
             print(f"Processing {var}")
             # Load data
-            aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
-            ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
+            if load_npy_files:
+                aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
+                ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
+            else:
+                aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
+                ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
+                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy', aff_data)
+                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy', ssp585_data)
+
 
             # Anomaly, mean and standard deviation relative to 2015 baseline. Demonstrates overall
             # impact of climate, CO2 forcing and afforestation on pool/flux.
@@ -111,8 +132,14 @@ def make_clim_plots():
     table = 'Amon'
     for var in CLIM_VARIABLES[table]:
         print(f"Processing {var}")
-        aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
-        ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
+        if load_npy_files:
+            aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
+            ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
+        else:
+            aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
+            ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
+            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy', aff_data)
+            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy', ssp585_data)
 
         # Calculate mean and standar deviation
         if var == 'tas':

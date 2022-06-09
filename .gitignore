@@ -7,6 +7,7 @@ tags
 *.log
 *.pdf
 *.gz
+*.npy
 svg-inkscape
 doc/afforestation_draft.aux.bbl
 doc/afforestation_draft.aux.blg
