@@ -69,10 +69,10 @@ for inst in models.keys():
     filenames = get_filenames('LUMIP', inst, models[inst], 'esm-ssp585-ssp126Lu', ensembles[inst],
             'Lmon', 'cVeg')[0]
 
-    cdo.gridarea(input=filenames, output='grid.nc')
+    cdo.gridarea(input=filenames, output=DATA_DIR+'/grid.nc')
 
     @cdod.cdo_cat(input2='')
-    @cdod.cdo_mul(input2='grid.nc')
+    @cdod.cdo_mul(input2=DATA_DIR+'/grid.nc')
     @cdod.cdo_fldsum
     @cdod.cdo_yearmonmean
     @cdod.cdo_divc(str(KG_IN_PG))
