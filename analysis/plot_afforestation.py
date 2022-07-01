@@ -118,13 +118,13 @@ def make_veg_plots():
             years = list(range(2015, 2101))
             plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg')
+                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png')
             plt.close()
 
             # Plot the graphs for anomalies relative to the esm-ssp585
             plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg')
+                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png')
             plt.close()
 
 
@@ -157,16 +157,16 @@ def make_clim_plots():
         years = list(range(2015, 2101))
         plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles.svg')
+                f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles.png')
         plt.close()
         plot_ensembles_clim(years, ssp585_data, ssp585_mean, ssp585_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles.svg')
+                f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles.png')
         plt.close()
         plot_ensembles_clim(years, ssp585_data-aff_data, ssp585_mean-aff_mean,
                 aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg')
+                f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png')
         plt.close()
 
 

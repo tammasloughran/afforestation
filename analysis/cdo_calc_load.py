@@ -19,7 +19,7 @@ else:
                                     SEC_IN_DAY, SEC_IN_YEAR, TABLES, VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
-cdo.debug = False
+cdo.debug = True
 
 
 # Box region definition
@@ -139,7 +139,7 @@ def load_aus_base_flux(var:str, input:str)->np.ma.MaskedArray:
 
 
 ## Decorator to add multiplication of the grid area to the CDO command
-cdo_mul_grid_area = cdod.cdo_mul(cdod.get_str(cdod.cdo_gridarea, input=LAND_FRAC_FILE))
+cdo_mul_grid_area = cdod.cdo_mul(input2=cdod.get_str(cdod.cdo_gridarea, input=LAND_FRAC_FILE))
 
 
 def cdo_sec2mon(cdo_func:FunctionType)->np.ma.MaskedArray:

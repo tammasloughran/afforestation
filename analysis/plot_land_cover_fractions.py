@@ -7,7 +7,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-if __name__ != 'analysis.plot_afforestation':
+if __name__ != 'analysis.plot_land_cover_fractions':
     from cdo_calc_load import cdo_cover_area_load
     from cmip_files import get_filename
     from constants import FRAC_VARIABLES, M2_IN_MILKM2
@@ -53,7 +53,7 @@ def make_land_cover_plot():
     plt.ylabel("Area (million km$^2$)")
     plt.xlabel("Year")
     plt.legend()
-    plt.savefig(f'{PLOTS_DIR}/land_areas.svg')
+    plt.savefig(f'{PLOTS_DIR}/land_areas.png')
 
     plt.figure()
     for var in FRAC_VARIABLES[table]:
@@ -64,7 +64,7 @@ def make_land_cover_plot():
     plt.xlabel("Year")
     plt.hlines(y=0, xmin=years[0], xmax=years[-1], linestyle='dashed', color='black')
     plt.legend(loc='lower right')
-    plt.savefig(f'{PLOTS_DIR}/land_areas_diff.svg')
+    plt.savefig(f'{PLOTS_DIR}/land_areas_diff.png')
 
     print("By the end of the century:")
     print(f"Forrest expansion: {(aff_areas['treeFrac']-ssp585_areas['treeFrac'])[-1]}")

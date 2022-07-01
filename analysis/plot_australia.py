@@ -60,7 +60,7 @@ def plot_veg_region(years, data, data_mean, data_std, var, label=''):
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 Australia {var}")
-    plt.savefig('plots/'+var+'_aus_'+label+'.svg')
+    plt.savefig('plots/'+var+'_aus_'+label+'.png')
 
 
 def plot_clim_region(years, data, data_mean, data_std, var, label=''):
@@ -76,7 +76,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, label=''):
         plt.ylabel('$^\circ$C')
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 Australia {var}")
-    plt.savefig('plots/'+var+'_aus_'+label+'.svg')
+    plt.savefig('plots/'+var+'_aus_'+label+'.png')
 
 
 def make_australia_plots():
@@ -92,7 +92,7 @@ def make_australia_plots():
 
             # Load the afforestation data.
             if load_npy_files:
-                aff_dat = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy')
+                aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy')
             else:
                 aff_data = np.ones((NENS,NTIMES))*np.nan
                 for i, ens in enumerate(ENSEMBLES):
@@ -109,7 +109,7 @@ def make_australia_plots():
 
             # Load the ssp585 data.
             if load_npy_files:
-                    ssp585_data[i,:] = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
+                    ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
             else:
                 ssp585_data = np.ones((NENS,NTIMES))*np.nan
                 for i, ens in enumerate(ENSEMBLES):
