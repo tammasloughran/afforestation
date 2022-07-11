@@ -5,6 +5,7 @@ import glob
 import os
 
 import matplotlib.pyplot as plt
+import netCDF4 as nc
 import numpy as np
 
 if __name__ != 'analysis.plot_land_cover_fractions':
@@ -36,6 +37,9 @@ PLOTS_DIR = 'plots'
 
 
 def make_land_cover_plot():
+    """Create plot of the land cover for forest, grass and crop for esm-ssp585 and
+    esm-ssp585-ssp126Lu.
+    """
     table = 'Lmon'
     years = list(range(2015, 2101))
 
@@ -74,8 +78,45 @@ def make_land_cover_plot():
     print(f"Crop minimum: {(aff_areas['cropFrac']-ssp585_areas['cropFrac'])[imin]}")
 
 
+def make_afforestation_pft_plot():
+    """Plot the pfts for the afforestation scenario.
+    """
+    CABLE_LUC = '/g/data/p66/txz599/data/luc_ssp126/cableCMIP6_LC_2*.nc'
+    CABLE_AREA = 'data/gridarea.nc'
+    ncarea = nc.Dataset(CABLE_AREA, 'r')
+    grid_area = ncarea.variables['cell_area'][:]
+    files = glob.glob(CABLE_LUC)
+    files.sort()
+    nyears = len(files)
+    fractions = np.ones((nyears,4,145,192))*np.nan
+    for i,f in enumerate(files):
+        ncfile = nc.Dataset(f, 'r')
+        fractions[i,...] = ncfile.variables['fraction'][:,0:4,...]
+    fractions[fractions>5] = np.nan # The input files do not have a missing value attribute.
+    areas = fractions*grid_area/M2_IN_MILKM2
+    global_sum = np.nansum(areas, axis=(2,3))
+    years = list(range(2015,2102))
+    plt.figure()
+    plt.plot(years, global_sum[:,0,...], label='Evergreen needle leaf')
+    plt.plot(years, global_sum[:,1,...], label='Evergreen broad leaf')
+    plt.plot(years, global_sum[:,3,...], label='Deciduous broad leaf')
+    plt.title("CABLE forests in SSP1-2.6")
+    plt.xlabel('Time (year)')
+    plt.ylabel('Area (million km$^2$)')
+    plt.legend()
+    plt.savefig('plots/CABLE_forests.png')
+    plt.figure()
+    plt.plot(years, global_sum[:,2,...], label='Deciduous needle leaf')
+    plt.title("CABLE forests in SSP1-2.6")
+    plt.xlabel('Time (year)')
+    plt.ylabel('Area (million km$^2$)')
+    plt.legend()
+    plt.savefig('plots/CABLE_forests_deciduous_needle.png')
+
+
 if __name__ != 'analysis.plot_land_cover_fractions':
-    make_land_cover_plot()
+    #make_land_cover_plot()
+    make_land_cover_map()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
