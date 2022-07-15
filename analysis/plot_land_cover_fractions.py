@@ -5,16 +5,18 @@ import glob
 import os
 
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 import netCDF4 as nc
 import numpy as np
 
 if __name__ != 'analysis.plot_land_cover_fractions':
-    from cdo_calc_load import cdo_cover_area_load
-    from cmip_files import get_filename
+    from cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
+    from cmip_files import get_filename, LAND_FRAC_FILE
     from constants import FRAC_VARIABLES, M2_IN_MILKM2
 else:
-    from analysis.cdo_calc_load import cdo_cover_area_load
-    from analysis.cmip_files import get_filename
+    from analysis.cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
+    from analysis.cmip_files import get_filename, LAND_FRAC_FILE
     from analysis.constants import FRAC_VARIABLES, M2_IN_MILKM2
 
 COLORS = {
@@ -39,6 +41,8 @@ PLOTS_DIR = 'plots'
 def make_land_cover_plot():
     """Create plot of the land cover for forest, grass and crop for esm-ssp585 and
     esm-ssp585-ssp126Lu.
+    Plot the difference in land cover fractions/areas between 2015 and 2100 for the
+    esm-ssp585-ssp126Lu experiment.
     """
     table = 'Lmon'
     years = list(range(2015, 2101))
@@ -114,9 +118,38 @@ def make_afforestation_pft_plot():
     plt.savefig('plots/CABLE_forests_deciduous_needle.png')
 
 
+def make_area_anomaly_map():
+    """Plot the change in area for trees, crop and grass in esm-ssp585-ssp126Lu between 2015
+    and 2100.
+    """
+    for table in FRAC_VARIABLES.keys():
+        for var in FRAC_VARIABLES[table]:
+            frac_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', table, var)
+            area_anomaly = cdo_area_diff_load(var=var, input=frac_file[0])/M2_IN_MILKM2
+            ncfile = nc.Dataset(LAND_FRAC_FILE)
+            mask = ncfile.variables['sftlf'][:]
+            area_anomaly[mask==0] = np.nan
+            lats = ncfile.variables['lat'][:]
+            lons = ncfile.variables['lon'][:]
+
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+            abs_max = np.nanmax(np.abs(area_anomaly))
+            plt.pcolormesh(lons, lats, area_anomaly,
+                    vmax=abs_max/2, vmin=-abs_max/2,
+                    cmap='PRGn',
+                    transform=ccrs.PlateCarree())
+            ax.coastlines()
+            plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
+            plt.title(var.upper())
+            plt.tight_layout()
+            plt.savefig('plots/'+var+'_anomaly.png')
+
+
 if __name__ != 'analysis.plot_land_cover_fractions':
-    #make_land_cover_plot()
-    make_land_cover_map()
+    make_land_cover_plot()
+    make_afforestation_pft_plot()
+    make_area_anomaly_map()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
