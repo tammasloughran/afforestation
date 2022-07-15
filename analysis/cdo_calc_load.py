@@ -181,6 +181,18 @@ def cdo_cover_area_load(var:str, input:str)->np.ma.MaskedArray:
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
+@cdod.cdo_yearmonmean
+@cdod.cdo_selyear('2015','2100')
+@cdo_mul_grid_area
+@cdod.cdo_deltat
+def cdo_area_diff_load(var:str, input:str)->np.ma.MaskedArray:
+    """Load themap of the difference between 2015 and 2100 in land cover area.
+    @cdo.cdo_selyear(str(2015),str(2100))
+    @cdo.cdo_deltat
+    """
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
 @cdod.cdo_cat(input2='')
 @cdo_mul_land_area
 @cdod.cdo_fldsum
