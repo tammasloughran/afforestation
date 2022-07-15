@@ -12,18 +12,32 @@ import cdo as cdo_module
 import matplotlib.pyplot as plt
 import numpy as np
 
-if __name__ != 'analysis.plot_afforestation':
-    # plot_afforestation.py is main program or imported as a module from another script.
-    from baseline import global_sum_baselines
-    from cdo_calc_load import cdo_fetch_ensembles
-    from constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY, TABLES,
-                           VARIABLES)
-else:
+if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.baseline import global_sum_baselines
     from analysis.cdo_calc_load import cdo_fetch_ensembles
-    from analysis.constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY,
-                                    TABLES, VARIABLES)
+    from analysis.constants import (
+            CLIM_VARIABLES,
+            DATA_DIR,
+            ENSEMBLES,
+            PLOTS_DIR,
+            SEC_IN_DAY,
+            TABLES,
+            VARIABLES,
+            )
+else:
+    # plot_afforestation.py is main program or imported as a module from another script.
+    from baseline import global_sum_baselines
+    from cdo_calc_load import cdo_fetch_ensembles
+    from constants import (
+            CLIM_VARIABLES,
+            DATA_DIR,
+            ENSEMBLES,
+            PLOTS_DIR,
+            SEC_IN_DAY,
+            TABLES,
+            VARIABLES,
+            )
 
 # Local constants
 COLORS = {'gpp':'green',
@@ -36,8 +50,6 @@ COLORS = {'gpp':'green',
         'cSoil':'black',
         'tas':'black',
         'pr':'blue'}
-PLOTS_DIR = './plots'
-DATA_DIR = './data'
 
 files = glob.glob('./*')
 if PLOTS_DIR not in files:
@@ -46,12 +58,13 @@ if DATA_DIR not in files:
     os.mkdir(DATA_DIR)
 
 # Control flag
-files = glob.glob('./data/*')
+files = glob.glob('{DATA_DIR}/cVeg_*_global.npy')
 if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
 #load_npy_files = True # Uncomment to override previous check.
+
 
 def plot_ensembles(years, data, data_mean, data_std, var):
     """Plot all ensemble members with ensemble mean and standard deviation.

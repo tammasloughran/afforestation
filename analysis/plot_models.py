@@ -13,16 +13,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cdo_decorators as cdod
 
-if __name__ != 'analysis.plot_afforestation':
-    # plot_afforestation.py is main program or imported as a module from another script.
-    from cmip_files import get_filenames
-    from constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY, TABLES,
-                           VARIABLES, KG_IN_PG)
-else:
+if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cmip_files import get_filenames
     from analysis.constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY,
                                     TABLES, VARIABLES, KG_IN_PG)
+else:
+    # plot_afforestation.py is main program or imported as a module from another script.
+    from cmip_files import get_filenames
+    from constants import (CLIM_VARIABLES, ENSEMBLES, SEC_IN_DAY, TABLES,
+                           VARIABLES, KG_IN_PG)
+
 cdo = cdo_module.Cdo()
 
 # Local constants
