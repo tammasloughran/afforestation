@@ -57,7 +57,28 @@ By the end of the century:
     \item Abandonment: -1.11 million km²
 \end{itemize}
 
-Mid-century crop minimum: -2.74 million km²
+\begin{itemize}
+    \item Mid-century crop minimum: -2.74 million km²
+\end{itemize}
+
+\begin{figure}[!h]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas.svg}
+        \includegraphics[width=\linewidth]{../plots/treeFrac_anomaly.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/grassFrac_anomaly.png}
+    \end{subfigure}
+    \caption{ACCESS-ESM1.5 Land use area change from 215 to 2100 in the afforestation scenario. Left: forest. Right: Grass. In ACCESS-ESM1.5 LUH2 pasture fractions are allocated to C3 grass.}
+    \label{fig:land_use_map}
+\end{figure}
+
+Afforestation is dominated by growth of evergreen broadleaf forests, followed by evergreen needle leaf forests, then deciduous broadleaf forests.
+Deciduous needle leaf forests only make a small fraction of forrests and do not show any expansion.
+There are only a few areas where there is defforestation in the esm-ssp585-ssp126Lu experiment.
+These occur in deciduous broadleaf forests in eastern USA, China and western Russia (Figure \ref{fig:land_use_map}).
 
 \section{Results}
 
@@ -235,3 +256,4 @@ Mid-century crop minimum: -2.74 million km²
 \printbibliography
 
 \end{document}
+

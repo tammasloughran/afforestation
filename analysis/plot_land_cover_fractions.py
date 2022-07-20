@@ -10,14 +10,16 @@ import cartopy.feature as cfeature
 import netCDF4 as nc
 import numpy as np
 
-if __name__ != 'analysis.plot_land_cover_fractions':
-    from cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
-    from cmip_files import get_filename, LAND_FRAC_FILE
-    from constants import FRAC_VARIABLES, M2_IN_MILKM2
-else:
+if __name__ == 'analysis.plot_land_cover_fractions':
+    # imported as a module of the analysis package.
     from analysis.cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
     from analysis.cmip_files import get_filename, LAND_FRAC_FILE
     from analysis.constants import FRAC_VARIABLES, M2_IN_MILKM2
+else:
+    # is main program or imported as a module from another script.
+    from cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
+    from cmip_files import get_filename, LAND_FRAC_FILE
+    from constants import FRAC_VARIABLES, M2_IN_MILKM2
 
 COLORS = {
         'treeFrac':'green',
@@ -36,6 +38,15 @@ LABELS = {
                 'shrubFrac': 'shrub SSP5-8.5',
                 'grassFrac': 'grass SSP5-8.5'}}
 PLOTS_DIR = 'plots'
+
+
+# Control flag
+files = glob.glob('{DATA_DIR}/*')
+if any(['.npy' in f for f in files]):
+    load_npy_files = True
+else:
+    load_npy_files = False
+#load_npy_files = True # Uncomment to override previous check.
 
 
 def make_land_cover_plot():
@@ -86,7 +97,7 @@ def make_afforestation_pft_plot():
     """Plot the pfts for the afforestation scenario.
     """
     CABLE_LUC = '/g/data/p66/txz599/data/luc_ssp126/cableCMIP6_LC_2*.nc'
-    CABLE_AREA = 'data/gridarea.nc'
+    CABLE_AREA = DATA_DIR+'/gridarea.nc'
     ncarea = nc.Dataset(CABLE_AREA, 'r')
     grid_area = ncarea.variables['cell_area'][:]
     files = glob.glob(CABLE_LUC)
