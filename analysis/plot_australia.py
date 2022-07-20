@@ -96,7 +96,8 @@ def make_australia_plots():
             else:
                 aff_data = np.ones((NENS,NTIMES))*np.nan
                 for i, ens in enumerate(ENSEMBLES):
-                    filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
+                    filenames = ' '.join(
+                            get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
                     filenames = '[ '+filenames+' ]'
                     if var in ['cVeg', 'cLitter', 'cSoil']:
                         aff_data[i,:] = load_aus_pool(input=filenames, var=var)
@@ -109,7 +110,7 @@ def make_australia_plots():
 
             # Load the ssp585 data.
             if load_npy_files:
-                    ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
+                ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
             else:
                 ssp585_data = np.ones((NENS,NTIMES))*np.nan
                 for i, ens in enumerate(ENSEMBLES):
@@ -137,7 +138,7 @@ def make_australia_plots():
         print("Plotting region australia for ", var)
         # Load the afforestation data
         if load_npy_files:
-            aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
+            aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy')
             ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
         else:
             aff_data = np.ones((NENS,NTIMES))*np.nan
