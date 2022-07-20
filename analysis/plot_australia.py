@@ -2,6 +2,8 @@
 import glob
 import os
 
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -29,6 +31,14 @@ COLORS = {'gpp':'green',
         'cSoil':'black',
         'tas':'black',
         'pr':'blue'}
+REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # afforestation/deforesation
+        'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # reforrestation
+        'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # afforest & deforestaion
+        'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # reforrestation
+        'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # low reforrestation
+        'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # deforrestation
+        'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # afforestation
+        'East Asia': ([8.34,45.87],[96.25,148.87])} # afforestation and deforestation
 PLOTS_DIR = './plots'
 DATA_DIR = './data'
 
@@ -49,6 +59,30 @@ else:
 years = list(range(2015, 2101))
 
 
+def plot_regions_map():
+    """Plot the box regions on a map.
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+    ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
+    ax.add_feature(cfeature.LAND)
+    ax.add_feature(cfeature.OCEAN)
+    ax.add_feature(cfeature.COASTLINE)
+    for region,box in REGIONS.items():
+        plt.plot([box[1][0],box[1][1],box[1][1],box[1][0],box[1][0]],
+                [box[0][1],box[0][1],box[0][0],box[0][0],box[0][1]],
+                transform=ccrs.PlateCarree())
+        plt.annotate(region, (box[1][0],box[0][0]))
+    ax.set_xticks([-180,-120, -60, 0, 60, 120, 180], crs=ccrs.PlateCarree())
+    ax.set_yticks([-90, -60, -30, 0, 30, 60, 90], crs=ccrs.PlateCarree())
+    plt.xlabel('Longitude (°E)')
+    plt.ylabel('Latitude (°N)')
+    plt.title('Regions')
+    plt.tight_layout()
+    plt.savefig('regional_analysis_map.png')
+    plt.show()
+
+
 def plot_veg_region(years, data, data_mean, data_std, var, label=''):
     plt.figure()
     for i,ens in enumerate(ENSEMBLES):
@@ -61,6 +95,7 @@ def plot_veg_region(years, data, data_mean, data_std, var, label=''):
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 Australia {var}")
     plt.savefig('plots/'+var+'_aus_'+label+'.png')
+    plt.show()
 
 
 def plot_clim_region(years, data, data_mean, data_std, var, label=''):
@@ -172,6 +207,7 @@ def make_australia_plots():
 
 
 if __name__ != 'analysis.plot_australia':
+    plot_regions_map()
     make_australia_plots()
 
     # Clean up
