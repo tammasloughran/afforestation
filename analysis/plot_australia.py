@@ -11,12 +11,12 @@ if __name__ == 'analysis.plot_australia':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cdo_calc_load import (load_aus_base_flux, load_aus_flux,
                                         load_aus_pool, load_aus_clim)
-    from analysis.cmip_files import get_filename
+    from analysis.cmip_files import get_filename, LAND_FRAC_FILE
     from analysis.constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES, SEC_IN_DAY
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from cdo_calc_load import load_aus_base_flux, load_aus_flux, load_aus_pool, load_aus_clim
-    from cmip_files import get_filename
+    from cmip_files import get_filename, LAND_FRAC_FILE
     from constants import CLIM_VARIABLES, ENSEMBLES, TABLES, VARIABLES, SEC_IN_DAY
 
 NTIMES = 86
@@ -54,7 +54,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = False # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -93,7 +93,7 @@ def plot_veg_region(years, data, data_mean, data_std, var, label=''):
     plt.xlim(left=years[0], right=years[-1])
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
-    plt.title(f"ACCES-ESM1.5 Australia {var}")
+    plt.title(f"ACCES-ESM1.5 {region} {var}")
     plt.savefig('plots/'+var+'_aus_'+label+'.png')
     plt.show()
 
@@ -110,98 +110,153 @@ def plot_clim_region(years, data, data_mean, data_std, var, label=''):
     elif var=='tas':
         plt.ylabel('$^\circ$C')
     plt.xlabel('Time (Year)')
-    plt.title(f"ACCES-ESM1.5 Australia {var}")
+    plt.title(f"ACCES-ESM1.5 {region} {var}")
     plt.savefig('plots/'+var+'_aus_'+label+'.png')
 
 
-def make_australia_plots():
-    for table in TABLES:
-        for var in VARIABLES[table]:
-            # Get the reference period value.
-            ref_file = '[ data/'+var+'_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc ]'
-            if var in ['cVeg', 'cLitter', 'cSoil']:
-                reference = load_aus_pool(input=ref_file, var=var)
-            elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
-                reference = load_aus_base_flux(input=ref_file, var=var)
+def make_regional_plots():
+    for region,box REGIONS.items():
+        # Create loader functions
+        @cdod.cdo_cat(input2='') # Concatenate all files in input1.
+        @cdo_mul_land_area
+        @cdod.cdo_sellonlatbox(
+                str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_fldsum
+        @cdod.cdo_yearmonmean
+        @cdod.cdo_divc(str(KG_IN_PG))
+        def load_region_pool(var:str, input:str)->np.ma.MaskedArray:
+            return cdo.copy(
+                    input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
 
-            # Load the afforestation data.
+
+        @cdod.cdo_cat(input2='')
+        @cdo_mul_land_area
+        @cdod.cdo_sellonlatbox(
+                str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_fldsum
+        @cdod.cdo_mulc(str(SEC_IN_YEAR))
+        @cdod.cdo_divc(str(KG_IN_PG))
+        def load_region_base_flux(var:str, input:str)->np.ma.MaskedArray:
+            return cdo.copy(
+                    input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+        @cdod.cdo_cat(input2='')
+        @cdo_mul_land_area
+        @cdod.cdo_sellonlatbox(
+                str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_fldsum
+        @cdod.cdo_mulc(str(SEC_IN_DAY))
+        @cdod.cdo_muldpm
+        @cdod.cdo_yearsum
+        @cdod.cdo_divc(str(KG_IN_PG))
+        def load_region_flux(var:str, input:str)->np.ma.MaskedArray:
+            return cdo.copy(
+                    input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+        @cdod.cdo_cat(input2='')
+        @cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+        @cdod.cdo_sellonlatbox(
+                str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_fldmean
+        @cdod.cdo_yearmonmean
+        def load_region_clim(var:str, input:str)->np.ma.MaskedArray:
+            return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+        rname = region.replace(' ', '').lower()
+
+        for table in tables:
+            for var in variables[table]:
+                # get the reference period value.
+                ref_file = f'[ data/{var}_access-esm1-5_esm-hist-aff_ensmean_200501-202412mean.nc ]'
+                if var in ['cveg', 'clitter', 'csoil']:
+                    reference = load_region_pool(input=ref_file, var=var)
+                elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                    reference = load_region_base_flux(input=ref_file, var=var)
+
+                # load the afforestation data.
+                if load_npy_files:
+                    aff_data = np.load(
+                            f'{data_dir}/{var}_access-esm1.5_esm-ssp585-ssp126lu_{rname}.npy')
+                else:
+                    aff_data = np.ones((nens,ntimes))*np.nan
+                    for i, ens in enumerate(ensembles):
+                        filenames = ' '.join(
+                                get_filename('lumip', 'esm-ssp585-ssp126lu', ens, table, var))
+                        filenames = '[ '+filenames+' ]'
+                        if var in ['cveg', 'clitter', 'csoil']:
+                            aff_data[i,:] = load_region_pool(input=filenames, var=var)
+                        elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                            aff_data[i,:] = load_region_flux(input=filenames, var=var)
+                    np.save(f'{data_dir}/{var}_access-esm1.5_esm-ssp585-ssp126lu_{rname}.npy',
+                            aff_data)
+
+                # calculate anomaly.
+                anom_data = aff_data - reference
+
+                # load the ssp585 data.
+                if load_npy_files:
+                    ssp585_data = np.load(f'{data_dir}/{var}_access-esm1.5_esm-ssp585_{rname}.npy')
+                else:
+                    ssp585_data = np.ones((nens,ntimes))*np.nan
+                    for i, ens in enumerate(ensembles):
+                        filenames = ' '.join(get_filename('c4mip', 'esm-ssp585', ens, table, var))
+                        filenames = '[ '+filenames+' ]'
+                        if var in ['cveg', 'clitter', 'csoil']:
+                            ssp585_data[i,:] = load_region_pool(input=filenames, var=var)
+                        elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                            ssp585_data[i,:] = load_region_flux(input=filenames, var=var)
+                    np.save(f'{data_dir}/{var}_access-esm1.5_esm-ssp585_{rname}.npy', ssp585_data)
+
+                # clalculate the difference.
+                diff_data = aff_data - ssp585_data
+
+                # plot
+                anom_data_mean = anom_data.mean(axis=0)
+                anom_data_std = anom_data.std(axis=0, ddof=1)
+                plot_veg_region(years, anom_data, anom_data_mean, anom_data_std, var, label='anom')
+                diff_data_mean = diff_data.mean(axis=0)
+                diff_data_std = diff_data.std(axis=0, ddof=1)
+                plot_veg_region(years, diff_data, diff_data_mean, diff_data_std, var, label='diff')
+
+        for var in ['tas', 'pr']:
+            # load the afforestation data
             if load_npy_files:
-                aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy')
+                aff_data = np.load(f'{data_dir}/{var}_access-esm1.5_esm-ssp585-ssp126lu_{rname}.npy')
+                ssp585_data = np.load(f'{data_dir}/{var}_access-esm1.5_esm-ssp585_{rname}.npy')
             else:
-                aff_data = np.ones((NENS,NTIMES))*np.nan
-                for i, ens in enumerate(ENSEMBLES):
-                    filenames = ' '.join(
-                            get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
+                aff_data = np.ones((nens,ntimes))*np.nan
+                ssp585_data = np.ones((nens,ntimes))*np.nan
+                for i, ens in enumerate(ensembles):
+                    filenames = ' '.join(get_filename(
+                            'lumip', 'esm-ssp585-ssp126lu', ens, 'amon', var))
                     filenames = '[ '+filenames+' ]'
-                    if var in ['cVeg', 'cLitter', 'cSoil']:
-                        aff_data[i,:] = load_aus_pool(input=filenames, var=var)
-                    elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
-                        aff_data[i,:] = load_aus_flux(input=filenames, var=var)
-                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy', aff_data)
-
-            # Calculate anomaly.
-            anom_data = aff_data - reference
-
-            # Load the ssp585 data.
-            if load_npy_files:
-                ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
-            else:
-                ssp585_data = np.ones((NENS,NTIMES))*np.nan
-                for i, ens in enumerate(ENSEMBLES):
-                    filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, table, var))
+                    aff_data[i,:] = load_aus_clim(input=filenames, var=var)
+                    filenames = ' '.join(get_filename('c4mip', 'esm-ssp585', ens, 'amon', var))
                     filenames = '[ '+filenames+' ]'
-                    if var in ['cVeg', 'cLitter', 'cSoil']:
-                        ssp585_data[i,:] = load_aus_pool(input=filenames, var=var)
-                    elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
-                        ssp585_data[i,:] = load_aus_flux(input=filenames, var=var)
-                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy', ssp585_data)
+                    ssp585_data[i,:] = load_aus_clim(input=filenames, var=var)
+                np.save(f'{data_dir}/{var}_access-esm1.5_esm-ssp585-ssp126lu_{rname}.npy', aff_data)
+                np.save(f'{data_dir}/{var}_access-esm1.5_esm-ssp585_{rname}.npy', ssp585_data)
 
-            # Clalculate the difference.
+            if var=='tas':
+                aff_data -= 273.15
+                ssp585_data -= 273.15
+            elif var=='pr':
+                aff_data *= sec_in_day
+                ssp585_data *= sec_in_day
+
+            # calculate the difference
             diff_data = aff_data - ssp585_data
 
-            # Plot
-            anom_data_mean = anom_data.mean(axis=0)
-            anom_data_std = anom_data.std(axis=0, ddof=1)
-            plot_veg_region(years, anom_data, anom_data_mean, anom_data_std, var, label='anom')
-            diff_data_mean = diff_data.mean(axis=0)
-            diff_data_std = diff_data.std(axis=0, ddof=1)
-            plot_veg_region(years, diff_data, diff_data_mean, diff_data_std, var, label='diff')
-
-    for var in ['tas', 'pr']:
-        # Load the afforestation data
-        if load_npy_files:
-            aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy')
-            ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy')
-        else:
-            aff_data = np.ones((NENS,NTIMES))*np.nan
-            ssp585_data = np.ones((NENS,NTIMES))*np.nan
-            for i, ens in enumerate(ENSEMBLES):
-                filenames = ' '.join(get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var))
-                filenames = '[ '+filenames+' ]'
-                aff_data[i,:] = load_aus_clim(input=filenames, var=var)
-                filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var))
-                filenames = '[ '+filenames+' ]'
-                ssp585_data[i,:] = load_aus_clim(input=filenames, var=var)
-            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_aus.npy', aff_data)
-            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_aus.npy', ssp585_data)
-
-        if var=='tas':
-            aff_data -= 273.15
-            ssp585_data -= 273.15
-        elif var=='pr':
-            aff_data *= SEC_IN_DAY
-            ssp585_data *= SEC_IN_DAY
-
-        # Calculate the difference
-        diff_data = aff_data - ssp585_data
-
-        # Plot
-        plot_clim_region(years, aff_data, aff_data.mean(axis=0), aff_data.std(axis=0, ddof=1),
-                var, label='aff_'+var)
-        plot_clim_region(years, ssp585_data, ssp585_data.mean(axis=0),
-                ssp585_data.std(axis=0, ddof=1), var, label='ssp585_'+var)
-        plot_clim_region(years, diff_data, diff_data.mean(axis=0), diff_data.std(axis=0, ddof=1),
-                var, label='diff_'+var)
+            # plot
+            plot_clim_region(years, aff_data, aff_data.mean(axis=0), aff_data.std(axis=0, ddof=1),
+                    var, label='aff_'+var)
+            plot_clim_region(years, ssp585_data, ssp585_data.mean(axis=0),
+                    ssp585_data.std(axis=0, ddof=1), var, label='ssp585_'+var)
+            plot_clim_region(years, diff_data, diff_data.mean(axis=0), diff_data.std(axis=0, ddof=1),
+                    var, label='diff_'+var)
 
     plt.show()
 
