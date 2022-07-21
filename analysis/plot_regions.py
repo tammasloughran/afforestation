@@ -52,14 +52,14 @@ COLORS = {'gpp':'green',
         'tas':'black',
         'pr':'blue'}
 REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # afforestation/deforesation
+        'Australia': ([-45,-10],[110,155]), # Neutral
         'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # reforrestation
         'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # afforest & deforestaion
         'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # reforrestation
         'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # low reforrestation
         'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # deforrestation
         'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # afforestation
-        'East Asia': ([8.34,45.87],[96.25,148.87]), # afforestation and deforestation
-        'Australia': ([-45,-10],[110,155])} # Neutral
+        'East Asia': ([8.34,45.87],[96.25,148.87])} # afforestation and deforestation
 
 files = glob.glob('./*')
 if PLOTS_DIR not in files:
@@ -73,7 +73,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+#load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -110,7 +110,7 @@ def plot_regions_map():
     plt.title('Regions')
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/regional_analysis_map.png')
-    plt.close()
+    #plt.close()
 
 
 def plot_veg_region(years, data, data_mean, data_std, var, region, label=''):
@@ -124,9 +124,9 @@ def plot_veg_region(years, data, data_mean, data_std, var, region, label=''):
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 {region} {var}")
-    reg = region.replace(' ', '')
+    reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
-    plt.close()
+    #plt.close()
 
 
 def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
@@ -142,9 +142,9 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
         plt.ylabel('$^\circ$C')
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 {label} {var}")
-    reg = region.replace(' ', '')
+    reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
-    plt.close()
+    #plt.close()
 
 
 def make_regional_plots():
@@ -257,9 +257,9 @@ def make_regional_plots():
             # Load the afforestation data.
             if load_npy_files:
                 aff_data = np.load(
-                        f'{data_dir}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_{rname}.npy')
+                        f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_{rname}.npy')
                 ssp585_data = np.load(
-                        f'{data_dir}/{var}_ACCESS-ESM1.5_esm-ssp585_{rname}.npy')
+                        f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_{rname}.npy')
             else:
                 aff_data = np.ones((NENS,NTIMES))*np.nan
                 ssp585_data = np.ones((NENS,NTIMES))*np.nan
