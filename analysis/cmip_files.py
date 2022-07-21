@@ -6,7 +6,7 @@ LAND_FRAC_FILE = '/g/data/fs38/publications/CMIP6/LUMIP/CSIRO/ACCESS-ESM1-5/esm-
 
 
 def get_filename(mip:str, exp:str, ens:str, table:str, var:str):
-    """Insert MIP experiment, ensemble, table, and variable strings into a CMOR directory tree 
+    """Insert MIP experiment, ensemble, table, and variable strings into a CMOR directory tree
     and filename string. Automatically detects the period for the file name.
     """
     # The ensemble field is specific to ACCESS. There may be other models that use a different

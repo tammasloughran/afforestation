@@ -19,33 +19,7 @@ else:
                                     SEC_IN_DAY, SEC_IN_YEAR, TABLES, VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
-cdo.debug = True
-
-
-# Box region definition
-class BoxRegion(object):
-
-    def __init__(self, north, east, south, west):
-        self.north = north
-        self.east = east
-        self.south = south
-        self.west = west
-        self.northwest = (west, north)
-        self.northeast = (east, north)
-        self.southeast = (east, south)
-        self.southwest = (west, south)
-
-    def box_x_y(self):
-        return zip(self.northwest, self.northeast, self.southeast, self.southwest, self.northwest)
-
-
-# Australian box boundaries
-aus_north = -10 # degrees north
-aus_east = 110  # degrees east
-aus_south = -45 # degrees north
-aus_west = 155  # Degrees east
-aus_region = BoxRegion(aus_north, aus_east, aus_south, aus_west)
-aus_x, aus_y = aus_region.box_x_y()
+cdo.debug = False
 
 
 def cdo_mul_land_area(cdo_func):

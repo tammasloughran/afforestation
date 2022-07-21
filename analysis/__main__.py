@@ -9,8 +9,9 @@ from analysis.plot_land_cover_fractions import (
         make_land_cover_plot,
         make_afforestation_pft_plot,
         make_area_anomaly_map)
-from analysis.plot_australia import (
-        make_australia_plots)
+from analysis.plot_regions import (
+        make_regional_plots,
+        plot_regions_map)
 from analysis.constants import PLOTS_DIR, DATA_DIR
 
 files = os.listdir('.')
@@ -25,7 +26,8 @@ def main():
     make_area_anomaly_map()
     make_afforestation_pft_plot()
     make_area_anomaly_map()
-    make_australia_plots()
+    plot_regions_map()
+    make_regional_plots()
 
 
 sys.exit(main())
