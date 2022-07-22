@@ -58,7 +58,7 @@ if DATA_DIR not in files:
     os.mkdir(DATA_DIR)
 
 # Control flag
-files = glob.glob('{DATA_DIR}/cVeg_*_global.npy')
+files = glob.glob(f'{DATA_DIR}/cVeg_*_global.npy')
 if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
@@ -69,6 +69,7 @@ else:
 def plot_ensembles(years, data, data_mean, data_std, var):
     """Plot all ensemble members with ensemble mean and standard deviation.
     """
+    model = 'ACCESS-ESM1.5'
     plt.figure()
     for ens in ENSEMBLES:
         plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
@@ -79,12 +80,13 @@ def plot_ensembles(years, data, data_mean, data_std, var):
     plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
     plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
-    plt.title(f"ACCESS-ESM1-5 {var.upper()}")
+    plt.title(f"{model} {var.upper()}")
 
 
 def plot_ensembles_clim(years, data, data_mean, data_std, var):
     """Plot all ensemble members with ensemble mean and standard deviation.
     """
+    model = 'ACCESS-ESM1.5'
     plt.figure()
     for ens in ENSEMBLES:
         plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
@@ -97,22 +99,23 @@ def plot_ensembles_clim(years, data, data_mean, data_std, var):
         plt.ylabel(var.upper()+' ($^{\circ}$C)')
     elif var=='pr':
         plt.ylabel(f'{var.upper()} (mm/day)')
-    plt.title(f"ACCESS-ESM1-5 {var.upper()}")
+    plt.title(f"{model} {var.upper()}")
 
 
 def make_veg_plots():
+    model = 'ACCESS-ESM1.5'
     for table in TABLES:
         for var in VARIABLES[table]:
             print(f"Processing {var}")
             # Load data
             if load_npy_files:
-                aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
-                ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
+                aff_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy')
+                ssp585_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585_global.npy')
             else:
                 aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
                 ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
-                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy', aff_data)
-                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy', ssp585_data)
+                np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy', aff_data)
+                np.save(f'{DATA_DIR}/{var}_{}model_esm-ssp585_global.npy', ssp585_data)
 
 
             # Anomaly, mean and standard deviation relative to 2015 baseline. Demonstrates overall
@@ -131,28 +134,29 @@ def make_veg_plots():
             years = list(range(2015, 2101))
             plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png')
+                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_anomalies.png')
             plt.close()
 
             # Plot the graphs for anomalies relative to the esm-ssp585
             plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png')
+                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png')
             plt.close()
 
 
 def make_clim_plots():
+    model = 'ACCESS-ESM1.5'
     table = 'Amon'
     for var in CLIM_VARIABLES[table]:
         print(f"Processing {var}")
         if load_npy_files:
-            aff_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
-            ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
+            aff_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy')
+            ssp585_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585_global.npy')
         else:
             aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
             ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
-            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy', aff_data)
-            np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy', ssp585_data)
+            np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy', aff_data)
+            np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_global.npy', ssp585_data)
 
         # Calculate mean and standar deviation
         if var == 'tas':
@@ -170,16 +174,16 @@ def make_clim_plots():
         years = list(range(2015, 2101))
         plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles.png')
+                f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png')
         plt.close()
         plot_ensembles_clim(years, ssp585_data, ssp585_mean, ssp585_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles.png')
+                f'{var}_{model}_esm-ssp585_ensembles.png')
         plt.close()
         plot_ensembles_clim(years, ssp585_data-aff_data, ssp585_mean-aff_mean,
                 aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png')
+                f'{var}_{model}_esm-ssp585_ensembles_diff.png')
         plt.close()
 
 

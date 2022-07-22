@@ -67,7 +67,7 @@ if PLOTS_DIR not in files:
 if DATA_DIR not in files:
     os.mkdir(DATA_DIR)
 
-# Control flag
+# Control flag.
 files = glob.glob('./data/*')
 if any(['.npy' in f for f in files]):
     load_npy_files = True
@@ -149,6 +149,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
 
 
 def make_regional_plots():
+    model = 'ACCESS-ESM1.5'
     for region,box in REGIONS.items():
         # Create loader functions
         @cdod.cdo_cat(input2='') # Concatenate all files in input1.
@@ -192,14 +193,14 @@ def make_regional_plots():
             return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
-        print("Plotting ", region)
+        print("Plotting", region)
         rname = region.replace(' ', '').lower()
 
         for table in TABLES:
             for var in VARIABLES[table]:
                 print("Processing", var)
                 # Get the reference period value.
-                ref_file = f'[ data/{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc ]'
+                ref_file = f'[ {DATA_DIR}/{var}_{model}_esm-hist-aff_ensmean_200501-202412mean.nc ]'
                 if var in ['cVeg', 'cLitter', 'cSoil']:
                     reference = load_region_pool(input=ref_file, var=var)
                 elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
@@ -207,8 +208,7 @@ def make_regional_plots():
 
                 # Load the afforestation data.
                 if load_npy_files:
-                    aff_data = np.load(
-                            f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_{rname}.npy')
+                    aff_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_{rname}.npy')
                 else:
                     aff_data = np.ones((NENS,NTIMES))*np.nan
                     for i, ens in enumerate(ENSEMBLES):
@@ -219,15 +219,14 @@ def make_regional_plots():
                             aff_data[i,:] = load_region_pool(input=filenames, var=var)
                         elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
                             aff_data[i,:] = load_region_flux(input=filenames, var=var)
-                    np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_{rname}.npy',
-                            aff_data)
+                    np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_{rname}.npy', aff_data)
 
                 # Calculate anomaly.
                 anom_data = aff_data - reference
 
                 # Load the ssp585 data.
                 if load_npy_files:
-                    ssp585_data = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_{rname}.npy')
+                    ssp585_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585_{rname}.npy')
                 else:
                     ssp585_data = np.ones((NENS,NTIMES))*np.nan
                     for i, ens in enumerate(ENSEMBLES):
@@ -237,42 +236,57 @@ def make_regional_plots():
                             ssp585_data[i,:] = load_region_pool(input=filenames, var=var)
                         elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
                             ssp585_data[i,:] = load_region_flux(input=filenames, var=var)
-                    np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_{rname}.npy', ssp585_data)
+                    np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_{rname}.npy', ssp585_data)
 
                 # Clalculate the difference.
                 diff_data = aff_data - ssp585_data
 
-                # Plot
+                # Calculate the ensemble mean and standard deviation.
                 anom_data_mean = anom_data.mean(axis=0)
                 anom_data_std = anom_data.std(axis=0, ddof=1)
-                plot_veg_region(
-                        years, anom_data, anom_data_mean, anom_data_std, var, region, label='anom')
                 diff_data_mean = diff_data.mean(axis=0)
                 diff_data_std = diff_data.std(axis=0, ddof=1)
-                plot_veg_region(
-                        years, diff_data, diff_data_mean, diff_data_std, var, region, label='diff')
 
-        for var in CLIM_VARIABLES['Amon']:
+                # Plot.
+                plot_veg_region(
+                        years,
+                        anom_data,
+                        anom_data_mean,
+                        anom_data_std,
+                        var,
+                        region,
+                        label='anom',
+                        )
+                plot_veg_region(
+                        years,
+                        diff_data,
+                        diff_data_mean,
+                        diff_data_std,
+                        var,
+                        region,
+                        label='diff',
+                        )
+
+        table = 'Amon'
+        for var in CLIM_VARIABLES[table]:
             print("Processing", var)
             # Load the afforestation data.
             if load_npy_files:
-                aff_data = np.load(
-                        f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_{rname}.npy')
-                ssp585_data = np.load(
-                        f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_{rname}.npy')
+                aff_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_{rname}.npy')
+                ssp585_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585_{rname}.npy')
             else:
                 aff_data = np.ones((NENS,NTIMES))*np.nan
                 ssp585_data = np.ones((NENS,NTIMES))*np.nan
                 for i, ens in enumerate(ENSEMBLES):
                     filenames = ' '.join(get_filename(
-                            'LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var))
+                        'LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
                     filenames = '[ '+filenames+' ]'
                     aff_data[i,:] = load_region_clim(input=filenames, var=var)
-                    filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var))
+                    filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, table, var))
                     filenames = '[ '+filenames+' ]'
                     ssp585_data[i,:] = load_region_clim(input=filenames, var=var)
-                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_{rname}.npy', aff_data)
-                np.save(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_{rname}.npy', ssp585_data)
+                np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_{rname}.npy', aff_data)
+                np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_{rname}.npy', ssp585_data)
 
             if var=='tas':
                 aff_data -= 273.15
@@ -281,16 +295,37 @@ def make_regional_plots():
                 aff_data *= SEC_IN_DAY
                 ssp585_data *= SEC_IN_DAY
 
-            # calculate the difference
+            # Calculate the difference.
             diff_data = aff_data - ssp585_data
 
-            # plot
-            plot_clim_region(years, aff_data, aff_data.mean(axis=0),
-                    aff_data.std(axis=0, ddof=1), var, region, label='aff')
-            plot_clim_region(years, ssp585_data, ssp585_data.mean(axis=0),
-                    ssp585_data.std(axis=0, ddof=1), var, region, label='ssp585')
-            plot_clim_region(years, diff_data, diff_data.mean(axis=0),
-                    diff_data.std(axis=0, ddof=1), var, region, label='diff')
+            # Plot.
+            plot_clim_region(
+                    years,
+                    aff_data,
+                    aff_data.mean(axis=0),
+                    aff_data.std(axis=0, ddof=1),
+                    var,
+                    region,
+                    label='aff',
+                    )
+            plot_clim_region(
+                    years,
+                    ssp585_data,
+                    ssp585_data.mean(axis=0),
+                    ssp585_data.std(axis=0, ddof=1),
+                    var,
+                    region,
+                    label='ssp585',
+                    )
+            plot_clim_region(
+                    years,
+                    diff_data,
+                    diff_data.mean(axis=0),
+                    diff_data.std(axis=0, ddof=1),
+                    var,
+                    region,
+                    label='diff',
+                    )
 
 
 if __name__ != 'analysis.plot_regions':

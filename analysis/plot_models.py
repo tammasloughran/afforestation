@@ -66,25 +66,48 @@ ensembles = {
 
 data = {}
 for inst in models.keys():
+    # Create the gridarea.nc file.
+    data_files = glob.glob(DATA_DIR)
+    if 'gridarea_{models[inst]}.nc' not in data_files:
+        afile = get_filenames(
+                'LUMIP',
+                inst,
+                models[inst],
+                'esm-ssp585-ssp126Lu',
+                ensembles[inst],
+                'Lmon',
+                'cVeg',
+                )[0]
+        cdo.gridarea(input=filenames, output=f'{DATA_DIR}/gridarea_{models[inst]}.nc')
 
-    filenames = get_filenames('LUMIP', inst, models[inst], 'esm-ssp585-ssp126Lu', ensembles[inst],
-            'Lmon', 'cVeg')[0]
 
-    cdo.gridarea(input=filenames, output=DATA_DIR+'/grid.nc')
-
+    # The loader function needs to be defined in this loop to account
+    # for the model resolution.
     @cdod.cdo_cat(input2='')
-    @cdod.cdo_mul(input2=DATA_DIR+'/grid.nc')
+    @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea_{models[inst]}.nc')
     @cdod.cdo_fldsum
     @cdod.cdo_yearmonmean
     @cdod.cdo_divc(str(KG_IN_PG))
-    def cdo_pool_load_bad(var:str, input:str)->np.ma.MaskedArray:
-        return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+    def cdo_pool_load_model(var:str, input:str)->np.ma.MaskedArray:
+        return cdo.copy(
+                input=input,
+                options='-L',
+                returnCdf=True,
+                ).variables[var][:].squeeze()
 
-    filenames = ' '.join(get_filenames('LUMIP', inst, models[inst], 'esm-ssp585-ssp126Lu',
-        ensembles[inst], 'Lmon', 'cVeg'))
-    filenames = '[ '+filenames+' ]'
-    data[inst] = cdo_pool_load_bad(input=filenames, var='cVeg')
 
+    filenames = '[ ' + ' '.join(get_filenames(
+            'LUMIP',
+            inst,
+            models[inst],
+            'esm-ssp585-ssp126Lu',
+            ensembles[inst],
+            'Lmon',
+            'cVeg',
+            )) + ' ]'
+    data[inst] = cdo_pool_load_model(input=filenames, var='cVeg')
+
+# Plot.
 years = list(range(2015, 2101))
 plt.figure()
 for m in models.keys():
