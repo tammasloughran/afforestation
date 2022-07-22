@@ -158,8 +158,7 @@ def make_regional_plots():
         @cdod.cdo_yearmonmean
         @cdod.cdo_divc(str(KG_IN_PG))
         def load_region_pool(var:str, input:str)->np.ma.MaskedArray:
-            return cdo.copy(
-                    input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
+            return cdo.copy(input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
 
 
         @cdod.cdo_cat(input2='')

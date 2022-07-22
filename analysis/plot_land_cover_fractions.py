@@ -14,12 +14,12 @@ if __name__ == 'analysis.plot_land_cover_fractions':
     # imported as a module of the analysis package.
     from analysis.cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
     from analysis.cmip_files import get_filename, LAND_FRAC_FILE
-    from analysis.constants import FRAC_VARIABLES, M2_IN_MILKM2
+    from analysis.constants import FRAC_VARIABLES, M2_IN_MILKM2, PLOTS_DIR, DATA_DIR
 else:
     # is main program or imported as a module from another script.
     from cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
     from cmip_files import get_filename, LAND_FRAC_FILE
-    from constants import FRAC_VARIABLES, M2_IN_MILKM2
+    from constants import FRAC_VARIABLES, M2_IN_MILKM2, PLOTS_DIR, DATA_DIR
 
 COLORS = {
         'treeFrac':'green',
@@ -37,11 +37,9 @@ LABELS = {
                 'cropFrac': 'crop SSP5-8.5',
                 'shrubFrac': 'shrub SSP5-8.5',
                 'grassFrac': 'grass SSP5-8.5'}}
-PLOTS_DIR = 'plots'
-
 
 # Control flag
-files = glob.glob('{DATA_DIR}/*')
+files = glob.glob(f'{DATA_DIR}/*')
 if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
@@ -126,7 +124,7 @@ def make_afforestation_pft_plot():
     plt.xlabel('Time (year)')
     plt.ylabel('Area (million km$^2$)')
     plt.legend()
-    plt.savefig('plots/CABLE_forests_deciduous_needle.png')
+    plt.savefig('{PLOTS_DIR}/CABLE_forests_deciduous_needle.png')
 
 
 def make_area_anomaly_map():
@@ -148,13 +146,13 @@ def make_area_anomaly_map():
             abs_max = np.nanmax(np.abs(area_anomaly))
             plt.pcolormesh(lons, lats, area_anomaly,
                     vmax=abs_max/2, vmin=-abs_max/2,
-                    cmap='PRGn',
+                    cmap='nipy_spectral',#'PRGn', # nipy_spectral has a sharp color change at 0
                     transform=ccrs.PlateCarree())
-            ax.coastlines()
+            #ax.coastlines() # Drawing coastlines covers the coastal gridpoints
             plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
             plt.title(var.upper())
             plt.tight_layout()
-            plt.savefig('plots/'+var+'_anomaly.png')
+            plt.savefig(f'{PLOTS_DIR}/'+var+'_anomaly.png')
 
 
 if __name__ != 'analysis.plot_land_cover_fractions':
