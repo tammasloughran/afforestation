@@ -135,6 +135,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
         plt.plot(years, data[i,...], color='grey', alpha=0.4)
     plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var], alpha=0.4)
     plt.plot(years, data_mean, color=COLORS[var])
+    plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
     plt.xlim(left=years[0], right=years[-1])
     if var=='pr':
         plt.ylabel('mm/day')
