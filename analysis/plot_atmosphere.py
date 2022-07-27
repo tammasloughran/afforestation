@@ -9,7 +9,6 @@ from cdo import Cdo
 import cdo_decorators as cdod
 if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
-    from analysis.cdo_calc_load import cdo_fetch_ensembles
     from analysis.cmip_files import get_filename
     from analysis.constants import (
             DATA_DIR,
@@ -18,7 +17,6 @@ if __name__ == 'analysis.plot_afforestation':
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
-    from cdo_calc_load import cdo_fetch_ensembles
     from cmip_files import get_filename
     from constants import (
             DATA_DIR,
