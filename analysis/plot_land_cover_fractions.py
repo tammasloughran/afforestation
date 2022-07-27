@@ -15,11 +15,13 @@ if __name__ == 'analysis.plot_land_cover_fractions':
     from analysis.cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
     from analysis.cmip_files import get_filename, LAND_FRAC_FILE
     from analysis.constants import FRAC_VARIABLES, M2_IN_MILKM2, PLOTS_DIR, DATA_DIR
+    from analysis.jaisnb import jaisnb
 else:
     # is main program or imported as a module from another script.
     from cdo_calc_load import cdo_cover_area_load, cdo_area_diff_load
     from cmip_files import get_filename, LAND_FRAC_FILE
     from constants import FRAC_VARIABLES, M2_IN_MILKM2, PLOTS_DIR, DATA_DIR
+    from jaisnb import jaisnb
 
 COLORS = {
         'treeFrac':'green',
@@ -124,7 +126,7 @@ def make_afforestation_pft_plot():
     plt.xlabel('Time (year)')
     plt.ylabel('Area (million km$^2$)')
     plt.legend()
-    plt.savefig('{PLOTS_DIR}/CABLE_forests_deciduous_needle.png')
+    plt.savefig(f'{PLOTS_DIR}/CABLE_forests_deciduous_needle.png')
 
 
 def make_area_anomaly_map():
@@ -146,9 +148,11 @@ def make_area_anomaly_map():
             abs_max = np.nanmax(np.abs(area_anomaly))
             plt.pcolormesh(lons, lats, area_anomaly,
                     vmax=abs_max/2, vmin=-abs_max/2,
-                    cmap='nipy_spectral',#'PRGn', # nipy_spectral has a sharp color change at 0
+                    #cmap='nipy_spectral',#'PRGn', # nipy_spectral has a sharp color change at 0
+                    cmap=jaisnb,
                     transform=ccrs.PlateCarree())
-            #ax.coastlines() # Drawing coastlines covers the coastal gridpoints
+            ax.coastlines() # Drawing coastlines covers the coastal gridpoints.
+            # Only needed for diverging colormaps that have white in the centre.
             plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
             plt.title(var.upper())
             plt.tight_layout()

@@ -103,8 +103,8 @@ def plot_regions_map():
                 [box[0][1],box[0][1],box[0][0],box[0][0],box[0][1]],
                 transform=ccrs.PlateCarree())
         plt.annotate(region, (box[1][0],box[0][0]))
-    ax.set_xticks([-180,-120, -60, 0, 60, 120, 180], crs=ccrs.PlateCarree())
-    ax.set_yticks([-90, -60, -30, 0, 30, 60, 90], crs=ccrs.PlateCarree())
+    ax.set_xticks([-180,-120,-60,0,60,120,180], crs=ccrs.PlateCarree())
+    ax.set_yticks([-90,-60,-30,0,30,60,90], crs=ccrs.PlateCarree())
     plt.xlabel('Longitude (°E)')
     plt.ylabel('Latitude (°N)')
     plt.title('Regions')
