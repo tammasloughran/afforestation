@@ -235,18 +235,90 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
         %\includesvg[width=\linewidth]{../plots/cSoil_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_aus_diff.png}
     \end{subfigure}
-    \caption{Caption}
+    \caption{Left: absolute carbon stocks. Right: difference between afforestation scenario and ssp585.}
     \label{fig:aus_region}
 \end{figure}
 
-\subsection{Model intercomparison}
+\begin{figure}
+    \centering
+    \includegraphics{../plots/regional_analysis_map.png}
+    \caption{Box regions for regional analysis.}
+    \label{fig:my_label}
+\end{figure}
+
+\begin{itemize}
+\item The esm-ssp585-ssp126Lu land use has bot afforestation and deforestation.
+\item Afforestation occurs in boreal Eurasia, boreal North America and Brazil.
+\item Afforestation and deforestation occurs in eastern North America, Central Africa and East Asia.
+\item Deforestation occurs in western Eurasia.
+\item Low afforestation/deforestation occurs in Australia.
+\item No appreciable difference in climate variables.
+\item Increases in cVeg for all regions except boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
+\item Decreases in cSoil for Australia, Amazonia, Eastern North America. Western Eurasia, East Asia, Boreal Eurasia, Boreal North America, generally also show decreases in cSoil but there are a few ensemble members that show increases by the end of the century.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_amazonia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/tas_amazonia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_easternnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
+        \includegraphics[width=\linewidth]{../plots/tas_easternnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_eastasia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/tas_eastasia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_borealnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/tas_borealnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_centralafrica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/tas_centralafrica_diff.png}
+    \end{subfigure}
+    \caption{ASD}
+    \label{fig:aus_region}
+\end{figure}
+
+\subsection{Model inter-comparison}
+
+\begin{figure}
+    \centering
+    %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
+    \includegraphics[width=\linewidth]{../plots/models_afforestation.png}
+    \caption{cVeg in esm-ssp585-ssp126Lu scenario for 3 models.}
+    \label{fig:aus_region}
+\end{figure}
 
 
 \subsection{Notes/Discussion}
 
 \begin{itemize}
     \item The lack of climate warming mitigatino potential in the afforestation scenario may be due to redistribution of the global carbon budget into the natural sinks.
-        An increase in vegetation uptake would lead to a deacrease in atmospheric CO2 accumulation, which would result in a reduction of partial CO2 pressure on the ocean and hence lead to a reduction of CO2 in the ocean sink.
+        An increase in vegetation uptake would lead to a decrease in atmospheric CO2 accumulation, which would result in a reduction of partial CO2 pressure on the ocean and hence lead to a reduction of CO2 in the ocean sink.
     \item This has bee seen in model simulations of the MPI-ESM simulations of afforestation. (See Hao-wei Wey).
     \item The biogeophysical impacts of growing trees could also warm the planet, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of afforestation.
 \end{itemize}
