@@ -14,6 +14,8 @@ if __name__ == 'analysis.plot_afforestation':
             DATA_DIR,
             ENSEMBLES,
             PLOTS_DIR,
+            SEC_IN_DAY,
+            KG_IN_PG,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
@@ -22,6 +24,8 @@ else:
             DATA_DIR,
             ENSEMBLES,
             PLOTS_DIR,
+            SEC_IN_DAY,
+            KG_IN_PG,
             )
 import ipdb
 
@@ -40,33 +44,58 @@ OCEAN_VARIABLES = {
         }
 NENS = len(ENSEMBLES)
 NTIMES = 2101 - 2015
+EXAMPLE_FILE = '/g/data/fs38/publications/CMIP6/C4MIP/CSIRO/ACCESS-ESM1-5/esm-ssp585/r1i1p1f1/'+\
+        'Omon/fgco2/gn/latest/fgco2_Omon_ACCESS-ESM1-5_esm-ssp585_r1i1p1f1_gn_201501-210012.nc'
 
 load_cdo = False
 load_npy = not load_cdo
 
+# If ocean grid area file does not exist, create it.
+if 'ocean_gridarea.nc' not in os.listdir(DATA_DIR):
+    cdo.gridarea(
+            input=EXAMPLE_FILE,
+            output=f'{DATA_DIR}/ocean_gridarea.nc',
+            options='-L', # Lock I/O (sequential access).
+            )
+
 
 @cdod.cdo_cat(input2='') # Concatenate all files in input1
-@cdod.cdo_fldsum
-@cdod.cdo_yearmonmean
-def cdo_load_ocean(var:str, input:str)->np.ma.MaskedArray:
+@cdod.cdo_mul(input2=f'{DATA_DIR}/ocean_gridarea.nc') # Convert from /m to per gridcell.
+@cdod.cdo_fldsum # Spatial aggregation
+@cdod.cdo_mulc(str(SEC_IN_DAY)) # Convertfrom /s into /day.
+@cdod.cdo_muldpm # Convert from /day into /month.
+@cdod.cdo_yearsum # Convert from /month into /year
+@cdod.cdo_divc(str(KG_IN_PG)) # Convert from kg into Pg.
+def cdo_load_ocean_flux(var:str, input:str)->np.ma.MaskedArray:
     """Use CDO to load an ocean carbon variable.
     """
     return cdo.copy(input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
 
 
-def plot_ocean_carbon(aff_data, ssp585_data, label:str='')->None:
+def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:str='flux')->None:
+    """Create a plot of ocean carbon for all ensembles.
+    """
     years = list(range(2015, 2015+NTIMES))
     plt.figure()
     diff = aff_data - ssp585_data
     for e,ens in enumerate(ENSEMBLES):
-        plt.plot(years, diff[e,:], color='lightgray')
-    plt.plot(years, diff.mean(axis=0), color='black')
+        plt.plot(years, diff[e,:], color='lightgray', alpha=0.5)
+    plt.plot(years, diff.mean(axis=0), color='black', label=f'{var} Aff. - SSP585')
+    plt.hlines(0, years[0], years[-1], color='black', linestyle='dashed')
     plt.xlabel('Year')
-    plt.ylabel('C')
-    plt.savefig(f'{PLOTS_DIR}/ocean_carbon_aff_ssp585_{label}.png')
+    if label=='flux':
+        plt.title('ACCESS-ESM1.5 Ocean Downward CO$_2$ flux')
+        plt.ylabel('$\Delta CO_2$ (Pg/year)')
+    else:
+        plt.title('ACCESS-ESM1.5 Ocean CO$_2$')
+        plt.ylabel('$\Delta CO_2$ (Pg)')
+    plt.legend()
+    plt.savefig(f'{PLOTS_DIR}/{var}_ocean_carbon_aff_ssp585_{label}.png')
 
 
-def make_ocean_carbon_plot():
+def make_ocean_carbon_plot()->None:
+    """Function to load ocean carbon data and execute plotting routine.
+    """
     # Load Data
     table = 'Omon'
     for var in OCEAN_VARIABLES[table]:
@@ -76,10 +105,10 @@ def make_ocean_carbon_plot():
             for e,ens in enumerate(ENSEMBLES):
                 aff_files = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)
                 aff_files = '[ '+' '.join(aff_files)+' ]'
-                aff_data[e,:] = cdo_load_ocean(var=var, input=aff_files)
+                aff_data[e,:] = cdo_load_ocean_flux(var=var, input=aff_files)
                 ssp585_files = get_filename('C4MIP', 'esm-ssp585', ens, table, var)
                 ssp585_files = '[ '+' '.join(ssp585_files)+' ]'
-                ssp585_data[e,:] = cdo_load_ocean(var=var, input=ssp585_files)
+                ssp585_data[e,:] = cdo_load_ocean_flux(var=var, input=ssp585_files)
             # Save.
             np.save(f'{DATA_DIR}/{var}_aff_ocean_carbon_data.npy', aff_data)
             np.save(f'{DATA_DIR}/{var}_ssp585_ocean_carbon_data.npy', ssp585_data)
@@ -88,10 +117,11 @@ def make_ocean_carbon_plot():
             ssp585_data = np.load(f'{DATA_DIR}/{var}_ssp585_ocean_carbon_data.npy')
 
         # Plot
-        plot_ocean_carbon(aff_data, ssp585_data, label='flux')
+        plot_ocean_carbon(aff_data, ssp585_data, var, label='flux')
         plot_ocean_carbon(
                 np.cumsum(aff_data, axis=1),
                 np.cumsum(ssp585_data, axis=1),
+                var,
                 label='cumulative',
                 )
 
