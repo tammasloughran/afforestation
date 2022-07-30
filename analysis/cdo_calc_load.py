@@ -126,6 +126,19 @@ def cdo_pool_load(var:str, input:str)->np.ma.MaskedArray:
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
+@cdod.cdo_cat(input2='')
+@cdod.selyear('2015,2100')
+@cdod.cdo_deltat
+@cdo_mul_land_area
+@cdod.cdo_divc(str(KG_IN_PG))
+def cdo_load_anomaly_map(var:str, input:str)->np.ma.MaskedArray:
+    """Use cdo to load the first and last years of the future scenario and calculate the
+    temporal anomaly between them.
+    """
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+
 def cdo_fetch_ensembles(mip:str, exp:str, table:str, var:str)->np.ndarray:
     """Loads all ensemble data using cdo functions.
     """

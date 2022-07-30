@@ -5,6 +5,7 @@ import sys
 from analysis.plot_afforestation import (
         make_clim_plots,
         make_veg_plots,
+        make_veg_maps,
         )
 from analysis.plot_land_cover_fractions import (
         make_land_cover_plot,
@@ -30,6 +31,7 @@ if 'plots' not in files: od.mkdir(PLOTS_DIR)
 
 
 def main():
+    make_veg_maps()
     make_veg_plots()
     make_clim_plots()
     make_land_cover_plot()

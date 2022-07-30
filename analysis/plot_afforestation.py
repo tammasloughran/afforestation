@@ -15,7 +15,7 @@ import numpy as np
 if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.baseline import global_sum_baselines
-    from analysis.cdo_calc_load import cdo_fetch_ensembles
+    from analysis.cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
@@ -28,7 +28,7 @@ if __name__ == 'analysis.plot_afforestation':
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from baseline import global_sum_baselines
-    from cdo_calc_load import cdo_fetch_ensembles
+    from cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
@@ -102,7 +102,25 @@ def plot_ensembles_clim(years, data, data_mean, data_std, var):
     plt.title(f"{model} {var.upper()}")
 
 
-def make_veg_plots():
+def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='')->None:
+    """Plot a map of the difference between the start of the future period and the last year.
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree)
+    plt.pcolormesh(lons, lats, data, vmax=data.max(), vmin=data.min(),
+            transform=ccrs.PlateCarree())
+    if var in ['cVeg','cLitter','cSoil']:
+        plt.colorbar(label='Pg(C)')
+    else:
+        plt.colorbar(label='Pg(C)/year')
+    plt.title(var+' '+label)
+    plt.tight_layout()
+    plt.savefig(f'{PLOTS_DIR}/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png')
+
+
+def make_veg_plots()->None:
+    """Load vegetation data and run plotting routine.
+    """
     model = 'ACCESS-ESM1.5'
     for table in TABLES:
         for var in VARIABLES[table]:
@@ -144,7 +162,9 @@ def make_veg_plots():
             plt.close()
 
 
-def make_clim_plots():
+def make_clim_plots()->None:
+    """Load climate data run plotting routine.
+    """
     model = 'ACCESS-ESM1.5'
     table = 'Amon'
     for var in CLIM_VARIABLES[table]:
@@ -187,9 +207,44 @@ def make_clim_plots():
         plt.close()
 
 
+def make_veg_maps()->None:
+    """Create maps of ensemble mean anomaly for the difference of the afforestation experiment
+    and the esm-ssp585 scenario.
+    """
+    for table in TABLES:
+        for var in VARIABLES[table]:
+            # Load the data.
+            if load_npy_files:
+                aff_data = np.load(f'{DATA_DIR}/{var}_aff_anomaly_maps.npy')
+                ssp585_data = np.load(f'{DATA_DIR}/{var}_ssp585_anomaly_maps.npy')
+                lats = np.load(f'{DATA_DIR}/lats.npy')
+                lons = np.load(f'{DATA_DIR}/lons.npy')
+            else:
+                aff_data = np.ones((NENS,NLAT,NLON))*np.nan
+                for e,ens in enumerate(ENSEMBLES):
+                    aff_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]
+                    ssp585_file = get_filename('C4MIP', 'esm-ssp585', ens, table, var)[0]
+                    aff_data[e,...] = load_anomaly_map(aff_file)
+                    ssp585_data[e,...] = load_anomaly_map(ssp585_file)
+                lats = nc.Dataset(aff_file, 'r').variables['latitude'][:]
+                lons = nc.Dataset(aff_file, 'r').variables['longitude'][:]
+                np.save(f'{DATA_DIR}/{var}_aff_anomaly_maps.npy', aff_data)
+                np.save(f'{DATA_DIR}/{var}_ssp585_anomaly_maps.npy', ssp585_data)
+                np.save(f'{DATA_DIR}/lats.npy', lats)
+                np.save(f'{DATA_DIR}/lons.npy', lons)
+
+            # Calculate ensemble mean of difference
+            difference = aff_data - ssp585_data
+            ensemble_mean_difference = difference.mean(axis=0)
+
+            # Plot.
+            plot_map(lons, lats, ensemble_mean_difference, var, label='difference')
+
+
 if __name__ != 'analysis.plot_afforestation':
     make_veg_plots()
     make_clim_plots()
+    make_veg_maps()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
