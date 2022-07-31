@@ -127,7 +127,7 @@ def cdo_pool_load(var:str, input:str)->np.ma.MaskedArray:
 
 
 @cdod.cdo_cat(input2='')
-@cdod.selyear('2015,2100')
+@cdod.cdo_selyear('2015,2100')
 @cdod.cdo_deltat
 @cdo_mul_land_area
 @cdod.cdo_divc(str(KG_IN_PG))

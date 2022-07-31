@@ -143,7 +143,7 @@ def make_area_anomaly_map():
             lats = ncfile.variables['lat'][:]
             lons = ncfile.variables['lon'][:]
 
-            np.save(f'{DATA_DIR}/{var}_area_anomaly.npy')
+            np.save(f'{DATA_DIR}/{var}_area_anomaly.npy', area_anomaly.data)
 
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())

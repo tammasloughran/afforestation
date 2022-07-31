@@ -78,7 +78,7 @@ for inst in models.keys():
                 'Lmon',
                 'cVeg',
                 )[0]
-        cdo.gridarea(input=filenames, output=f'{DATA_DIR}/gridarea_{models[inst]}.nc')
+        cdo.gridarea(input=afile, output=f'{DATA_DIR}/gridarea_{models[inst]}.nc')
 
 
     # The loader function needs to be defined in this loop to account

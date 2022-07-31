@@ -8,14 +8,17 @@ import os
 import pdb
 import sys
 
-import cdo as cdo_module
+from cdo import Cdo
+import cdo_decorators as cdod
 import matplotlib.pyplot as plt
 import numpy as np
+import netCDF4 as nc
 
 if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.baseline import global_sum_baselines
     from analysis.cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
+    from analysis.cmip_files import get_filename
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
@@ -24,11 +27,13 @@ if __name__ == 'analysis.plot_afforestation':
             SEC_IN_DAY,
             TABLES,
             VARIABLES,
+            M2_IN_MILKM2,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from baseline import global_sum_baselines
     from cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
+    from cmip_files import get_filename
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
@@ -37,7 +42,11 @@ else:
             SEC_IN_DAY,
             TABLES,
             VARIABLES,
+            M2_IN_MILKM2,
             )
+
+cdo = Cdo()
+cdo.debug = True
 
 # Local constants
 COLORS = {'gpp':'green',
@@ -133,7 +142,7 @@ def make_veg_plots()->None:
                 aff_data = cdo_fetch_ensembles('LUMIP', 'esm-ssp585-ssp126Lu', table, var)
                 ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
                 np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy', aff_data)
-                np.save(f'{DATA_DIR}/{var}_{}model_esm-ssp585_global.npy', ssp585_data)
+                np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_global.npy', ssp585_data)
 
 
             # Anomaly, mean and standard deviation relative to 2015 baseline. Demonstrates overall
@@ -244,16 +253,19 @@ def make_veg_maps()->None:
 @cdod.cdo_cat(input2='')
 @cdod.cdo_yearmonmean
 def cdo_clim_map_load(var:str, input:str)->np.ma.MaskedArray:
-    return cdo.copy(input=input, options='-L').variables[var][:].squeeze()
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
 def make_clim_aff_only():
     """Make plots of climate variables for where there are afforesed gridcells only.
     """
     # Load data for only afforested grid cells.
-    treeFrac_anomaly = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
+    treeFrac = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
     NLAT = treeFrac.shape[0]
     NLON = treeFrac.shape[1]
+    NENS = 10
+    NTIMES = 86
+    treeFrac = treeFrac*np.ones((NENS,NTIMES,NLAT,NLON))
     for var in CLIM_VARIABLES['Amon']:
         aff_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
         ssp585_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
@@ -261,31 +273,30 @@ def make_clim_aff_only():
             aff_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var)
             ssp585_file = get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var)
             aff_data[e,...] = cdo_clim_map_load(var=var, input=aff_file[0])
-            ssp585_data[e,...] = cdo_clim_map_load(var=var, input=aff_file[0])
+            ssp585_data[e,...] = cdo_clim_map_load(var=var, input=ssp585_file[0])
 
         # Calculate difference, mean and mask non afforested grid cells.
         clim_diff = aff_data - ssp585_data
         clim_diff[treeFrac<0.2] = np.nan
-        lats = np.Dataset(aff_file, 'r').variables['latitude'][:]
-        coslats = np.cos(lats*np.ones((NLATS,NLONS)))
+        lats = nc.Dataset(aff_file[0], 'r').variables['lat'][:]
+        coslats = np.cos(lats[:,None]*np.ones((NLAT,NLON)))
         clim_diff = np.nansum(clim_diff*coslats, axis=(-1,-2))/np.sum(coslats)
 
-        np.save(f'{DATA_DIR}/{var}_aff_only.np')
-
+        np.save(f'{DATA_DIR}/{var}_aff_only.np', clim_diff.data)
         # Plot
-        years = list(range(2015, 2015 + len(clim_diff))
-        plt.plot(years, clim_diff.mean(axis=0))
+        years = list(range(2015, 2015 + NTIMES))
+        plt.plot(years, clim_diff.mean(axis=0), color='black')
         for e in range(10):
-            plt.plot(years, clim_diff[e,...])
+            plt.plot(years, clim_diff[e,...], color='lightgray', alpha=0.5)
         plt.xlabel('Years')
         plt.ylabel('T')
         plt.show()
 
 
 if __name__ != 'analysis.plot_afforestation':
-    make_veg_plots()
-    make_clim_plots()
-    make_veg_maps()
+    #make_veg_plots()
+    #make_clim_plots()
+    #make_veg_maps()
     make_clim_aff_only()
 
     # Clean up
