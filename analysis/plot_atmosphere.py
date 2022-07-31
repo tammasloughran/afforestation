@@ -53,16 +53,22 @@ def global_average(input:str, output:str)->None:
 
 
 @cdod.cdo_cat(input2='')
-def load_co2(var:str, input:str):
+def load_co2(var:str, input:str)->np.ma.MaskedArray:
     """Concatenate and load the data using CDO.
     """
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
-def make_co2_plot():
+@cdod.cdo_mulc()
+def load_mass(var:str, input:str)->None:
+    """Load atmospheric CO2 as total mass in Pg(C).
+    """
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+def make_co2_plot()->None:
     """Load the CO2 data either from netcdf files with CDO or numpy files and plot.
     """
-    fig = plt.figure()
     aff_co2_data = np.ones((NENS,NTIMES))*np.nan
     ssp585_co2_data = np.ones((NENS,NTIMES))*np.nan
 
@@ -93,6 +99,7 @@ def make_co2_plot():
         ssp585_co2_data = np.load(f'{DATA_DIR}/ssp585_co2_data.npy')
 
     # Plot each ensemble member.
+    fig = plt.figure()
     for e,ens in enumerate(ENSEMBLES):
         years = list(range(2015, 2015+NTIMES))
         plt.plot(

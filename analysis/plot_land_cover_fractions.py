@@ -143,6 +143,8 @@ def make_area_anomaly_map():
             lats = ncfile.variables['lat'][:]
             lons = ncfile.variables['lon'][:]
 
+            np.save(f'{DATA_DIR}/{var}_area_anomaly.npy')
+
             fig = plt.figure()
             ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
             abs_max = np.nanmax(np.abs(area_anomaly))

@@ -241,10 +241,52 @@ def make_veg_maps()->None:
             plot_map(lons, lats, ensemble_mean_difference, var, label='difference')
 
 
+@cdod.cdo_cat(input2='')
+@cdod.cdo_yearmonmean
+def cdo_clim_map_load(var:str, input:str)->np.ma.MaskedArray:
+    return cdo.copy(input=input, options='-L').variables[var][:].squeeze()
+
+
+def make_clim_aff_only():
+    """Make plots of climate variables for where there are afforesed gridcells only.
+    """
+    # Load data for only afforested grid cells.
+    treeFrac_anomaly = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
+    NLAT = treeFrac.shape[0]
+    NLON = treeFrac.shape[1]
+    for var in CLIM_VARIABLES['Amon']:
+        aff_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
+        ssp585_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
+        for e,ens in enumerate(ENSEMBLES):
+            aff_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, 'Amon', var)
+            ssp585_file = get_filename('C4MIP', 'esm-ssp585', ens, 'Amon', var)
+            aff_data[e,...] = cdo_clim_map_load(var=var, input=aff_file[0])
+            ssp585_data[e,...] = cdo_clim_map_load(var=var, input=aff_file[0])
+
+        # Calculate difference, mean and mask non afforested grid cells.
+        clim_diff = aff_data - ssp585_data
+        clim_diff[treeFrac<0.2] = np.nan
+        lats = np.Dataset(aff_file, 'r').variables['latitude'][:]
+        coslats = np.cos(lats*np.ones((NLATS,NLONS)))
+        clim_diff = np.nansum(clim_diff*coslats, axis=(-1,-2))/np.sum(coslats)
+
+        np.save(f'{DATA_DIR}/{var}_aff_only.np')
+
+        # Plot
+        years = list(range(2015, 2015 + len(clim_diff))
+        plt.plot(years, clim_diff.mean(axis=0))
+        for e in range(10):
+            plt.plot(years, clim_diff[e,...])
+        plt.xlabel('Years')
+        plt.ylabel('T')
+        plt.show()
+
+
 if __name__ != 'analysis.plot_afforestation':
     make_veg_plots()
     make_clim_plots()
     make_veg_maps()
+    make_clim_aff_only()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
