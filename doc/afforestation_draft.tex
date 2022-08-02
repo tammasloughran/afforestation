@@ -1,14 +1,15 @@
+% Preamble.
 \documentclass[]{article}
 \usepackage[a4paper, total={170mm,257mm}, left=20mm, top=20mm,]{geometry}
-\usepackage{svg}
-%\usepackage{float}
-\usepackage{subcaption}
-\usepackage{lineno}
-\linenumbers
+\usepackage{svg} % Use SVGs only for final draft.
+\usepackage{float} % Allows the [H] option meaning "place figure here and only here"
+%\usepackage[section]{placeins} % Defines /FloatBarrier so that figures can't move.
+\usepackage{subcaption} % Allows subfigures and captions
+\usepackage{lineno} % Enable line numbers.
 \usepackage{textcomp}
 \usepackage[style=numeric]{biblatex}
 \addbibresource{afforestation_references.bib}
-
+\linenumbers
 \title{Afforestation in ACCESS-ESM1.5 \& maybe other models too... dunno yet}
 \author{Tammas Loughran et al.}
 
@@ -28,7 +29,6 @@ This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and t
 
 \begin{itemize}
     \item existing studies on MPI-ESM CMIP5 version using RCP8.5 emissions with RCP4.5 land use. \cite{sonntag_reforestation_2016} \cite{sonntag_quantifying_2018}
-
     \item esm-hist: emissions-driven simulations are initialized at 2015 using the esm-hist. \cite{eyring_overview_2016}
     \item esm-ssp585: High emissions scenario that assumes that development is driven by fossil fuels. \cite{oneill_scenario_2016}
     \item esm-ssp585-ssp126Lu: High emissions scenario from SSP5-8.5 but with the land use from SSP1-2.6. \cite{lawrence_land_2016}
@@ -37,7 +37,7 @@ This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and t
 
 \section{Methods}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
         %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas.svg}
@@ -56,12 +56,12 @@ By the end of the century:
     \item Forrest expands by: 1.59 million km²
     \item Abandonment: -1.11 million km²
 \end{itemize}
-
+Mid-century:
 \begin{itemize}
-    \item Mid-century crop minimum: -2.74 million km²
+    \item Crop minimum: -2.74 million km²
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
         %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas.svg}
@@ -86,11 +86,10 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 
 \begin{itemize}
     \item Climate warms about 4 \textcelsius{} by 2100 and precip. increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
-
     \item There isn't much difference between the afforestation scenario and ssp585.
 \end{itemize}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
         %\includesvg[inkscape=force,width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
@@ -112,18 +111,15 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \label{fig:climate}
 \end{figure}
 
-
 \subsection{Carbon cycle}
 
 \begin{itemize}
-\item There is an increase in vegetation carbon of about 30 Pg C by the end of the century.
-
-\item The increased co2 draw-down from the combined effect of Afforestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
-
-\item cSoil is lower than SSP585 by about 4 Pg carbon.
+    \item There is an increase in vegetation carbon of about 30 Pg C by the end of the century.
+    \item The increased co2 draw-down from the combined effect of Afforestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
+    \item cSoil is lower than SSP585 by about 4 Pg carbon.
 \end{itemize}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[inkscape=force,width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
@@ -153,9 +149,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \label{fig:cpools}
 \end{figure}
 
-\pagebreak
-
-\begin{figure}[!h]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[inkscape=force,width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
@@ -209,7 +203,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \item Australian cVeg increases by ~0.25 PgC in the afforestation scenario. But the difference from the reference simulation is 0.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
@@ -239,7 +233,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \label{fig:aus_region}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics{../plots/regional_analysis_map.png}
     \caption{Box regions for regional analysis.}
@@ -247,17 +241,17 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 \end{figure}
 
 \begin{itemize}
-\item The esm-ssp585-ssp126Lu land use has bot afforestation and deforestation.
-\item Afforestation occurs in boreal Eurasia, boreal North America and Brazil.
-\item Afforestation and deforestation occurs in eastern North America, Central Africa and East Asia.
-\item Deforestation occurs in western Eurasia.
-\item Low afforestation/deforestation occurs in Australia.
-\item No appreciable difference in climate variables.
-\item Increases in cVeg for all regions except boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
-\item Decreases in cSoil for Australia, Amazonia, Eastern North America. Western Eurasia, East Asia, Boreal Eurasia, Boreal North America, generally also show decreases in cSoil but there are a few ensemble members that show increases by the end of the century.
+    \item The esm-ssp585-ssp126Lu land use has bot afforestation and deforestation.
+    \item Afforestation occurs in boreal Eurasia, boreal North America and Brazil.
+    \item Afforestation and deforestation occurs in eastern North America, Central Africa and East Asia.
+    \item Deforestation occurs in western Eurasia.
+    \item Low afforestation/deforestation occurs in Australia.
+    \item No appreciable difference in climate variables.
+    \item Increases in cVeg for all regions except boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
+    \item Decreases in cSoil for Australia, Amazonia, Eastern North America. Western Eurasia, East Asia, Boreal Eurasia, Boreal North America, generally also show decreases in cSoil but there are a few ensemble members that show increases by the end of the century.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
@@ -305,14 +299,13 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 
 \subsection{Model inter-comparison}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
     \includegraphics[width=\linewidth]{../plots/models_afforestation.png}
     \caption{cVeg in esm-ssp585-ssp126Lu scenario for 3 models.}
     \label{fig:aus_region}
 \end{figure}
-
 
 \subsection{Notes/Discussion}
 
