@@ -13,7 +13,16 @@ if __name__ == 'analysis.plot_afforestation':
     from analysis.constants import (
             DATA_DIR,
             ENSEMBLES,
+            KG_IN_PG,
+            MASS_ATM, # kg
             PLOTS_DIR,
+            MIL,
+            MOLMASS_CO2, # kg/mol
+            MOLMASS_O2, # kg/mol
+            MOLMASS_AIR, # kg/mol
+            KGKG_TO_MOLMOL, # Converion of kg/kg to mol/mol
+            NENS,
+            NTIMES,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
@@ -21,9 +30,17 @@ else:
     from constants import (
             DATA_DIR,
             ENSEMBLES,
+            KG_IN_PG,
+            MASS_ATM, # kg
             PLOTS_DIR,
+            MIL,
+            MOLMASS_CO2, # kg/mol
+            MOLMASS_O2, # kg/mol
+            MOLMASS_AIR, # kg/mol
+            KGKG_TO_MOLMOL, # Converion of kg/kg to mol/mol
+            NENS,
+            NTIMES,
             )
-import ipdb
 
 cdo = Cdo()
 cdo.debug = False
@@ -32,12 +49,6 @@ CO2_VARIABLES = {
         'Emon':'co23D', # CO2 concentration (mixing ratio) in kg/kg.
         #'Amon':'co2', # Mole fraction of CO2. esm-ssp585 only
         }
-MIL = 1000000
-MOLMASS_CO2 = 0.0440095 # kg/mol
-MOLMASS_AIR = 0.0289652 # kg/mol
-KGKG_TO_MOLMOL = MOLMASS_AIR/MOLMASS_CO2 # Converion of kg/kg to mol/mol
-NENS = len(ENSEMBLES)
-NTIMES = 2101 - 2015
 
 load_cdo = False
 load_npy = not load_cdo
@@ -61,7 +72,7 @@ def load_co2(var:str, input:str)->np.ma.MaskedArray:
 
 @cdod.cdo_mulc()
 def load_mass(var:str, input:str)->None:
-    """Load atmospheric CO2 as total mass in Pg(C).
+    """Load atmospheric CO2 as total mass in Pg(CO$_2$).
     """
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
@@ -133,6 +144,29 @@ def make_co2_plot()->None:
     plt.xlabel('Year')
     plt.ylabel('CO$_2$ concentration (ppm)')
     plt.savefig(f'{PLOTS_DIR}/CO2_aff_and_ssp585.png')
+
+    # Plot mass difference.
+    fig = plt.figure()
+    for e,ens in enumerate(ENSEMBLES):
+        years = list(range(2015, 2015+NTIMES))
+        plt.plot(
+                years,
+                (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
+                color='royalblue',
+                linewidth=0.6,
+                alpha=0.4,
+                )
+    plt.plot(
+        years,
+        (aff_co2_data - ssp585_co2_data).mean(axis=0)*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
+        color='royalblue',
+        label='aff - ssp585',
+        )
+    plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
+    plt.legend()
+    plt.xlabel('Year')
+    plt.ylabel('Carbon mass [Pg(C)]')
+    plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
 
 
 if __name__ != 'analysis.plot_atmosphere':

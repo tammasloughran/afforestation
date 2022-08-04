@@ -13,9 +13,10 @@ if __name__ == 'analysis.plot_afforestation':
     from analysis.constants import (
             DATA_DIR,
             ENSEMBLES,
+            KG_IN_PG,
+            MOLMASS_O2,
             PLOTS_DIR,
             SEC_IN_DAY,
-            KG_IN_PG,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
@@ -23,9 +24,10 @@ else:
     from constants import (
             DATA_DIR,
             ENSEMBLES,
+            KG_IN_PG,
+            MOLMASS_O2,
             PLOTS_DIR,
             SEC_IN_DAY,
-            KG_IN_PG,
             )
 import ipdb
 
@@ -77,7 +79,7 @@ def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:st
     """
     years = list(range(2015, 2015+NTIMES))
     plt.figure()
-    diff = aff_data - ssp585_data
+    diff = (aff_data - ssp585_data)/MOLMASS_O2
     for e,ens in enumerate(ENSEMBLES):
         plt.plot(years, diff[e,:], color='lightgray', alpha=0.5)
     plt.plot(years, diff.mean(axis=0), color='black', label=f'{var} Aff. - SSP585')
