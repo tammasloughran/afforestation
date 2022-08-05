@@ -23,9 +23,11 @@ A considerable amount of anthropogenic carbon emissions comes from agricultural 
 In order to effectively limit global warming to below 2°C (or even 3°C), there must be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
 This study is motivated by existing studies on afforestation by Sonntag et al. (2016) where the potential of afforestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "afforestation" land use from a low emissions scenario (taken from RCP4.5).
-This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways. This study aims to quantify the CO2 removal potential of the afforestation strategy using updated models at both the global scale and for Australia specifically.
+This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
+This study aims to quantify the CO2 removal potential of the afforestation strategy using updated models at both the global scale and for Australia specifically.
 As part of the contributions to the CMIP5 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar afforestation scenario.
-This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6. ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
+This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6.
+ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
 
 \begin{itemize}
     \item existing studies on MPI-ESM CMIP5 version using RCP8.5 emissions with RCP4.5 land use. \cite{sonntag_reforestation_2016} \cite{sonntag_quantifying_2018}
@@ -195,7 +197,30 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \label{fig:cflux}
 \end{figure}
 
-\pagebreak
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CO2_atm_mass_diff.png}
+    \end{subfigure}
+    \caption{Atmosphere}
+    \label{fig:atmosphere_carbon}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_flux.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+    \end{subfigure}
+    \caption{Ocean}
+    \label{fig:ocean_carbon}
+\end{figure}
+
 
 \subsection{Regional analysis: Australia?}
 
@@ -207,27 +232,27 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
-        \includegraphics[width=\linewidth]{../plots/cVeg_aus_anom.png}
+        \includegraphics[width=\linewidth]{../plots/cVeg_australia_anom.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/cVeg_aus_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cVeg_australia_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cLitter_aus_anom.svg}
-        \includegraphics[width=\linewidth]{../plots/cLitter_aus_anom.png}
+        \includegraphics[width=\linewidth]{../plots/cLitter_australia_anom.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cLitter_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/cLitter_aus_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLitter_australia_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cSoil_aus_anom.svg}
-        \includegraphics[width=\linewidth]{../plots/cSoil_aus_anom.png}
+        \includegraphics[width=\linewidth]{../plots/cSoil_australia_anom.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[width=\linewidth]{../plots/cSoil_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/cSoil_aus_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cSoil_australia_diff.png}
     \end{subfigure}
     \caption{Left: absolute carbon stocks. Right: difference between afforestation scenario and ssp585.}
     \label{fig:aus_region}
@@ -302,7 +327,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 \begin{figure}[H]
     \centering
     %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
-    \includegraphics[width=\linewidth]{../plots/models_afforestation.png}
+    \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
     \caption{cVeg in esm-ssp585-ssp126Lu scenario for 3 models.}
     \label{fig:models}
 \end{figure}
