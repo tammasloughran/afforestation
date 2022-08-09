@@ -36,7 +36,6 @@ DATA_DIR = 'data'
 
 # Local variables.
 global_sum_baselines = {}
-
 # Calculate the maps of base period means for each variable and ensemble member.
 print("\rCalculating baseline values.")
 for table in TABLES:
@@ -51,7 +50,7 @@ for table in TABLES:
             # value. So I calculate the ensemble mean here.
             cdo.ensmean(input=f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc',
                     output=f'{DATA_DIR}/' \
-                            '{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
+                            f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
             # Clean up unneeded ensemble files.
             efiles = glob.glob(f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc')
             for f in efiles:
@@ -60,7 +59,7 @@ for table in TABLES:
         # Need to also multiply by the grid cell area and land fraction.
         # LAND_FRAC_FILE is in % so must be divided by 100 first.
         # kg m-2 s-2 -> *land_frac*landarea*SEC_IN_YEAR/KG_IN_PG -> Pg/year
-        if var in ['cVeg', 'cLitter', 'cSoil']:
+        if var in ['cVeg','cLitter','cSoil','cLand']:
             time_units = 1
         else:
             time_units = SEC_IN_YEAR

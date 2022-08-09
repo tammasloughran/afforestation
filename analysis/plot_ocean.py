@@ -81,16 +81,16 @@ def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:st
     plt.figure()
     diff = (aff_data - ssp585_data)/MOLMASS_O2
     for e,ens in enumerate(ENSEMBLES):
-        plt.plot(years, diff[e,:], color='lightgray', alpha=0.5)
-    plt.plot(years, diff.mean(axis=0), color='black', label=f'{var} Aff. - SSP585')
+        plt.plot(years, diff[e,:], color='lightblue', alpha=0.5)
+    plt.plot(years, diff.mean(axis=0), color='darkblue', label=f'{var} Aff. - SSP585')
     plt.hlines(0, years[0], years[-1], color='black', linestyle='dashed')
     plt.xlabel('Year')
     if label=='flux':
-        plt.title('ACCESS-ESM1.5 Ocean Downward CO$_2$ flux')
-        plt.ylabel('$\Delta CO_2$ (Pg/year)')
+        plt.title('ACCESS-ESM1.5 Difference Ocean Downward Carbon flux')
+        plt.ylabel('$\Delta$C [Pg(C)/year]')
     else:
-        plt.title('ACCESS-ESM1.5 Ocean CO$_2$')
-        plt.ylabel('$\Delta CO_2$ (Pg)')
+        plt.title('ACCESS-ESM1.5 Difference Cumulative Ocean Carbon')
+        plt.ylabel('$\Delta$C [Pg(C)]')
     plt.legend()
     plt.savefig(f'{PLOTS_DIR}/{var}_ocean_carbon_aff_ssp585_{label}.png')
 

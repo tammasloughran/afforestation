@@ -11,6 +11,7 @@ import sys
 from cdo import Cdo
 import cdo_decorators as cdod
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
 import numpy as np
 import netCDF4 as nc
 
@@ -19,30 +20,34 @@ if __name__ == 'analysis.plot_afforestation':
     from analysis.baseline import global_sum_baselines
     from analysis.cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
     from analysis.cmip_files import get_filename
+    from analysis.jaisnb import jaisnb
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
             ENSEMBLES,
+            M2_IN_MILKM2,
+            NENS,
             PLOTS_DIR,
             SEC_IN_DAY,
             TABLES,
             VARIABLES,
-            M2_IN_MILKM2,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from baseline import global_sum_baselines
     from cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
     from cmip_files import get_filename
+    from jaisnb import jaisnb
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
             ENSEMBLES,
+            M2_IN_MILKM2,
+            NENS,
             PLOTS_DIR,
             SEC_IN_DAY,
             TABLES,
             VARIABLES,
-            M2_IN_MILKM2,
             )
 
 cdo = Cdo()
@@ -56,6 +61,7 @@ COLORS = {'gpp':'green',
         'nbp':'purple',
         'cVeg':'darkgreen',
         'cLitter':'chocolate',
+        'cLand':'maroon',
         'cSoil':'black',
         'tas':'black',
         'pr':'blue'}
@@ -72,7 +78,13 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = True # Uncomment to override previous check.
+#load_npy_files = False # Uncomment to override previous check.
+
+
+# Load data for only afforested grid cells.
+treeFrac = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
+NLAT = treeFrac.shape[0]
+NLON = treeFrac.shape[1]
 
 
 def plot_ensembles(years, data, data_mean, data_std, var):
@@ -115,13 +127,15 @@ def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='
     """Plot a map of the difference between the start of the future period and the last year.
     """
     fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree)
-    plt.pcolormesh(lons, lats, data, vmax=data.max(), vmin=data.min(),
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    max_abs = np.abs(data).max()
+    plt.pcolormesh(lons, lats, data, cmap=jaisnb, vmax=max_abs, vmin=-max_abs,
             transform=ccrs.PlateCarree())
-    if var in ['cVeg','cLitter','cSoil']:
-        plt.colorbar(label='Pg(C)')
+    ax.coastlines()
+    if var in ['cVeg','cLitter','cSoil','cLand']:
+        plt.colorbar(label='Pg(C)', orientation='horizontal')
     else:
-        plt.colorbar(label='Pg(C)/year')
+        plt.colorbar(label='Pg(C)/year', orientation='horizontal')
     plt.title(var+' '+label)
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png')
@@ -143,7 +157,6 @@ def make_veg_plots()->None:
                 ssp585_data = cdo_fetch_ensembles('C4MIP', 'esm-ssp585', table, var)
                 np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy', aff_data)
                 np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_global.npy', ssp585_data)
-
 
             # Anomaly, mean and standard deviation relative to 2015 baseline. Demonstrates overall
             # impact of climate, CO2 forcing and afforestation on pool/flux.
@@ -230,17 +243,19 @@ def make_veg_maps()->None:
                 lons = np.load(f'{DATA_DIR}/lons.npy')
             else:
                 aff_data = np.ones((NENS,NLAT,NLON))*np.nan
+                ssp585_data = np.ones((NENS,NLAT,NLON))*np.nan
                 for e,ens in enumerate(ENSEMBLES):
-                    aff_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]
-                    ssp585_file = get_filename('C4MIP', 'esm-ssp585', ens, table, var)[0]
-                    aff_data[e,...] = load_anomaly_map(aff_file)
-                    ssp585_data[e,...] = load_anomaly_map(ssp585_file)
-                lats = nc.Dataset(aff_file, 'r').variables['latitude'][:]
-                lons = nc.Dataset(aff_file, 'r').variables['longitude'][:]
-                np.save(f'{DATA_DIR}/{var}_aff_anomaly_maps.npy', aff_data)
-                np.save(f'{DATA_DIR}/{var}_ssp585_anomaly_maps.npy', ssp585_data)
-                np.save(f'{DATA_DIR}/lats.npy', lats)
-                np.save(f'{DATA_DIR}/lons.npy', lons)
+                    aff_file = '[ '+get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]+' ]'
+                    ssp585_file = '[ '+get_filename('C4MIP', 'esm-ssp585', ens, table, var)[0]+' ]'
+                    aff_data[e,...] = cdo_load_anomaly_map(input=aff_file, var=var)
+                    ssp585_data[e,...] = cdo_load_anomaly_map(input=ssp585_file, var=var)
+                aff_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]
+                lats = nc.Dataset(aff_file, 'r').variables['lat'][:]
+                lons = nc.Dataset(aff_file, 'r').variables['lon'][:]
+                np.save(f'{DATA_DIR}/{var}_aff_anomaly_maps.npy', aff_data.data)
+                np.save(f'{DATA_DIR}/{var}_ssp585_anomaly_maps.npy', ssp585_data.data)
+                np.save(f'{DATA_DIR}/lats.npy', lats.data)
+                np.save(f'{DATA_DIR}/lons.npy', lons.data)
 
             # Calculate ensemble mean of difference
             difference = aff_data - ssp585_data
@@ -296,8 +311,8 @@ def make_clim_aff_only():
 if __name__ != 'analysis.plot_afforestation':
     #make_veg_plots()
     #make_clim_plots()
-    #make_veg_maps()
-    make_clim_aff_only()
+    make_veg_maps()
+    #make_clim_aff_only()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')

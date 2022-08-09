@@ -127,6 +127,7 @@ def cdo_pool_load(var:str, input:str)->np.ma.MaskedArray:
 
 
 @cdod.cdo_cat(input2='')
+@cdod.cdo_yearmonmean
 @cdod.cdo_selyear('2015,2100')
 @cdod.cdo_deltat
 @cdo_mul_land_area
@@ -148,10 +149,10 @@ def cdo_fetch_ensembles(mip:str, exp:str, table:str, var:str)->np.ndarray:
         # Get file names
         exp_files = ' '.join(get_filename(mip, exp, ens, table, var))
         exp_files = '[ '+exp_files+' ]'
-        if var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+        if var in ['gpp','npp','ra','rh','nbp']:
             # Load flux variable
             exp_data[int(ens)-1,:] = cdo_flux_load(var, input=exp_files)
-        elif var in ['cVeg', 'cLitter', 'cSoil']:
+        elif var in ['cVeg','cLitter','cSoil','cLand']:
             # Load pool variable
             exp_data[int(ens)-1,:] = cdo_pool_load(var, input=exp_files)
         elif var in CLIM_VARIABLES[table]:

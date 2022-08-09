@@ -146,6 +146,33 @@ def make_co2_plot()->None:
     plt.savefig(f'{PLOTS_DIR}/CO2_aff_and_ssp585.png')
 
     # Plot mass difference.
+    #fig = plt.figure()
+    #for e,ens in enumerate(ENSEMBLES):
+    #    years = list(range(2015, 2015+NTIMES))
+    #    plt.plot(
+    #            years,
+    #            (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
+    #            color='royalblue',
+    #            linewidth=0.6,
+    #            alpha=0.4,
+    #            )
+    #plt.plot(
+    #    years,
+    #    (aff_co2_data - ssp585_co2_data).mean(axis=0)*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
+    #    color='royalblue',
+    #    label='aff - ssp585',
+    #    )
+    #plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
+    #plt.legend()
+    #plt.xlabel('Year')
+    #plt.ylabel('Carbon mass [Pg(C)]')
+    #plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
+
+    # Plot mass difference.
+    aff_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')
+    ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')
+    ocean_diff = aff_ocean - ssp585_ocean
+    aff_nbp = np.load(f'data/
     fig = plt.figure()
     for e,ens in enumerate(ENSEMBLES):
         years = list(range(2015, 2015+NTIMES))
@@ -167,7 +194,6 @@ def make_co2_plot()->None:
     plt.xlabel('Year')
     plt.ylabel('Carbon mass [Pg(C)]')
     plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
-
 
 if __name__ != 'analysis.plot_atmosphere':
     make_co2_plot()
