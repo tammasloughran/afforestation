@@ -79,7 +79,7 @@ def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:st
     """
     years = list(range(2015, 2015+NTIMES))
     plt.figure()
-    diff = (aff_data - ssp585_data)/MOLMASS_O2
+    diff = (aff_data - ssp585_data)*0.27291 # %mass of C in co2 to convert from co2 to C
     for e,ens in enumerate(ENSEMBLES):
         plt.plot(years, diff[e,:], color='lightblue', alpha=0.5)
     plt.plot(years, diff.mean(axis=0), color='darkblue', label=f'{var} Aff. - SSP585')

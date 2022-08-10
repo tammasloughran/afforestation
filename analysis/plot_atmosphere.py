@@ -5,6 +5,7 @@ import os
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
+import netCDF4 as nc
 from cdo import Cdo
 import cdo_decorators as cdod
 if __name__ == 'analysis.plot_afforestation':
@@ -41,6 +42,7 @@ else:
             NENS,
             NTIMES,
             )
+import ipdb
 
 cdo = Cdo()
 cdo.debug = False
@@ -168,32 +170,40 @@ def make_co2_plot()->None:
     #plt.ylabel('Carbon mass [Pg(C)]')
     #plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
 
-    # Plot mass difference.
-    aff_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')
-    ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')
-    ocean_diff = aff_ocean - ssp585_ocean
-    aff_nbp = np.load(f'data/
+    # Carbon budget
+    # Ocean
+    for_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')*0.27291
+    ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')*0.27291
+    # Land
+    for_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
+    for_cland_flux = np.concatenate([np.repeat(np.nan, 10)[:,None], np.diff(for_cland, 1)], axis=1)
+    ssp585_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585_global.npy')
+    ssp585_cland_flux = np.concatenate([np.repeat(np.nan, 10)[:,None], np.diff(ssp585_cland, 1)], axis=1)
+    # Fossil fuel emissions
+    emissions_file = nc.Dataset(f'{DATA_DIR}/ssp585_emissions_global.nc', 'r')
+    ffemissions = emissions_file.variables['field1561'][1:].squeeze()*0.27291
+            # 0.27291 %mass of C in co2 to convert from co2 to C
+
+    for_cland_flux_mean = for_cland_flux.mean(axis=0)
+    for_cland_flux_mean[0] = 0
+    ssp585_cland_flux_mean = ssp585_cland_flux.mean(axis=0)
+    for_ocean_mean = for_ocean.mean(axis=0)
+    ssp585_ocean_mean = ssp585_ocean.mean(axis=0)
+    for_atmosphere = ffemissions - for_cland_flux_mean - for_ocean_mean
+    ssp585_atmosphere = ffemissions - ssp585_cland_flux_mean - ssp585_ocean_mean
+
     fig = plt.figure()
-    for e,ens in enumerate(ENSEMBLES):
-        years = list(range(2015, 2015+NTIMES))
-        plt.plot(
-                years,
-                (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
-                color='royalblue',
-                linewidth=0.6,
-                alpha=0.4,
-                )
-    plt.plot(
-        years,
-        (aff_co2_data - ssp585_co2_data).mean(axis=0)*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
-        color='royalblue',
-        label='aff - ssp585',
-        )
+    years = list(range(2015, 2015+NTIMES))
+    plt.fill_between(years, ffemissions, color='grey', label='Fossil fuel emissions')
+    plt.fill_between(years, -1*for_atmosphere-for_ocean_mean-for_cland_flux_mean, color='lightblue', label='Atmospheric accumulation')
+    plt.fill_between(years, -1*for_ocean_mean-for_cland_flux_mean, color='blue', label='Ocean sink')
+    plt.fill_between(years, -1*for_cland_flux_mean, color='green', label='Land sink')
     plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
-    plt.legend()
+    plt.legend(loc='lower left')
     plt.xlabel('Year')
     plt.ylabel('Carbon mass [Pg(C)]')
-    plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
+    plt.savefig(f'{PLOTS_DIR}/carbon_budget_esm-ssp585-ssp126Lu.png')
+
 
 if __name__ != 'analysis.plot_atmosphere':
     make_co2_plot()
