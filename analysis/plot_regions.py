@@ -49,6 +49,7 @@ COLORS = {'gpp':'green',
         'cVeg':'darkgreen',
         'cLitter':'chocolate',
         'cSoil':'black',
+        'cLand':'maroon',
         'tas':'black',
         'pr':'blue'}
 REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # afforestation/deforesation
@@ -73,7 +74,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = False # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -110,7 +111,7 @@ def plot_regions_map():
     plt.title('Regions')
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/regional_analysis_map.png')
-    #plt.close()
+    plt.close()
 
 
 def plot_veg_region(years, data, data_mean, data_std, var, region, label=''):
@@ -126,7 +127,7 @@ def plot_veg_region(years, data, data_mean, data_std, var, region, label=''):
     plt.title(f"ACCES-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
-    #plt.close()
+    plt.close()
 
 
 def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
@@ -135,7 +136,8 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
         plt.plot(years, data[i,...], color='grey', alpha=0.4)
     plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var], alpha=0.4)
     plt.plot(years, data_mean, color=COLORS[var])
-    plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
+    if label=='diff':
+        plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
     plt.xlim(left=years[0], right=years[-1])
     if var=='pr':
         plt.ylabel('mm/day')
@@ -145,11 +147,11 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
     plt.title(f"ACCES-ESM1.5 {label} {var}")
     reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
-    #plt.close()
+    plt.close()
 
 
 def make_regional_plots():
-    model = 'ACCESS-ESM1.5'
+    model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
         # Create loader functions
         @cdod.cdo_cat(input2='') # Concatenate all files in input1.
