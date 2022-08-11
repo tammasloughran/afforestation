@@ -10,7 +10,7 @@
 \usepackage[style=numeric]{biblatex}
 \addbibresource{afforestation_references.bib}
 \linenumbers
-\title{Afforestation in ACCESS-ESM1.5 \& maybe other models too... dunno yet}
+\title{Forestation in ACCESS-ESM1.5 \& maybe other models too... dunno yet}
 \author{Tammas Loughran et al.}
 
 \begin{document}
@@ -22,10 +22,10 @@
 A considerable amount of anthropogenic carbon emissions comes from agricultural activities.
 In order to effectively limit global warming to below 2°C (or even 3°C), there must be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
-This study is motivated by existing studies on afforestation by Sonntag et al. (2016) where the potential of afforestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "afforestation" land use from a low emissions scenario (taken from RCP4.5).
+This study is motivated by existing studies on Forestation by Sonntag et al. (2016) where the potential of forestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
-This study aims to quantify the CO2 removal potential of the afforestation strategy using updated models at both the global scale and for Australia specifically.
-As part of the contributions to the CMIP5 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar afforestation scenario.
+This study aims to quantify the CO2 removal potential of the forestation strategy using updated models at both the global scale and for Australia specifically.
+As part of the contributions to the CMIP5 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar forestation scenario.
 This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6.
 ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
 
@@ -49,7 +49,7 @@ ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
         %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas_diff.svg}
         \includegraphics[width=\linewidth]{../plots/land_areas_diff.png}
     \end{subfigure}
-    \caption{Land use areas in ACCESS-ESM1.5. Left: ssp585 (dashed) and afforestation scenario (solid). Right: difference between ssp585 and afforestation scenario.}
+    \caption{Land use areas in ACCESS-ESM1.5. Left: ssp585 (dashed) and forestation scenario (solid). Right: difference between ssp585 and forestation scenario.}
     \label{fig:land_use}
 \end{figure}
 
@@ -73,11 +73,23 @@ Mid-century:
         %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas_diff.svg}
         \includegraphics[width=\linewidth]{../plots/grassFrac_anomaly.png}
     \end{subfigure}
-    \caption{ACCESS-ESM1.5 Land use area change from 215 to 2100 in the afforestation scenario. Left: forest. Right: Grass. In ACCESS-ESM1.5 LUH2 pasture fractions are allocated to C3 grass.}
+    \caption{ACCESS-ESM1.5 land-use area change from 2015 to 2100 in the forestation scenario. Left: forest. Right: Grass. In ACCESS-ESM1.5 LUH2 pasture fractions are allocated to C3 grass.}
     \label{fig:land_use_map}
 \end{figure}
 
-Afforestation is dominated by growth of evergreen broadleaf forests, followed by evergreen needle leaf forests, then deciduous broadleaf forests.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CABLE_forests.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CABLE_forests_deciduous_needle.png}
+    \end{subfigure}
+    \caption{CABLE tree PFTs for the SSP1-2.6 scenario.}
+    \label{fig:CABLE_PFTs}
+\end{figure}
+
+Forestation is dominated by growth of evergreen broadleaf forests, followed by evergreen needle leaf forests, then deciduous broadleaf forests.
 Deciduous needle leaf forests only make a small fraction of forrests and do not show any expansion.
 There are only a few areas where there is defforestation in the esm-ssp585-ssp126Lu experiment.
 These occur in deciduous broadleaf forests in eastern USA, China and western Russia (Figure \ref{fig:land_use_map}).
@@ -88,7 +100,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 
 \begin{itemize}
     \item Climate warms about 4 \textcelsius{} by 2100 and precip. increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
-    \item There isn't much difference between the afforestation scenario and ssp585.
+    \item There isn't much difference between the forestation scenario and ssp585.
 \end{itemize}
 
 \begin{figure}[H]
@@ -109,7 +121,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
         %\includesvg[inkscape=force,width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png}
     \end{subfigure}
-    \caption{Climate in esm-ssp585-ssp126Lu. Left: from the afforestation simulation. Right: difference between esm-ssp585-ssp126Lu simulation and esm-ssp585}
+    \caption{Climate in esm-ssp585-ssp126Lu. Left: Absolute values from the forestation simulation (esm-ssp585-ssp126Lu). Right: difference between esm-ssp585-ssp126Lu simulation and esm-ssp585}
     \label{fig:climate}
 \end{figure}
 
@@ -117,12 +129,20 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 
 \begin{itemize}
     \item There is an increase in vegetation carbon of about 30 Pg C by the end of the century.
-    \item The increased co2 draw-down from the combined effect of Afforestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
+    \item The increased co2 draw-down from the combined effect of forestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
     \item cSoil is lower than SSP585 by about 4 Pg carbon.
 \end{itemize}
 
 \begin{figure}[H]
     \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+    \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         %\includesvg[inkscape=force,width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
@@ -139,15 +159,15 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
         %\includesvg[inkscape=force,width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
-        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+\begin{subfigure}[b]{0.4\linewidth}
+        %\includesvg[inkscape=force,width=\linewidth]{../plots/cLand_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
+        \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        %\includesvg[inkscape=force,width=\linewidth]{../plots/cLand_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
+        \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
-    \caption{Carbon pools in esm-ssp585-ssp126Lu. Left: relative to 2005–2025. Right: relative to ssp-585.}
+    \caption{Carbon pools. Left: esm-ssp585-ssp126Lu relative to the 2005–2025 period. Right: difference between the esm-ssp585-ssp126Lu and esm-ssp585.}
     \label{fig:cpools}
 \end{figure}
 
@@ -203,9 +223,9 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
         \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/CO2_atm_mass_diff.png}
+        \includegraphics[width=\linewidth]{../plots/carbon_budget_esm-ssp585-ssp126Lu.png}
     \end{subfigure}
-    \caption{Atmosphere}
+    \caption{Top left: Atmospheric CO$_2$ concentration in the forestation scenario and ssp585. Top right: carbon flux budget in the forestation scenaio. (IN PG/YEAR, the units are wrong on the plot...)}
     \label{fig:atmosphere_carbon}
 \end{figure}
 
@@ -217,7 +237,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
     \end{subfigure}
-    \caption{Ocean}
+    \caption{Left: Difference between the forestation scenario and ssp585 in downward ocean carbon mass flux. Right: Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux}
     \label{fig:ocean_carbon}
 \end{figure}
 
@@ -225,7 +245,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 \subsection{Regional analysis: Australia?}
 
 \begin{itemize}
-    \item Australian cVeg increases by ~0.25 PgC in the afforestation scenario. But the difference from the reference simulation is 0.
+    \item Australian cVeg increases by ~0.25 PgC in the forestation scenario. But the difference from the reference simulation is 0.
 \end{itemize}
 
 \begin{figure}[H]
@@ -254,7 +274,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
         %\includesvg[width=\linewidth]{../plots/cSoil_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_australia_diff.png}
     \end{subfigure}
-    \caption{Left: absolute carbon stocks. Right: difference between afforestation scenario and ssp585.}
+    \caption{Left: Australian region absolute carbon stocks. Right: Australian region  difference between forestation scenario and ssp585.}
     \label{fig:aus_region}
 \end{figure}
 
@@ -262,15 +282,15 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \centering
     \includegraphics{../plots/regional_analysis_map.png}
     \caption{Box regions for regional analysis.}
-    \label{fig:my_label}
+    \label{fig:box_regions}
 \end{figure}
 
 \begin{itemize}
-    \item The esm-ssp585-ssp126Lu land use has bot afforestation and deforestation.
-    \item Afforestation occurs in boreal Eurasia, boreal North America and Brazil.
-    \item Afforestation and deforestation occurs in eastern North America, Central Africa and East Asia.
+    \item The esm-ssp585-ssp126Lu land use has bot forestation and deforestation.
+    \item Forestation occurs in boreal Eurasia, boreal North America and Brazil.
+    \item Forestation and deforestation occurs in eastern North America, Central Africa and East Asia.
     \item Deforestation occurs in western Eurasia.
-    \item Low afforestation/deforestation occurs in Australia.
+    \item Low forestation/deforestation occurs in Australia.
     \item No appreciable difference in climate variables.
     \item Increases in cVeg for all regions except boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
     \item Decreases in cSoil for Australia, Amazonia, Eastern North America. Western Eurasia, East Asia, Boreal Eurasia, Boreal North America, generally also show decreases in cSoil but there are a few ensemble members that show increases by the end of the century.
@@ -318,7 +338,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
         %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/tas_centralafrica_diff.png}
     \end{subfigure}
-    \caption{ASD}
+    \caption{Experiment differences for each region in \ref{fig:box_regions}}
     \label{fig:aus_region_cveg_tas}
 \end{figure}
 
@@ -328,17 +348,22 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
     \centering
     %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
     \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
-    \caption{cVeg in esm-ssp585-ssp126Lu scenario for 3 models.}
+    \caption{cVeg in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
     \label{fig:models}
 \end{figure}
+
+\begin{itemize}
+    \item CanESM5 has differing ensemble methods for esm-ssp585 and esm-ssp585-ssp126Lu. One uses r1i1p1f1 and another uses r1i1p2f1. Therefore, there is some additional perturbation applied to one of those experiments which causes the blue line to start at negative values.
+    \item ACCESS-ESM is roughly in the missgle of the spread. More similar to MPI-ESM and UKESM than other models.
+\end{itemize}
 
 \subsection{Notes/Discussion}
 
 \begin{itemize}
-    \item The lack of climate warming mitigatino potential in the afforestation scenario may be due to redistribution of the global carbon budget into the natural sinks.
+    \item The lack of climate warming mitigatino potential in the forestation scenario may be due to redistribution of the global carbon budget into the natural sinks.
         An increase in vegetation uptake would lead to a decrease in atmospheric CO2 accumulation, which would result in a reduction of partial CO2 pressure on the ocean and hence lead to a reduction of CO2 in the ocean sink.
-    \item This has bee seen in model simulations of the MPI-ESM simulations of afforestation. (See Hao-wei Wey).
-    \item The biogeophysical impacts of growing trees could also warm the planet, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of afforestation.
+    \item The LUH2 dataset severely underestimates the tree cover that is originally dictated by IMAGE (the integrated assesment model that produces the SSP1-2.6 scenario).
+    \item The biogeophysical impacts of growing trees could also warm the planet, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of forestation.
 \end{itemize}
 
 \section{Conclusion?}
@@ -346,4 +371,3 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 \printbibliography
 
 \end{document}
-
