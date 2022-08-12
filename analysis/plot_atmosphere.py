@@ -57,7 +57,7 @@ load_npy = not load_cdo
 
 
 @cdod.cdo_vertmean
-@cdod.cdo_fldmean
+@cdod.cdo_fldmean(weights='TRUE')
 @cdod.cdo_yearmonmean
 def global_average(input:str, output:str)->None:
     """Create intermediate files for field and vertical aggregated yearly data using CDO.

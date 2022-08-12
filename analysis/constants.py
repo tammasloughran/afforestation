@@ -1,5 +1,10 @@
 # Define commonly used constants here
-CLIM_VARIABLES = {'Amon':['tas','pr'],'Emon':[]}
+CLIM_VARIABLES = {
+        'Amon':[
+            'tas',
+            'pr',
+            ],
+        'Emon':[]}
 DATA_DIR = './data'
 ENSEMBLES = [str(e) for e in range(1,11)]
 EXPERIMENTS = {

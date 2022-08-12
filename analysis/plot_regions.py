@@ -41,7 +41,8 @@ cdo = Cdo()
 
 NTIMES = 86
 NENS = 10
-COLORS = {'gpp':'green',
+COLORS = {
+        'gpp':'green',
         'npp':'olive',
         'ra':'orange',
         'rh':'saddlebrown',
@@ -51,7 +52,8 @@ COLORS = {'gpp':'green',
         'cSoil':'black',
         'cLand':'maroon',
         'tas':'black',
-        'pr':'blue'}
+        'pr':'blue',
+        }
 REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # afforestation/deforesation
         'Australia': ([-45,-10],[110,155]), # Neutral
         'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # reforrestation
@@ -60,7 +62,9 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # afforestation/deforesation
         'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # low reforrestation
         'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # deforrestation
         'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # afforestation
-        'East Asia': ([8.34,45.87],[96.25,148.87])} # afforestation and deforestation
+        'East Asia': ([8.34,45.87],[96.25,148.87]), # afforestation and deforestation
+        'Amazon Gridpoint': ([-13,-14],[-48,-49]), # Afforestation ONLY gridpoint
+        }
 
 files = glob.glob('./*')
 if PLOTS_DIR not in files:
@@ -187,9 +191,10 @@ def make_regional_plots():
 
 
         @cdod.cdo_cat(input2='')
-        @cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+        @cdod.cdo_mul(input2=LAND_FRAC_FILE) # Mask for climate over land only.
+        @cdod.cdo_divc(str(100)) # LAND_FRAC_FILE is in %.
         @cdod.cdo_sellonlatbox(str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
-        @cdod.cdo_fldmean
+        @cdod.cdo_fldmean()
         @cdod.cdo_yearmonmean
         def load_region_clim(var:str, input:str)->np.ma.MaskedArray:
             return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
@@ -198,14 +203,15 @@ def make_regional_plots():
         print("Plotting", region)
         rname = region.replace(' ', '').lower()
 
+        # Vegetation variables
         for table in TABLES:
             for var in VARIABLES[table]:
                 print("Processing", var)
                 # Get the reference period value.
                 ref_file = f'[ {DATA_DIR}/{var}_{model}_esm-hist-aff_ensmean_200501-202412mean.nc ]'
-                if var in ['cVeg', 'cLitter', 'cSoil']:
+                if var in ['cVeg','cLitter','cSoil','cLand']:
                     reference = load_region_pool(input=ref_file, var=var)
-                elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                elif var in ['gpp','npp','ra','rh','nbp']:
                     reference = load_region_base_flux(input=ref_file, var=var)
 
                 # Load the afforestation data.
@@ -217,9 +223,9 @@ def make_regional_plots():
                         filenames = ' '.join(
                                 get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var))
                         filenames = '[ '+filenames+' ]'
-                        if var in ['cVeg', 'cLitter', 'cSoil']:
+                        if var in ['cVeg','cLitter','cSoil','cLand']:
                             aff_data[i,:] = load_region_pool(input=filenames, var=var)
-                        elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                        elif var in ['gpp','npp','ra', 'rh','nbp']:
                             aff_data[i,:] = load_region_flux(input=filenames, var=var)
                     np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_{rname}.npy', aff_data)
 
@@ -234,9 +240,9 @@ def make_regional_plots():
                     for i, ens in enumerate(ENSEMBLES):
                         filenames = ' '.join(get_filename('C4MIP', 'esm-ssp585', ens, table, var))
                         filenames = '[ '+filenames+' ]'
-                        if var in ['cVeg', 'cLitter', 'cSoil']:
+                        if var in ['cVeg','cLitter','cSoil','cLand']:
                             ssp585_data[i,:] = load_region_pool(input=filenames, var=var)
-                        elif var in ['gpp', 'npp', 'ra', 'rh', 'nbp']:
+                        elif var in ['gpp','npp','ra','rh','nbp']:
                             ssp585_data[i,:] = load_region_flux(input=filenames, var=var)
                     np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_{rname}.npy', ssp585_data)
 
@@ -269,6 +275,7 @@ def make_regional_plots():
                         label='diff',
                         )
 
+        # Climate Variables
         table = 'Amon'
         for var in CLIM_VARIABLES[table]:
             print("Processing", var)
