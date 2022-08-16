@@ -19,7 +19,7 @@ else:
                                     SEC_IN_DAY, SEC_IN_YEAR, TABLES, VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
-cdo.debug = False
+cdo.debug = True
 
 
 def cdo_mul_land_area(cdo_func):

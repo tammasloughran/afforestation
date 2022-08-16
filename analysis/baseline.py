@@ -18,7 +18,7 @@ else:
     from constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
 
 cdo = cdo_module.Cdo(tempdir='.')
-cdo.debug = False
+cdo.debug = True
 
 
 def reference_period(infile1:str, infile2:str, outfile:str, pyear:list=[2005, 2024]):

@@ -45,8 +45,9 @@ else:
 import ipdb
 
 cdo = Cdo()
-cdo.debug = False
+cdo.debug = True
 
+C_IN_CO2_RATIO = 0.27291 # 0.27291 %mass of C in co2 to convert from co2 to C
 CO2_VARIABLES = {
         'Emon':'co23D', # CO2 concentration (mixing ratio) in kg/kg.
         #'Amon':'co2', # Mole fraction of CO2. esm-ssp585 only
@@ -148,32 +149,32 @@ def make_co2_plot()->None:
     plt.savefig(f'{PLOTS_DIR}/CO2_aff_and_ssp585.png')
 
     # Plot mass difference.
-    #fig = plt.figure()
-    #for e,ens in enumerate(ENSEMBLES):
-    #    years = list(range(2015, 2015+NTIMES))
-    #    plt.plot(
-    #            years,
-    #            (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
-    #            color='royalblue',
-    #            linewidth=0.6,
-    #            alpha=0.4,
-    #            )
-    #plt.plot(
-    #    years,
-    #    (aff_co2_data - ssp585_co2_data).mean(axis=0)*(MASS_ATM/KG_IN_PG)/MOLMASS_O2,
-    #    color='royalblue',
-    #    label='aff - ssp585',
-    #    )
-    #plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
-    #plt.legend()
-    #plt.xlabel('Year')
-    #plt.ylabel('Carbon mass [Pg(C)]')
-    #plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
+    fig = plt.figure()
+    for e,ens in enumerate(ENSEMBLES):
+        years = list(range(2015, 2015+NTIMES))
+        plt.plot(
+                years,
+                (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
+                color='royalblue',
+                linewidth=0.6,
+                alpha=0.4,
+                )
+    plt.plot(
+        years,
+        (aff_co2_data - ssp585_co2_data).mean(axis=0)*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
+        color='royalblue',
+        label='aff - ssp585',
+        )
+    plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
+    plt.legend()
+    plt.xlabel('Year')
+    plt.ylabel('Carbon mass [Pg(C)]')
+    plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
 
-    # Carbon budget
+    ## Carbon budget
     # Ocean
-    for_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')*0.27291
-    ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')*0.27291
+    for_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')*C_IN_CO2_RATIO
+    ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')*C_IN_CO2_RATIO
     # Land
     for_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
     for_cland_flux = np.concatenate([np.repeat(np.nan, 10)[:,None], np.diff(for_cland, 1)], axis=1)
@@ -181,9 +182,10 @@ def make_co2_plot()->None:
     ssp585_cland_flux = np.concatenate([np.repeat(np.nan, 10)[:,None], np.diff(ssp585_cland, 1)], axis=1)
     # Fossil fuel emissions
     emissions_file = nc.Dataset(f'{DATA_DIR}/ssp585_emissions_global.nc', 'r')
-    ffemissions = emissions_file.variables['field1561'][1:].squeeze()*0.27291
-            # 0.27291 %mass of C in co2 to convert from co2 to C
+    ffemissions = emissions_file.variables['field1561'][1:].squeeze()*C_IN_CO2_RATIO
 
+    # This is kind of cheating. I'm inferring the atmosphere component of the budget as the
+    # resiual of the other terms.
     for_cland_flux_mean = for_cland_flux.mean(axis=0)
     for_cland_flux_mean[0] = 0
     ssp585_cland_flux_mean = ssp585_cland_flux.mean(axis=0)
@@ -201,8 +203,24 @@ def make_co2_plot()->None:
     plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
     plt.legend(loc='lower left')
     plt.xlabel('Year')
-    plt.ylabel('Carbon mass [Pg(C)]')
+    plt.ylabel('Carbon flux [Pg(C)/year]')
     plt.savefig(f'{PLOTS_DIR}/carbon_budget_esm-ssp585-ssp126Lu.png')
+
+    plt.figure()
+    plt.plot(years[1:],
+            np.diff(aff_co2_data.mean(axis=0), axis=0)*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
+            color='blue',
+            label='My calculated C to atm. converted from kg/kg to Pg(C)'
+            )
+    ssp585_atmosphere[0] = 0
+    plt.plot(years,
+            for_atmosphere,
+            color='red',
+            label='Inferred residual (EFF - SOCEAN - SLAND)'
+            )
+    plt.title("GATM esm-ssp585")
+    plt.legend()
+    plt.show()
 
 
 if __name__ != 'analysis.plot_atmosphere':

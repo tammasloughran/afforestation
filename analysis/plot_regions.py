@@ -38,6 +38,7 @@ else:
             VARIABLES)
 
 cdo = Cdo()
+cdo.debug = True
 
 NTIMES = 86
 NENS = 10
@@ -54,17 +55,19 @@ COLORS = {
         'tas':'black',
         'pr':'blue',
         }
-REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # afforestation/deforesation
+REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         'Australia': ([-45,-10],[110,155]), # Neutral
-        'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # reforrestation
-        'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # afforest & deforestaion
-        'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # reforrestation
-        'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # low reforrestation
-        'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # deforrestation
-        'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # afforestation
-        'East Asia': ([8.34,45.87],[96.25,148.87]), # afforestation and deforestation
-        'Amazon Gridpoint': ([-13,-14],[-48,-49]), # Afforestation ONLY gridpoint
+        'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # Forestation
+        'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # Forestation & deforestaion
+        'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # Forestation
+        'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # Low forestation
+        'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
+        'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
+        'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
+        'Amazon Gridpoint': ([-13,-14],[-48,-49]), # Forestation ONLY gridpoint
         }
+
+LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
 
 files = glob.glob('./*')
 if PLOTS_DIR not in files:
@@ -148,7 +151,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
     elif var=='tas':
         plt.ylabel('$^\circ$C')
     plt.xlabel('Time (Year)')
-    plt.title(f"ACCES-ESM1.5 {label} {var}")
+    plt.title(f"ACCES-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
     plt.close()
@@ -190,12 +193,14 @@ def make_regional_plots():
             return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
-        @cdod.cdo_cat(input2='')
-        @cdod.cdo_mul(input2=LAND_FRAC_FILE) # Mask for climate over land only.
-        @cdod.cdo_divc(str(100)) # LAND_FRAC_FILE is in %.
+        @cdod.cdo_cat(input2='') # Concatenate all files in input1.
+        @cdod.cdo_ifthen(input1=LAND_GT_50) # Mask for climate over land only.
+        # Alternatively I can multiply by the land fraction and divide by 100. Doesnt work for temp.
+        #@cdod.cdo_mul(input2=LAND_FRAC_FILE) # Mask for climate over land only.
+        #@cdod.cdo_divc(str(100)) # LAND_FRAC_FILE is in %.
         @cdod.cdo_sellonlatbox(str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
-        @cdod.cdo_fldmean()
-        @cdod.cdo_yearmonmean
+        @cdod.cdo_fldmean(weights='TRUE') # Area weighted spatial mean.
+        @cdod.cdo_yearmonmean # Annual mean
         def load_region_clim(var:str, input:str)->np.ma.MaskedArray:
             return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 

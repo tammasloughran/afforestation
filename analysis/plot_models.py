@@ -42,7 +42,7 @@ else:
             )
 
 cdo = cdo_module.Cdo()
-cdo.debug = False
+cdo.debug = True
 
 # Local constants
 COLORS = {

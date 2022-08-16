@@ -34,6 +34,7 @@ import ipdb
 cdo = Cdo()
 cdo.debug = True
 
+C_IN_CO2_RATIO = 0.27291 # 0.27291 %mass of C in co2 to convert from co2 to C
 OCEAN_VARIABLES = {
         'Omon':[
                 'fgco2', # Surface Downward Flux of Total CO2. Units kg m-2 s-1
@@ -76,10 +77,11 @@ def cdo_load_ocean_flux(var:str, input:str)->np.ma.MaskedArray:
 
 def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:str='flux')->None:
     """Create a plot of ocean carbon for all ensembles.
+    Input data is in CO2 but plot is converted to C 
     """
     years = list(range(2015, 2015+NTIMES))
     plt.figure()
-    diff = (aff_data - ssp585_data)*0.27291 # %mass of C in co2 to convert from co2 to C
+    diff = (aff_data - ssp585_data)*C_IN_CO2_RATIO
     for e,ens in enumerate(ENSEMBLES):
         plt.plot(years, diff[e,:], color='lightblue', alpha=0.5)
     plt.plot(years, diff.mean(axis=0), color='darkblue', label=f'{var} Aff. - SSP585')
