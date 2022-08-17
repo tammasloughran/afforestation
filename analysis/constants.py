@@ -1,7 +1,7 @@
 # Define commonly used constants here
 CLIM_VARIABLES = {
         'Amon':[
-            'tas',
+            #'tas',
             'pr',
             ],
         'Emon':[]}

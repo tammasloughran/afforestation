@@ -162,7 +162,6 @@ for m in models.keys():
         ssp585_data[m] = ssp585_data[m][:-1]
     years = list(range(2015, 2015 + aff_data[m].shape[0]))
     plt.plot(years, aff_data[m] - ssp585_data[m], label=models[m])
-    #plt.plot(years, aff_data[m], label=models[m])
 access_aff = np.load(f'{DATA_DIR}/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
 access_ssp585 = np.load(f'{DATA_DIR}/cVeg_ACCESS-ESM1.5_esm-ssp585_global.npy')
 diff = access_aff - access_ssp585
@@ -176,5 +175,24 @@ plt.xlabel('Year')
 plt.title("cVeg esm-ssp585-ssp126Lu - esm-ssp585")
 plt.legend()
 plt.savefig(f'{PLOTS_DIR}/cVeg_model_intercomparison_diff.png')
+
+# Plotonly the 
+plt.figure()
+for m in models.keys():
+    years = list(range(2015, 2015 + aff_data[m].shape[0]))
+    plt.plot(years, aff_data[m], label=models[m])
+access_aff = np.load(f'{DATA_DIR}/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
+access_ssp585 = np.load(f'{DATA_DIR}/cVeg_ACCESS-ESM1.5_esm-ssp585_global.npy')
+diff = access_aff
+ens_mean = np.mean(diff, axis=0)
+years = list(range(2015, 2015 + ens_mean.shape[0]))
+plt.plot(years, ens_mean, label='ACCESS-ESM1-5')
+for e in range(10):
+    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
+plt.ylabel('Pg(C)')
+plt.xlabel('Year')
+plt.title("cVeg esm-ssp585-ssp126Lu")
+plt.legend()
+plt.savefig(f'{PLOTS_DIR}/cVeg_model_intercomparison_esm-ssp585-ssp126Lu.png')
 plt.show()
 

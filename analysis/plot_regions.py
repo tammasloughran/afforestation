@@ -163,7 +163,7 @@ def make_regional_plots():
         # Create loader functions
         @cdod.cdo_cat(input2='') # Concatenate all files in input1.
         @cdo_mul_land_area
-        @cdod.cdo_sellonlatbox(str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         @cdod.cdo_fldsum
         @cdod.cdo_yearmonmean
         @cdod.cdo_divc(str(KG_IN_PG))
@@ -173,7 +173,7 @@ def make_regional_plots():
 
         @cdod.cdo_cat(input2='')
         @cdo_mul_land_area
-        @cdod.cdo_sellonlatbox(str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         @cdod.cdo_fldsum
         @cdod.cdo_mulc(str(SEC_IN_YEAR))
         @cdod.cdo_divc(str(KG_IN_PG))
@@ -183,7 +183,7 @@ def make_regional_plots():
 
         @cdod.cdo_cat(input2='')
         @cdo_mul_land_area
-        @cdod.cdo_sellonlatbox(str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         @cdod.cdo_fldsum
         @cdod.cdo_mulc(str(SEC_IN_DAY))
         @cdod.cdo_muldpm
@@ -198,7 +198,7 @@ def make_regional_plots():
         # Alternatively I can multiply by the land fraction and divide by 100. Doesnt work for temp.
         #@cdod.cdo_mul(input2=LAND_FRAC_FILE) # Mask for climate over land only.
         #@cdod.cdo_divc(str(100)) # LAND_FRAC_FILE is in %.
-        @cdod.cdo_sellonlatbox(str(box[1][1]), str(box[1][0]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         @cdod.cdo_fldmean(weights='TRUE') # Area weighted spatial mean.
         @cdod.cdo_yearmonmean # Annual mean
         def load_region_clim(var:str, input:str)->np.ma.MaskedArray:
@@ -351,3 +351,4 @@ if __name__ != 'analysis.plot_regions':
     for f in temp_files:
         os.remove(f)
 
+    plt.show()
