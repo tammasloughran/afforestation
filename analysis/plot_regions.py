@@ -16,8 +16,11 @@ if __name__ == 'analysis.plot_regions':
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             KG_IN_PG,
+            NENS,
+            NTIMES,
             PLOTS_DIR,
             SEC_IN_DAY,
             SEC_IN_YEAR,
@@ -29,8 +32,11 @@ else:
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             KG_IN_PG,
+            NENS,
+            NTIMES,
             PLOTS_DIR,
             SEC_IN_DAY,
             SEC_IN_YEAR,
@@ -40,8 +46,6 @@ else:
 cdo = Cdo()
 cdo.debug = True
 
-NTIMES = 86
-NENS = 10
 COLORS = {
         'gpp':'green',
         'npp':'olive',
@@ -56,15 +60,16 @@ COLORS = {
         'pr':'blue',
         }
 REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
-        'Australia': ([-45,-10],[110,155]), # Neutral
-        'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # Forestation
-        'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # Forestation & deforestaion
-        'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # Forestation
-        'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # Low forestation
-        'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
-        'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
-        'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
-        'Amazon Gridpoint': ([-13,-14],[-48,-49]), # Forestation ONLY gridpoint
+        #'Australia': ([-45,-10],[110,155]), # Neutral
+        #'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # Forestation
+        #'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # Forestation & deforestaion
+        #'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # Forestation
+        #'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # Low forestation
+        #'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
+        #'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
+        #'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
+        #'Amazon Gridpoint': ([-13,-14],[-48,-49]), # Forestation ONLY gridpoint
+        'Asia gridopint': ([29.75,30.25],[99,100]),
         }
 
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
@@ -153,7 +158,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
-    plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
+    plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png', dpi=DPI)
     plt.close()
 
 
@@ -194,7 +199,7 @@ def make_regional_plots():
 
 
         @cdod.cdo_cat(input2='') # Concatenate all files in input1.
-        @cdod.cdo_ifthen(input1=LAND_GT_50) # Mask for climate over land only.
+        @cdod.cdo_ifthen(input1=LAND_GT_50) # Mask for climate over land only. land frac > 50%
         # Alternatively I can multiply by the land fraction and divide by 100. Doesnt work for temp.
         #@cdod.cdo_mul(input2=LAND_FRAC_FILE) # Mask for climate over land only.
         #@cdod.cdo_divc(str(100)) # LAND_FRAC_FILE is in %.

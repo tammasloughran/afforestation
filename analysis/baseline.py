@@ -10,12 +10,25 @@ import cdo as cdo_module
 if __name__ == 'analysis.baseline':
     # baseline.py imported as a module of the analysis package.
     from analysis.cmip_files import LAND_FRAC_FILE, get_filename
-    from analysis.constants import (ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES,
-                                    VARIABLES)
+    from analysis.constants import (
+            DATA_DIR,
+            ENSEMBLES,
+            KG_IN_PG,
+            SEC_IN_YEAR,
+            TABLES,
+            VARIABLES,
+            )
 else:
     # baseline.py is main program or imported as a module from another script.
     from cmip_files import LAND_FRAC_FILE, get_filename
-    from constants import ENSEMBLES, KG_IN_PG, SEC_IN_YEAR, TABLES, VARIABLES
+    from constants import (
+            DATA_DIR,
+            ENSEMBLES,
+            KG_IN_PG,
+            SEC_IN_YEAR,
+            TABLES,
+            VARIABLES,
+            )
 
 cdo = cdo_module.Cdo(tempdir='.')
 cdo.debug = True
@@ -32,7 +45,6 @@ def reference_period(infile1:str, infile2:str, outfile:str, pyear:list=[2005, 20
 # Options.
 ## Recalculate the ensemble means from the CMORized CMIP6 data. If not, assume it's been done.
 recalculate_ens_mean = False
-DATA_DIR = 'data'
 
 # Local variables.
 global_sum_baselines = {}

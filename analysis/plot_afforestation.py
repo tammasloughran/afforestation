@@ -24,6 +24,7 @@ if __name__ == 'analysis.plot_afforestation':
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             M2_IN_MILKM2,
             NENS,
@@ -41,6 +42,7 @@ else:
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             M2_IN_MILKM2,
             NENS,
@@ -138,7 +140,7 @@ def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='
         plt.colorbar(label='Pg(C)/year', orientation='horizontal')
     plt.title(var+' '+label)
     plt.tight_layout()
-    plt.savefig(f'{PLOTS_DIR}/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png')
+    plt.savefig(f'{PLOTS_DIR}/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png', dpi=DPI)
 
 
 def make_veg_plots()->None:
@@ -174,13 +176,13 @@ def make_veg_plots()->None:
             years = list(range(2015, 2101))
             plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_anomalies.png')
+                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_anomalies.png', dpi=DPI)
             plt.close()
 
             # Plot the graphs for anomalies relative to the esm-ssp585
             plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
             plt.savefig(f'{PLOTS_DIR}/'+ \
-                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png')
+                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png', dpi=DPI)
             plt.close()
 
 
@@ -216,16 +218,16 @@ def make_clim_plots()->None:
         years = list(range(2015, 2101))
         plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png')
+                f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png', dpi=DPI)
         plt.close()
         plot_ensembles_clim(years, ssp585_data, ssp585_mean, ssp585_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_{model}_esm-ssp585_ensembles.png')
+                f'{var}_{model}_esm-ssp585_ensembles.png', dpi=DPI)
         plt.close()
         plot_ensembles_clim(years, ssp585_data-aff_data, ssp585_mean-aff_mean,
                 aff_std, var)
         plt.savefig(f'{PLOTS_DIR}/'+\
-                f'{var}_{model}_esm-ssp585_ensembles_diff.png')
+                f'{var}_{model}_esm-ssp585_ensembles_diff.png', dpi=DPI)
         plt.close()
 
 
@@ -309,10 +311,10 @@ def make_clim_aff_only():
 
 
 if __name__ != 'analysis.plot_afforestation':
-    #make_veg_plots()
-    #make_clim_plots()
+    make_veg_plots()
+    make_clim_plots()
     make_veg_maps()
-    #make_clim_aff_only()
+    make_clim_aff_only()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')

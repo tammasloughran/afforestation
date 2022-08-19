@@ -12,6 +12,7 @@ if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cmip_files import get_filename
     from analysis.constants import (
+            C_IN_CO2_RATIO,
             DATA_DIR,
             ENSEMBLES,
             KG_IN_PG,
@@ -29,6 +30,7 @@ else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from cmip_files import get_filename
     from constants import (
+            C_IN_CO2_RATIO,
             DATA_DIR,
             ENSEMBLES,
             KG_IN_PG,
@@ -47,7 +49,6 @@ import ipdb
 cdo = Cdo()
 cdo.debug = True
 
-C_IN_CO2_RATIO = 0.27291 # 0.27291 %mass of C in co2 to convert from co2 to C
 CO2_VARIABLES = {
         'Emon':'co23D', # CO2 concentration (mixing ratio) in kg/kg.
         #'Amon':'co2', # Mole fraction of CO2. esm-ssp585 only

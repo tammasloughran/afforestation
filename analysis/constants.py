@@ -1,11 +1,13 @@
 # Define commonly used constants here
+C_IN_CO2_RATIO = 0.27291 # 0.27291 %mass of C in co2 to convert from co2 to C
 CLIM_VARIABLES = {
         'Amon':[
-            #'tas',
-            'pr',
+            'tas',
+            #'pr',
             ],
         'Emon':[]}
 DATA_DIR = './data'
+DPI = 200
 ENSEMBLES = [str(e) for e in range(1,11)]
 EXPERIMENTS = {
         'CMIP':['esm-hist'],
@@ -36,17 +38,17 @@ SEC_IN_YEAR = 60*60*24*365 # s
 TABLES = ['Lmon','Emon']
 VARIABLES = {
         'Lmon':[
-            'gpp',
-            'npp',
-            'ra',
-            'rh',
-            'nbp',
+            #'gpp',
+            #'npp',
+            #'ra',
+            #'rh',
+            #'nbp',
             'cVeg',
-            'cLitter',
+            #'cLitter',
             ],
         'Emon':[
-            'cSoil',
-            'cLand',
+            #'cSoil',
+            #'cLand',
             ],
         }
 

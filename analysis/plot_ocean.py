@@ -11,10 +11,13 @@ if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cmip_files import get_filename
     from analysis.constants import (
+            C_IN_CO2_RATIO,
             DATA_DIR,
             ENSEMBLES,
             KG_IN_PG,
             MOLMASS_O2,
+            NENS,
+            NTIMES,
             PLOTS_DIR,
             SEC_IN_DAY,
             )
@@ -22,10 +25,13 @@ else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from cmip_files import get_filename
     from constants import (
+            C_IN_CO2_RATIO,
             DATA_DIR,
             ENSEMBLES,
             KG_IN_PG,
             MOLMASS_O2,
+            NENS,
+            NTIMES,
             PLOTS_DIR,
             SEC_IN_DAY,
             )
@@ -34,7 +40,6 @@ import ipdb
 cdo = Cdo()
 cdo.debug = True
 
-C_IN_CO2_RATIO = 0.27291 # 0.27291 %mass of C in co2 to convert from co2 to C
 OCEAN_VARIABLES = {
         'Omon':[
                 'fgco2', # Surface Downward Flux of Total CO2. Units kg m-2 s-1
@@ -45,8 +50,6 @@ OCEAN_VARIABLES = {
                 #'spco2nat', # Surface Aqueous Partial Pressure of Natural CO2. Units Pa
                 ],
         }
-NENS = len(ENSEMBLES)
-NTIMES = 2101 - 2015
 EXAMPLE_FILE = '/g/data/fs38/publications/CMIP6/C4MIP/CSIRO/ACCESS-ESM1-5/esm-ssp585/r1i1p1f1/'+\
         'Omon/fgco2/gn/latest/fgco2_Omon_ACCESS-ESM1-5_esm-ssp585_r1i1p1f1_gn_201501-210012.nc'
 
