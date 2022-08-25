@@ -38,18 +38,21 @@ SEC_IN_YEAR = 60*60*24*365 # s
 TABLES = ['Lmon','Emon']
 VARIABLES = {
         'Lmon':[
-            #'gpp',
-            #'npp',
-            #'ra',
-            #'rh',
-            #'nbp',
+            'gpp',
+            'npp',
+            'ra',
+            'rh',
+            'nbp',
             'cVeg',
-            #'cLitter',
+            'cLitter',
             ],
         'Emon':[
-            #'cSoil',
-            #'cLand',
+            'cSoil',
+            'cLand',
             ],
+        }
+ARCHIVE_VARS = {
+
         }
 
 # Depends on constants already defined.

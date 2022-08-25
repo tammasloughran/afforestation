@@ -25,7 +25,8 @@ if __name__ == 'analysis.plot_regions':
             SEC_IN_DAY,
             SEC_IN_YEAR,
             TABLES,
-            VARIABLES)
+            VARIABLES,
+            )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from cmip_files import LAND_FRAC_FILE, get_filename
@@ -41,7 +42,8 @@ else:
             SEC_IN_DAY,
             SEC_IN_YEAR,
             TABLES,
-            VARIABLES)
+            VARIABLES,
+            )
 
 cdo = Cdo()
 cdo.debug = True
