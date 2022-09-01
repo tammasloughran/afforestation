@@ -51,9 +51,6 @@ VARIABLES = {
             'cLand',
             ],
         }
-ARCHIVE_VARS = {
-
-        }
 
 # Depends on constants already defined.
 NEW_UNITS_FACTOR = SEC_IN_YEAR/KG_IN_PG # s/kg

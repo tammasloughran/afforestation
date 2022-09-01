@@ -23,6 +23,9 @@ from analysis.plot_atmoshpere import (
 from ananlysis.plot_ocean import (
         make_ocean_carbon_plot,
         )
+from analysis.plot_models import (
+        make_model_plots,
+        )
 
 
 files = os.listdir('.')
@@ -42,6 +45,7 @@ def main():
     make_regional_plots()
     make_co2_plot()
     make_ocean_carbon_plot()
+    make_model_plots()
 
 
 sys.exit(main())
