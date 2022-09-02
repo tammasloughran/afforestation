@@ -20,6 +20,7 @@ if __name__ == 'analysis.plot_afforestation':
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             KG_IN_PG,
             PLOTS_DIR,
@@ -33,6 +34,7 @@ else:
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             KG_IN_PG,
             PLOTS_DIR,
@@ -170,7 +172,6 @@ def make_model_plots():
                             ).variables[var][:].squeeze()
 
 
-
                 # Select pool or climate loader for this variable.
                 if var in ['pr', 'tas']:
                     loader = cdo_clim_load_model
@@ -226,7 +227,7 @@ def make_model_plots():
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/{var}_model_intercomparison_diff.png')
+            plt.savefig(f'{PLOTS_DIR}/{var}_model_intercomparison_diff.png', pdi=DPI)
 
             # Plot only the afforestation scenario.
             plt.figure()
@@ -246,7 +247,7 @@ def make_model_plots():
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu")
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png')
+            plt.savefig(f'{PLOTS_DIR}/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_models':

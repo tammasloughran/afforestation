@@ -14,6 +14,7 @@ if __name__ == 'analysis.plot_afforestation':
     from analysis.constants import (
             C_IN_CO2_RATIO,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             KG_IN_PG,
             MASS_ATM, # kg
@@ -33,6 +34,7 @@ else:
     from constants import (
             C_IN_CO2_RATIO,
             DATA_DIR,
+            DPI,
             ENSEMBLES,
             KG_IN_PG,
             MASS_ATM, # kg
@@ -83,7 +85,6 @@ def load_co2(var:str, input:str)->np.ma.MaskedArray:
 #    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
-@cdod.cdo_cat(input2='') # Concatenate all files in input1
 @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea.nc') # Converts from m-2 to per gridcell
 @cdod.cdo_divc(str(KG_IN_PG)) # Converts from kg to Pg
 @cdod.cdo_mulc(str(SEC_IN_DAY)) # Converts from s-1 to day-1
@@ -246,44 +247,31 @@ def make_co2_plot()->None:
 
 
 def make_carbon_budget_plot():
-    ocean_flux_variable = 'fld_s00i250'
-    land_flux_variable = 'fld_s03i326'
-    atmosphere_flux_variable = 'fld_s03i327'
-    emissions_variable = 'fld_s00i251'
-    variables = {
-            'socean':ocean_flux_variable,
-            'sland':land_flux_variable,
-            'gatm':atmosphere_flux_variable,
-            'eff':emissions_variable,
-            }
+    variables = [
+            'socean',
+            'sland',
+            'gatm',
+            'eff',
+            ]
+    ARCHIVE_DIR = '/g/data/p66/tfl561/archive_data'
     # Load data.
     var_data = {}
-    savedata = True
-    for term,var in variables.items():
-        if savedata==True:
-            for term,var in variables.items():
-                var_data[term] = np.ones((NENS,NTIMES))*np.nan
-                for e,experiment in enumerate(SSP585126LU_ENS):
-                    pafiles = get_archive_filename(exp=experiment, freq='mon')
-                    pafiles.sort()
-                    for i,f in enumerate(pafiles):
-                        cdo.selvar(var, input=f, output=str(i).rjust(4, '0')+var+'.nc')
-                    files = glob.glob('*.nc')
-                    files.sort()
-                    files = '[ '+' '.join(files)+' ]'
-                    var_data[term][e,:] = load_archive_carbon(var=var, input=files)
-                np.save(f'{DATA_DIR}/{term}_PgCyear.npy', var_data[term])
-                files = glob.glob('*.nc')
-                for f in files: os.remove(f)
+    for var in variables:
+        if load_cdo==True:
+            var_data[var] = np.ones((NENS,NTIMES))*np.nan
+            for e,ens in enumerate(SSP585126LU_ENS):
+                filename = f'{ARCHIVE_DIR}/{var}_{ens}.nc'
+                var_data[var][e,:] = load_archive_carbon(var=var, input=filename)
+            np.save(f'{DATA_DIR}/{var}_PgCyear.npy', var_data[var])
         else:
-            var_data[term] = np.load(f'{DATA_DIR}/{term}_PgCyear.npy')
+            var_data[var] = np.load(f'{DATA_DIR}/{var}_PgCyear.npy')
 
     # Create stacked ensemble means for budget
     eff = var_data['eff'].mean(axis=0)
     gatm = -var_data['gatm'].mean(axis=0) - var_data['socean'].mean(axis=0) \
-            - var_data['sland'].mean(axis=0)
-    socean = -var_data['sland'].mean(axis=0) - var_data['socean'].mean(axis=0)
-    sland = -var_data['sland'].mean(axis=0)
+            + var_data['sland'].mean(axis=0)
+    socean = var_data['sland'].mean(axis=0) - var_data['socean'].mean(axis=0)
+    sland = var_data['sland'].mean(axis=0)
 
     # Plot data.
     plt.figure()
@@ -294,8 +282,9 @@ def make_carbon_budget_plot():
     plt.fill_between(years, sland, color='green', label='Land sink')
     plt.xlabel('Years')
     plt.ylabel('Pg(C)/year')
-    plt.legend()
-    plt.savefig('A_budget.png', dpi=200)
+    plt.legend(loc='upper left')
+    plt.title('esm-ssp585-ssp126Lu Global Carbon Budget')
+    plt.savefig('esm-ssp585-ssp126Lu_budget.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_atmosphere':
