@@ -4,6 +4,6 @@ Plots output will end up in here
 Get images:
 
 ```
-scp gadi:\~/afforestation/plots/\*.png .
+rsync --update gadi:\~/afforestation/plots/\*.png .
 ```
 

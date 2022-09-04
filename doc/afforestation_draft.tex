@@ -22,12 +22,12 @@
 A considerable amount of anthropogenic carbon emissions comes from agricultural activities.
 In order to effectively limit global warming to below 2°C (or even 3°C), there must be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
-This study is motivated by existing studies on Forestation by Sonntag et al. (2016) where the potential of forestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
+This study is motivated by existing studies on Forestation by Sonntag et al. (2016) \cite{sonntag_reforestation_2016} where the potential of forestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
 This study aims to quantify the CO2 removal potential of the forestation strategy using updated models at both the global scale and for Australia specifically.
 As part of the contributions to the CMIP5 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar forestation scenario.
 This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6.
-ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
+ACCESS-ESM1.5 contributed 10 ensemble members to these experiments, and it was the only model to contribute multiple ensemble members to the CMIP6 afforestation experiment.
 
 \begin{itemize}
     \item existing studies on MPI-ESM CMIP5 version using RCP8.5 emissions with RCP4.5 land use. \cite{sonntag_reforestation_2016} \cite{sonntag_quantifying_2018}
@@ -38,6 +38,20 @@ ACCESS-ESM1.5 contributed 10 ensemble members to these experiments.
 \end{itemize}
 
 \section{Methods}
+
+\begin{table}[]
+    \begin{tabular}{lllllll}
+    \hline
+Model         & Nitrogen & Phosphorus & Dynamic Vegetation & No. PFTs & No. of natural PFTs & Reference                                         \\ \hline
+ACCESS-ESM1-5 & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
+BCC-CSM2-MR   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
+CanESM5       & No       & No         & Yes                & 9        & 9                   & \cite{swart_canadian_2019}     \\
+MIROC-ES2L    & Yes      & No         & No                 & 12       & 12                  & \cite{hajima_development_2020} \\
+NorESM2-LM    & Yes      & No         & No                 & 15       & 15                  & \cite{seland_norwegian_2020}   \\
+UKESM1-0-LL   & Yes      & No         & Yes                & 13       & 13                  & \cite{sellar_ukesm1_2019}      \\
+MPI-ESM1-2-LR & Yes      & No         & Yes                & 13       & 12                  & \cite{giorgetta_climate_2013}  \\ \hline
+\end{tabular}
+\end{table}
 
 \begin{figure}[H]
     \centering
@@ -89,17 +103,17 @@ Mid-century:
     \label{fig:CABLE_PFTs}
 \end{figure}
 
-Forestation is dominated by growth of evergreen broadleaf forests, followed by evergreen needle leaf forests, then deciduous broadleaf forests.
-Deciduous needle leaf forests only make a small fraction of forrests and do not show any expansion.
-There are only a few areas where there is defforestation in the esm-ssp585-ssp126Lu experiment.
-These occur in deciduous broadleaf forests in eastern USA, China and western Russia (Figure \ref{fig:land_use_map}).
+Forestation is dominated by growth of evergreen broad leaf forests, followed by evergreen needle leaf forests, then deciduous broad leaf forests.
+Deciduous needle leaf forests only make a small fraction of forests and do not show any expansion.
+There are only a few areas where there is deforestation in the esm-ssp585-ssp126Lu experiment.
+These occur in deciduous broad leaf forests in eastern USA, China and western Russia (Figure \ref{fig:land_use_map}).
 
 \section{Results}
 
 \subsection{Climate}
 
 \begin{itemize}
-    \item Climate warms about 4 \textcelsius{} by 2100 and precip. increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
+    \item Climate warms about 4 \textcelsius{} by 2100 and precipitation increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
     \item There isn't much difference between the forestation scenario and ssp585.
 \end{itemize}
 
@@ -129,7 +143,7 @@ These occur in deciduous broadleaf forests in eastern USA, China and western Rus
 
 \begin{itemize}
     \item There is an increase in vegetation carbon of about 25 Pg C by the end of the century.
-    \item The increased co2 draw-down from the combined effect of forestation and co2 fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
+    \item The increased CO$_2$ draw-down from the combined effect of forestation and CO$_2$ fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
     \item cSoil is lower than SSP585 by about 4 Pg carbon.
 \end{itemize}
 
@@ -239,7 +253,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/carbon_budget_esm-ssp585-ssp126Lu.png}
     \end{subfigure}
-    \caption{Top left: Atmospheric CO$_2$ concentration in the forestation scenario and ssp585. Top right: carbon flux budget in the forestation scenaio.}
+    \caption{Top left: Atmospheric CO$_2$ concentration in the forestation scenario and ssp585. Top right: carbon flux budget in the forestation scenario.}
     \label{fig:atmosphere_carbon}
 \end{figure}
 
@@ -301,12 +315,12 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 
 \begin{itemize}
     \item The esm-ssp585-ssp126Lu land use has bot forestation and deforestation.
-    \item Forestation occurs in boreal Eurasia, boreal North America and Brazil.
+    \item Forestation occurs in Boreal Eurasia, Boreal North America and Brazil.
     \item Forestation and deforestation occurs in eastern North America, Central Africa and East Asia.
     \item Deforestation occurs in western Eurasia.
     \item Low forestation/deforestation occurs in Australia.
     \item No appreciable difference in climate variables.
-    \item Increases in cVeg for all regions except boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
+    \item Increases in cVeg for all regions except Boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
     \item Decreases in cSoil for Australia, Amazonia, Eastern North America. Western Eurasia, East Asia, Boreal Eurasia, Boreal North America, generally also show decreases in cSoil but there are a few ensemble members that show increases by the end of the century.
 \end{itemize}
 
@@ -374,10 +388,10 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \subsection{Notes/Discussion}
 
 \begin{itemize}
-    \item The lack of climate warming mitigatino potential in the forestation scenario may be due to redistribution of the global carbon budget into the natural sinks.
-        An increase in vegetation uptake would lead to a decrease in atmospheric CO2 accumulation, which would result in a reduction of partial CO2 pressure on the ocean and hence lead to a reduction of CO2 in the ocean sink.
-    \item The LUH2 dataset severely underestimates the tree cover that is originally dictated by IMAGE (the integrated assesment model that produces the SSP1-2.6 scenario).
-    \item The biogeophysical impacts of growing trees could also warm the planet, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of forestation.
+    \item The lack of climate warming mitigation potential in the forestation scenario may be due to redistribution of the global carbon budget into the natural sinks.
+        An increase in vegetation uptake would lead to a decrease in atmospheric CO$_2$ accumulation, which would result in a reduction of partial CO$_2$ pressure on the ocean and hence lead to a reduction of CO$_2$ in the ocean sink.
+    \item The LUH2 data set severely underestimates the tree cover that is originally dictated by IMAGE (the integrated assessment model that produces the SSP1-2.6 scenario).
+    \item The bio-geophysical impacts of growing trees could also warm the planet, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of forestation.
 \end{itemize}
 
 \section{Conclusion?}
@@ -385,3 +399,4 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \printbibliography
 
 \end{document}
+
