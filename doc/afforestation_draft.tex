@@ -40,17 +40,17 @@ ACCESS-ESM1.5 contributed 10 ensemble members to these experiments, and it was t
 \section{Methods}
 
 \begin{table}[]
-    \begin{tabular}{lllllll}
+    \begin{tabular}{llllllll}
     \hline
-Model         & Nitrogen & Phosphorus & Dynamic Vegetation & No. PFTs & No. of natural PFTs & Reference                                         \\ \hline
-ACCESS-ESM1-5 & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
-BCC-CSM2-MR   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
-CanESM5       & No       & No         & Yes                & 9        & 9                   & \cite{swart_canadian_2019}     \\
-MIROC-ES2L    & Yes      & No         & No                 & 12       & 12                  & \cite{hajima_development_2020} \\
-NorESM2-LM    & Yes      & No         & No                 & 15       & 15                  & \cite{seland_norwegian_2020}   \\
-UKESM1-0-LL   & Yes      & No         & Yes                & 13       & 13                  & \cite{sellar_ukesm1_2019}      \\
-MPI-ESM1-2-LR & Yes      & No         & Yes                & 13       & 12                  & \cite{giorgetta_climate_2013}  \\ \hline
-\end{tabular}
+Model         & Fire & Nitrogen & Phosphorus & Dynamic Veg. & No. PFTs & No. natural PFTs & Reference                                         \\ \hline
+ACCESS-ESM1-5 & No   & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
+BCC-CSM2-MR   & No   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
+CanESM5       & No   & No       & No         & Yes                & 9        & 7                   & \cite{swart_canadian_2019}     \\
+MIROC-ES2L    & No   & Yes      & No         & No                 & 14       & 13                  & \cite{hajima_development_2020} \\
+MPI-ESM1-2-LR & Yes  & Yes      & No         & Yes                & 13       & 12                  & \cite{giorgetta_climate_2013}  \\
+NorESM2-LM    & Yes  & Yes      & No         & No                 & 22       & 14                  & \cite{seland_norwegian_2020}   \\
+UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8                   & \cite{sellar_ukesm1_2019}      \\ \hline
+    \end{tabular}
 \end{table}
 
 \begin{figure}[H]
@@ -245,7 +245,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \label{fig:cflux}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
@@ -257,7 +257,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \label{fig:atmosphere_carbon}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_flux.png}
