@@ -26,6 +26,9 @@ from ananlysis.plot_ocean import (
 from analysis.plot_models import (
         make_model_plots,
         )
+from ananlysis.plot_histograms import (
+        make_histogram_plots,
+        )
 
 
 files = os.listdir('.')
@@ -46,6 +49,7 @@ def main():
     make_co2_plot()
     make_ocean_carbon_plot()
     make_model_plots()
+    make_histogram_plots()
 
 
 sys.exit(main())
