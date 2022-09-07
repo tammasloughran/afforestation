@@ -284,7 +284,7 @@ def make_carbon_budget_plot():
     plt.ylabel('Pg(C)/year')
     plt.legend(loc='upper left')
     plt.title('esm-ssp585-ssp126Lu Global Carbon Budget')
-    plt.savefig('esm-ssp585-ssp126Lu_budget.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/esm-ssp585-ssp126Lu_budget.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_atmosphere':
