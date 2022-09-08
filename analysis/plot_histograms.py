@@ -75,7 +75,6 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         #'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
         'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
         'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
-        #'Amazon Gridpoint': ([-14,-13],[-49,-48]), # Forestation ONLY gridpoint
         'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
         'Asia gridopint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
         }

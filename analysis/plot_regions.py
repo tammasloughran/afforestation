@@ -8,6 +8,8 @@ import cartopy.feature as cfeature
 import cdo_decorators as cdod
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as stats
+import pymannkendall as pmk
 from cdo import Cdo
 
 if __name__ == 'analysis.plot_regions':
@@ -70,8 +72,10 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
         'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
         'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
-        'Amazon Gridpoint': ([-14,-13],[-49,-48]), # Forestation ONLY gridpoint
-        'Asia gridopint': ([29.75,30.25],[99,100]),
+        'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
+        'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
+        'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
+        'Asia gridopint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
         }
 
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
@@ -165,6 +169,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
 
 
 def make_regional_plots():
+    stats_file = open('regions_stats.md', 'w')
     model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
         # Create loader functions
@@ -319,6 +324,28 @@ def make_regional_plots():
             # Calculate the difference.
             diff_data = aff_data - ssp585_data
 
+            # Print statistics to file.
+            diff_mean = diff_data.mean(axis=0)
+            stats_file.write(f'# {var} for {region}\n')
+            stats_file.write('## Autocorrelation at lag 1\n')
+            auto_corr, p = stats.spearmanr(diff_mean[:-1], diff_mean[1:])
+            stats_file.write(f'r={auto_corr}, p={p}\n')
+            stats_file.write('## Trend\n')
+            # trend: tells the trend (increasing, decreasing or no trend)
+            # h: True (if trend is present) or False (if trend is absence)
+            # p: p-value of the significance test
+            # z: normalized test statistics
+            # Tau: Kendall Tau
+            # s: Mann-Kendal's score
+            # var_s: Variance S
+            # slope: Theil-Sen estimator/slope
+            # intercept: intercept of Kendall-Theil Robust Line
+            trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
+                    diff_mean,
+                    alpha=0.05,
+                    )
+            stats_file.write(f'trend={trend}, p={p}, h={h}\n')
+
             # Plot.
             plot_clim_region(
                     years,
@@ -347,6 +374,7 @@ def make_regional_plots():
                     region,
                     label='diff',
                     )
+    stats_file.close()
 
 
 if __name__ != 'analysis.plot_regions':
