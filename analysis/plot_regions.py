@@ -11,6 +11,7 @@ import numpy as np
 import scipy.stats as stats
 import pymannkendall as pmk
 from cdo import Cdo
+import pdb
 
 if __name__ == 'analysis.plot_regions':
     # plot_afforestation.py imported as a module of the analysis package.
@@ -92,12 +93,12 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
 
-def cdo_mul_land_area(cdo_func):
+def cdo_mul_land_area(cdo_func)->None:
     """Decorator to add multiplication of the land area and land cover fractions to the CDO command.
     """
     @functools.wraps(cdo_func)
@@ -108,7 +109,7 @@ def cdo_mul_land_area(cdo_func):
     return wrapper_mul_land_area
 
 
-def plot_regions_map():
+def plot_regions_map()->None:
     """Plot the box regions on a map.
     """
     fig = plt.figure()
@@ -132,7 +133,9 @@ def plot_regions_map():
     plt.close()
 
 
-def plot_veg_region(years, data, data_mean, data_std, var, region, label=''):
+def plot_veg_region(years, data, data_mean, data_std, var, region, label='')->None:
+    """Plot vegetation data for regional analysis.
+    """
     plt.figure()
     for i,ens in enumerate(ENSEMBLES):
         plt.plot(years, data[i,...], color='grey', alpha=0.4)
@@ -148,7 +151,9 @@ def plot_veg_region(years, data, data_mean, data_std, var, region, label=''):
     plt.close()
 
 
-def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
+def plot_clim_region(years, data, data_mean, data_std, var, region, label='')->None:
+    """Plot climate data for regional analysis.
+    """
     plt.figure()
     for i,ens in enumerate(ENSEMBLES):
         plt.plot(years, data[i,...], color='grey', alpha=0.4)
@@ -168,7 +173,9 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label=''):
     plt.close()
 
 
-def make_regional_plots():
+def make_regional_plots()->None:
+    """Load data and generate regional analysis plots.
+    """
     stats_file = open('regions_stats.md', 'w')
     model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
@@ -332,7 +339,7 @@ def make_regional_plots():
             stats_file.write(f'r={auto_corr}, p={p}\n')
             stats_file.write('## Trend\n')
             # trend: tells the trend (increasing, decreasing or no trend)
-            # h: True (if trend is present) or False (if trend is absence)
+            # h: True (if trend is present) or False (if trend is absent)
             # p: p-value of the significance test
             # z: normalized test statistics
             # Tau: Kendall Tau
@@ -345,6 +352,7 @@ def make_regional_plots():
                     alpha=0.05,
                     )
             stats_file.write(f'trend={trend}, p={p}, h={h}\n')
+            trend_line = slope*np.arange(NTIMES) + intercept
 
             # Plot.
             plot_clim_region(
@@ -358,15 +366,6 @@ def make_regional_plots():
                     )
             plot_clim_region(
                     years,
-                    ssp585_data,
-                    ssp585_data.mean(axis=0),
-                    ssp585_data.std(axis=0, ddof=1),
-                    var,
-                    region,
-                    label='ssp585',
-                    )
-            plot_clim_region(
-                    years,
                     diff_data,
                     diff_data.mean(axis=0),
                     diff_data.std(axis=0, ddof=1),
@@ -374,11 +373,21 @@ def make_regional_plots():
                     region,
                     label='diff',
                     )
+            # I don't really need to plot the ssp585 simulation, but it's here just in case.
+            #plot_clim_region(
+            #        years,
+            #        ssp585_data,
+            #        ssp585_data.mean(axis=0),
+            #        ssp585_data.std(axis=0, ddof=1),
+            #        var,
+            #        region,
+            #        label='ssp585',
+            #        )
     stats_file.close()
 
 
 if __name__ != 'analysis.plot_regions':
-    plot_regions_map()
+    #plot_regions_map()
     make_regional_plots()
 
     # Clean up

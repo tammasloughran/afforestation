@@ -11,7 +11,9 @@ import cartopy.feature as cfeature
 import cdo_decorators as cdod
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as stats
 from cdo import Cdo
+import pdb
 
 if __name__ == 'analysis.plot_regions':
     # plot_afforestation.py imported as a module of the analysis package.
@@ -157,6 +159,12 @@ def make_histogram_plots():
             ssp585_data -= 273.15
             for_data[for_data>100] = np.nan
             ssp585_data[ssp585_data>100] = np.nan
+            ks_test = stats.ks_2samp(for_data.flatten(), ssp585_data.flatten())
+            print(f"{region} ks test p value is {ks_test.pvalue}")
+            if ks_test.pvalue<0.05:
+                print("The distributions are likely from different populations.")
+            else:
+                print("The distributions are likely the same.")
 
             n, bins, patches = plt.hist(
                     for_data.flatten()[is_not_nan(for_data.flatten())],
@@ -174,6 +182,7 @@ def make_histogram_plots():
                     histtype='step',
                     label='esm-ssp585',
                     )
+        #plt.annotate(f'p={ks_test.pvalue}', (0.1,0.9), xycoords='figure fraction')
         axin = ax.inset_axes([0.075,0.72,0.20,0.20])
         axin.plot(years,for_treeFrac)
         axin.set_title('Tree fraction')

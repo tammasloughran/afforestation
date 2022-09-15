@@ -89,7 +89,7 @@ NLAT = treeFrac.shape[0]
 NLON = treeFrac.shape[1]
 
 
-def plot_ensembles(years, data, data_mean, data_std, var):
+def plot_ensembles(years, data, data_mean, data_std, var)->None:
     """Plot all ensemble members with ensemble mean and standard deviation.
     """
     model = 'ACCESS-ESM1.5'
@@ -106,7 +106,7 @@ def plot_ensembles(years, data, data_mean, data_std, var):
     plt.title(f"{model} {var.upper()}")
 
 
-def plot_ensembles_clim(years, data, data_mean, data_std, var):
+def plot_ensembles_clim(years, data, data_mean, data_std, var)->None:
     """Plot all ensemble members with ensemble mean and standard deviation.
     """
     model = 'ACCESS-ESM1.5'
@@ -273,7 +273,7 @@ def cdo_clim_map_load(var:str, input:str)->np.ma.MaskedArray:
     return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
 
 
-def make_clim_aff_only():
+def make_clim_aff_only()->None:
     """Make plots of climate variables for where there are afforesed gridcells only.
     """
     # Load data for only afforested grid cells.
