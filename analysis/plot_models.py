@@ -18,7 +18,6 @@ if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cmip_files import get_filenames
     from analysis.constants import (
-            CLIM_VARIABLES,
             DATA_DIR,
             DPI,
             ENSEMBLES,
@@ -26,13 +25,11 @@ if __name__ == 'analysis.plot_afforestation':
             PLOTS_DIR,
             SEC_IN_DAY,
             TABLES,
-            VARIABLES,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from cmip_files import get_filenames
     from constants import (
-            CLIM_VARIABLES,
             DATA_DIR,
             DPI,
             ENSEMBLES,
@@ -40,7 +37,6 @@ else:
             PLOTS_DIR,
             SEC_IN_DAY,
             TABLES,
-            VARIABLES,
             )
 
 cdo = cdo_module.Cdo()
@@ -160,8 +156,13 @@ def make_model_plots():
                             ).variables[var][:].squeeze()
 
 
+                model_land_frac = f'/g/data/p66/tfl561/CMIP6/C4MIP/{instit}/{models[instit]}' \
+                        f'/esm-ssp585/{ssp585_ensembles[instit]}/fx/sftlf/gn/latest' \
+                        f'/sftlf_fx_{models[instit]}_esm-ssp585_{ssp585_ensembles[instit]}_gn.nc'
+
+
                 @cdod.cdo_cat(input2='')
-                @cdod.cdo_mul(input2=f'/g/data/p66/tfl561/CMIP6/C4MIP/{instit}/{models[instit]}/esm-ssp585/{ssp585_ensembles[instit]}/fx/sftlf/gn/latest/sftlf_fx_{models[instit]}_esm-ssp585_{ssp585_ensembles[instit]}_gn.nc')
+                @cdod.cdo_mul(input2=model_land_frac)
                 @cdod.cdo_fldmean()
                 @cdod.cdo_yearmonmean
                 def cdo_clim_load_model(var:str, input:str)->np.ma.MaskedArray:

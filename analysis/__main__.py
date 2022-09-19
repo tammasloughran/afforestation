@@ -29,7 +29,9 @@ from analysis.plot_models import (
 from ananlysis.plot_histograms import (
         make_histogram_plots,
         )
-
+from analysis.cstock_stats import (
+        print_stats,
+        )
 
 files = os.listdir('.')
 if 'data' not in files: od.mkdir(DATA_DIR)
@@ -50,6 +52,7 @@ def main():
     make_ocean_carbon_plot()
     make_model_plots()
     make_histogram_plots()
+    print_stats()
 
 
 sys.exit(main())
