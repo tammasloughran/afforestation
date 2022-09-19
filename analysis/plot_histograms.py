@@ -94,7 +94,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = True # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -110,10 +110,12 @@ def make_histogram_plots():
 
         # Create loader functions
         @cdod.cdo_selyear('2081/2100') # Select only the last 20 years of data.
+        @cdod.cdo_selseason('JJA') # Select the summer season.
         @cdod.cdo_ifthen(input1=LAND_GT_50) # Mask for climate over land only. land frac > 50%
         @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         def load_region_clim(var:str, input:str)->np.ma.MaskedArray:
             return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
 
         @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         @cdod.cdo_fldmean()
@@ -131,9 +133,9 @@ def make_histogram_plots():
         for_treeFrac = load_region_frac(input=filenames[0], var='treeFrac')
 
         # Daily temperature variable
-        fig, ax = plt.subplots()
         table = 'day'
-        for var in ['tas',]:
+        for var in ['tas','tasmax','tasmin']:
+            fig, ax = plt.subplots()
             print("Processing", var)
             # Load the data.
             if load_npy_files:
@@ -182,15 +184,15 @@ def make_histogram_plots():
                     histtype='step',
                     label='esm-ssp585',
                     )
-        #plt.annotate(f'p={ks_test.pvalue}', (0.1,0.9), xycoords='figure fraction')
-        axin = ax.inset_axes([0.075,0.72,0.20,0.20])
-        axin.plot(years,for_treeFrac)
-        axin.set_title('Tree fraction')
-        plt.xlabel('Surface air temperature (°C)')
-        plt.ylabel('Probablility')
-        plt.title(region)
-        plt.legend()
-        plt.savefig(f'{PLOTS_DIR}/tas_histogram_{rname}.png', dpi=DPI)
+            #plt.annotate(f'p={ks_test.pvalue}', (0.1,0.9), xycoords='figure fraction')
+            axin = ax.inset_axes([0.075,0.72,0.20,0.20])
+            axin.plot(years,for_treeFrac)
+            axin.set_title('Tree fraction')
+            plt.xlabel('Temperature (°C)')
+            plt.ylabel('Probablility')
+            plt.title(region+f' {var}')
+            plt.legend()
+            plt.savefig(f'{PLOTS_DIR}/{var}_histogram_{rname}.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_regions':
