@@ -37,5 +37,8 @@ python -m analysis
 ```
 
 ## Generate ctags
-    ctags --recurse --python-kinds=-i analysis
+
+```bash
+ctags --recurse --python-kinds=-i analysis
+```
 
