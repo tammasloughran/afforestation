@@ -140,12 +140,13 @@ def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='
         plt.colorbar(label='Pg(C)/year', orientation='horizontal')
     plt.title(var+' '+label)
     plt.tight_layout()
-    plt.savefig(f'{PLOTS_DIR}/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/global/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png', dpi=DPI)
 
 
 def make_veg_plots()->None:
     """Load vegetation data and run plotting routine.
     """
+    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     model = 'ACCESS-ESM1.5'
     for table in TABLES:
         for var in VARIABLES[table]:
@@ -175,13 +176,13 @@ def make_veg_plots()->None:
             # Plot the graphs for anomalies relative to 2015.
             years = list(range(2015, 2101))
             plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
-            plt.savefig(f'{PLOTS_DIR}/'+ \
+            plt.savefig(f'{PLOTS_DIR}/global/'+ \
                     f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_anomalies.png', dpi=DPI)
             plt.close()
 
             # Plot the graphs for anomalies relative to the esm-ssp585
             plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
-            plt.savefig(f'{PLOTS_DIR}/'+ \
+            plt.savefig(f'{PLOTS_DIR}/global/'+ \
                     f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png', dpi=DPI)
             plt.close()
 
@@ -189,6 +190,7 @@ def make_veg_plots()->None:
 def make_clim_plots()->None:
     """Load climate data run plotting routine.
     """
+    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     model = 'ACCESS-ESM1.5'
     table = 'Amon'
     for var in CLIM_VARIABLES[table]:
@@ -217,16 +219,16 @@ def make_clim_plots()->None:
         # Plot
         years = list(range(2015, 2101))
         plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
-        plt.savefig(f'{PLOTS_DIR}/'+\
+        plt.savefig(f'{PLOTS_DIR}/global/'+\
                 f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png', dpi=DPI)
         plt.close()
         plot_ensembles_clim(years, ssp585_data, ssp585_mean, ssp585_std, var)
-        plt.savefig(f'{PLOTS_DIR}/'+\
+        plt.savefig(f'{PLOTS_DIR}/global/'+\
                 f'{var}_{model}_esm-ssp585_ensembles.png', dpi=DPI)
         plt.close()
         plot_ensembles_clim(years, ssp585_data-aff_data, ssp585_mean-aff_mean,
                 aff_std, var)
-        plt.savefig(f'{PLOTS_DIR}/'+\
+        plt.savefig(f'{PLOTS_DIR}/global/'+\
                 f'{var}_{model}_esm-ssp585_ensembles_diff.png', dpi=DPI)
         plt.close()
 
@@ -235,6 +237,7 @@ def make_veg_maps()->None:
     """Create maps of ensemble mean anomaly for the difference of the afforestation experiment
     and the esm-ssp585 scenario.
     """
+    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     for table in TABLES:
         for var in VARIABLES[table]:
             # Load the data.
@@ -276,6 +279,7 @@ def cdo_clim_map_load(var:str, input:str)->np.ma.MaskedArray:
 def make_clim_aff_only()->None:
     """Make plots of climate variables for where there are afforesed gridcells only.
     """
+    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     # Load data for only afforested grid cells.
     treeFrac = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
     NLAT = treeFrac.shape[0]

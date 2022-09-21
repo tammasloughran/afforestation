@@ -112,6 +112,7 @@ def cdo_mul_land_area(cdo_func)->None:
 def plot_regions_map()->None:
     """Plot the box regions on a map.
     """
+    if not os.path.exists(f'{PLOTS_DIR}/regional'): os.mkdir(f'{PLOTS_DIR}/regional')
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
     ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
@@ -129,7 +130,7 @@ def plot_regions_map()->None:
     plt.ylabel('Latitude (°N)')
     plt.title('Regions')
     plt.tight_layout()
-    plt.savefig(f'{PLOTS_DIR}/regional_analysis_map.png')
+    plt.savefig(f'{PLOTS_DIR}/regional/regional_analysis_map.png')
     plt.close()
 
 
@@ -147,7 +148,7 @@ def plot_veg_region(years, data, data_mean, data_std, var, region, label='')->No
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
-    plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png')
+    plt.savefig(f'{PLOTS_DIR}/regional/{var}_{reg}_{label}.png')
     plt.close()
 
 
@@ -169,13 +170,14 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label='')->N
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
-    plt.savefig(f'{PLOTS_DIR}/{var}_{reg}_{label}.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/regional/{var}_{reg}_{label}.png', dpi=DPI)
     plt.close()
 
 
 def make_regional_plots()->None:
     """Load data and generate regional analysis plots.
     """
+    if os.path.exists(f'{PLOTS_DIR}/regional'): os.mkdir(f'{PLOTS_DIR}/regional')
     stats_file = open('regions_stats.md', 'w')
     model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
@@ -387,7 +389,7 @@ def make_regional_plots()->None:
 
 
 if __name__ != 'analysis.plot_regions':
-    #plot_regions_map()
+    plot_regions_map()
     make_regional_plots()
 
     # Clean up

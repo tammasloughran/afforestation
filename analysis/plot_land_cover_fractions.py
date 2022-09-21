@@ -55,6 +55,7 @@ def make_land_cover_plot():
     Plot the difference in land cover fractions/areas between 2015 and 2100 for the
     esm-ssp585-ssp126Lu experiment.
     """
+    os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
     table = 'Lmon'
     years = list(range(2015, 2101))
 
@@ -72,7 +73,7 @@ def make_land_cover_plot():
     plt.ylabel("Area (million km$^2$)")
     plt.xlabel("Year")
     plt.legend()
-    plt.savefig(f'{PLOTS_DIR}/land_areas.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/fractions/land_areas.png', dpi=DPI)
 
     plt.figure()
     for var in FRAC_VARIABLES[table]:
@@ -83,7 +84,7 @@ def make_land_cover_plot():
     plt.xlabel("Year")
     plt.hlines(y=0, xmin=years[0], xmax=years[-1], linestyle='dashed', color='black')
     plt.legend(loc='lower right')
-    plt.savefig(f'{PLOTS_DIR}/land_areas_diff.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/fractions/land_areas_diff.png', dpi=DPI)
 
     print("By the end of the century:")
     print(f"Forrest expansion: {(aff_areas['treeFrac']-ssp585_areas['treeFrac'])[-1]}")
@@ -96,6 +97,7 @@ def make_land_cover_plot():
 def make_afforestation_pft_plot():
     """Plot the pfts for the afforestation scenario.
     """
+    os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
     CABLE_LUC = '/g/data/p66/txz599/data/luc_ssp126/cableCMIP6_LC_2*.nc'
     CABLE_AREA = DATA_DIR+'/gridarea.nc'
     ncarea = nc.Dataset(CABLE_AREA, 'r')
@@ -119,20 +121,21 @@ def make_afforestation_pft_plot():
     plt.xlabel('Time (year)')
     plt.ylabel('Area (million km$^2$)')
     plt.legend()
-    plt.savefig('plots/CABLE_forests.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/fractions/CABLE_forests.png', dpi=DPI)
     plt.figure()
     plt.plot(years, global_sum[:,2,...], label='Deciduous needle leaf')
     plt.title("CABLE forests in SSP1-2.6")
     plt.xlabel('Time (year)')
     plt.ylabel('Area (million km$^2$)')
     plt.legend()
-    plt.savefig(f'{PLOTS_DIR}/CABLE_forests_deciduous_needle.png', dpi=DPI)
+    plt.savefig(f'{PLOTS_DIR}/fractions/CABLE_forests_deciduous_needle.png', dpi=DPI)
 
 
 def make_area_anomaly_map():
     """Plot the change in area for trees, crop and grass in esm-ssp585-ssp126Lu between 2015
     and 2100.
     """
+    os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
     for table in FRAC_VARIABLES.keys():
         for var in FRAC_VARIABLES[table]:
             frac_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', table, var)
@@ -158,7 +161,7 @@ def make_area_anomaly_map():
             plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
             plt.title(var.upper())
             plt.tight_layout()
-            plt.savefig(f'{PLOTS_DIR}/'+var+'_anomaly.png', dpi=DPI)
+            plt.savefig(f'{PLOTS_DIR}/fractions/'+var+'_anomaly.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_land_cover_fractions':

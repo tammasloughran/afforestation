@@ -118,6 +118,7 @@ VARIABLES = {
 
 
 def make_model_plots():
+    os.path.exists(f'{PLOTS_DIR}/models'): os.mkdir(f'{PLOTS_DIR}/models')
     for table in VARIABLES.keys():
         for var in VARIABLES[table]:
             aff_data = {}
@@ -228,7 +229,7 @@ def make_model_plots():
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/{var}_model_intercomparison_diff.png', pdi=DPI)
+            plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_diff.png', pdi=DPI)
 
             # Plot only the afforestation scenario.
             plt.figure()
@@ -248,7 +249,8 @@ def make_model_plots():
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu")
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png', dpi=DPI)
+            plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png',
+                    dpi=DPI)
 
 
 if __name__ != 'analysis.plot_models':
