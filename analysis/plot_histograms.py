@@ -78,9 +78,29 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
         'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
         'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
-        'Asia gridopint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
+        'Asia Gridopint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
         }
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
+ARCHIVE_DIR = '/g/data/p66/tfl561/archive_data'
+PFTS = {
+        1:'Evergreen Needleleaf',
+        2:'Evergreen Broadleaf',
+        3:'Deciduous Needleleaf',
+        4:'Deciduous Broadleaf',
+        5:'Shrub',
+        6:'C3 Grass',
+        7:'C4 Grass',
+        8:'Tundra',
+        9:'C3 Crop',
+        10:'C4 Crop',
+        11:'Wetland',
+        12:'',
+        13:'',
+        14:'Barren',
+        15:'Urban',
+        16:'Lakes',
+        17:'Ice',
+        }
 
 files = glob.glob('./*')
 if PLOTS_DIR not in files:
@@ -94,7 +114,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -104,6 +124,7 @@ def is_not_nan(array):
 
 
 def make_histogram_plots():
+    if not os.path.exists(f'{PLOTS_DIR}/histograms'): os.mkdir(f'{PLOTS_DIR}/histograms')
     model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
 
@@ -131,6 +152,20 @@ def make_histogram_plots():
         filenames = sorted(
                 get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ENSEMBLES[0], 'Lmon', 'treeFrac'))
         for_treeFrac = load_region_frac(input=filenames[0], var='treeFrac')
+        filename = ARCHIVE_DIR+'/esm-ssp585-ssp126Lu/surface_frac_tiles_SSP-585-126-nn.nc'
+        pfts = load_region_frac(input=filename, var='surface_frac_tiles')
+
+        # Plot the pfts
+        pfts_to_show = np.max(pfts, axis=0)>0
+        plt.figure()
+        for i,pft in PFTS.items():
+            if pfts_to_show[i-1]==True:
+                plt.plot(years, pfts[:,i-1]*100, label=pft)
+        plt.legend()
+        plt.title(region+' PFTs')
+        plt.xlabel('Year')
+        plt.ylabel('%')
+        plt.savefig(f'{PLOTS_DIR}/histograms/pfts_{rname}.png', dpi=DPI)
 
         # Daily temperature variable
         table = 'day'
@@ -192,10 +227,11 @@ def make_histogram_plots():
             plt.ylabel('Probablility')
             plt.title(region+f' {var}')
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/{var}_histogram_{rname}.png', dpi=DPI)
+            plt.savefig(f'{PLOTS_DIR}/histograms/{var}_histogram_{rname}.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_regions':
     make_histogram_plots()
 
     plt.show()
+
