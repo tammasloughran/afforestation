@@ -169,7 +169,7 @@ def make_histogram_plots():
 
         # Daily temperature variable
         table = 'day'
-        for var in ['tas','tasmax','tasmin']:
+        for var in ['tasmax','tasmin']:
             fig, ax = plt.subplots()
             print("Processing", var)
             # Load the data.
