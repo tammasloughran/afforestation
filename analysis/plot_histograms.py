@@ -75,10 +75,12 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         #'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
         #'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
         #'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
-        'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
-        'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
-        'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
-        'Asia Gridopint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
+        'Boreal Eurasia Gridpoint': ([64.9,65.1],[71.24,71.26]),
+        #'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
+        'Amazon Gridpoint as difference': ([-14.9,-15.1],[313.124,313.126]), # Forestation ONLY gridpoint. from difference of treeFrac between forestation and ssp585
+        'Amazon Gridpoint': ([-12.6,-12.4],[311.24,311.26]), # Forestation ONLY gridpoint. as anomaly of tree frac 2015-2100.
+        'Asia Gridopint': ([32.4,32.6],[99.374,99.376]), # Forestation in the latter half of century.
+        'Asia Boxpoint': ([31.24,33.76],[97.4,101.26]), # Forestation in the latter half of century. As a box region
         }
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
 ARCHIVE_DIR = '/g/data/p66/tfl561/archive_data'
@@ -114,7 +116,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = True # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -127,11 +129,16 @@ def make_histogram_plots():
     if not os.path.exists(f'{PLOTS_DIR}/histograms'): os.mkdir(f'{PLOTS_DIR}/histograms')
     model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
+        # If in the southern hemisphere, summer is DJF.  Otherwise, summer is JJA.
+        if box[0][0]<0:
+            summer = 'DJF'
+        else:
+            summer = 'JJA'
 
 
         # Create loader functions
         @cdod.cdo_selyear('2081/2100') # Select only the last 20 years of data.
-        @cdod.cdo_selseason('JJA') # Select the summer season.
+        @cdod.cdo_selseason(summer) # Select the summer season.
         @cdod.cdo_ifthen(input1=LAND_GT_50) # Mask for climate over land only. land frac > 50%
         @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
         def load_region_clim(var:str, input:str)->np.ma.MaskedArray:
@@ -219,7 +226,10 @@ def make_histogram_plots():
                     histtype='step',
                     label='esm-ssp585',
                     )
-            #plt.annotate(f'p={ks_test.pvalue}', (0.1,0.9), xycoords='figure fraction')
+            if ks_test.pvalue<0.05:
+                plt.annotate(f'v', (0.1,0.9), xycoords='figure fraction')
+            else:
+                plt.annotate(f'x', (0.1,0.9), xycoords='figure fraction')
             axin = ax.inset_axes([0.075,0.72,0.20,0.20])
             axin.plot(years,for_treeFrac)
             axin.set_title('Tree fraction')
@@ -233,5 +243,5 @@ def make_histogram_plots():
 if __name__ != 'analysis.plot_regions':
     make_histogram_plots()
 
-    plt.show()
+    #plt.show()
 
