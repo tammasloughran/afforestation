@@ -39,6 +39,10 @@ LABELS = {
                 'cropFrac': 'crop SSP5-8.5',
                 'shrubFrac': 'shrub SSP5-8.5',
                 'grassFrac': 'grass SSP5-8.5'}}
+MIPS = {
+        'esm-ssp585':'C4MIP',
+        'esm-ssp585-ssp126Lu':'LUMIP',
+        }
 
 # Control flag
 files = glob.glob(f'{DATA_DIR}/*')
@@ -55,7 +59,7 @@ def make_land_cover_plot():
     Plot the difference in land cover fractions/areas between 2015 and 2100 for the
     esm-ssp585-ssp126Lu experiment.
     """
-    os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
+    if not os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
     table = 'Lmon'
     years = list(range(2015, 2101))
 
@@ -97,7 +101,7 @@ def make_land_cover_plot():
 def make_afforestation_pft_plot():
     """Plot the pfts for the afforestation scenario.
     """
-    os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
+    if not os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
     CABLE_LUC = '/g/data/p66/txz599/data/luc_ssp126/cableCMIP6_LC_2*.nc'
     CABLE_AREA = DATA_DIR+'/gridarea.nc'
     ncarea = nc.Dataset(CABLE_AREA, 'r')
@@ -132,36 +136,37 @@ def make_afforestation_pft_plot():
 
 
 def make_area_anomaly_map():
-    """Plot the change in area for trees, crop and grass in esm-ssp585-ssp126Lu between 2015
-    and 2100.
+    """Plot the change in area for trees, crop and grass in esm-ssp585-ssp126Lu and esm-ssp585
+    between 2015 and 2100.
     """
-    os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
-    for table in FRAC_VARIABLES.keys():
-        for var in FRAC_VARIABLES[table]:
-            frac_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', table, var)
-            area_anomaly = cdo_area_diff_load(var=var, input=frac_file[0])/M2_IN_MILKM2
-            ncfile = nc.Dataset(LAND_FRAC_FILE)
-            mask = ncfile.variables['sftlf'][:]
-            area_anomaly[mask==0] = np.nan
-            lats = ncfile.variables['lat'][:]
-            lons = ncfile.variables['lon'][:]
+    for exp in ['esm-ssp585','esm-ssp585-ssp126Lu']:
+        if not os.path.exists(f'{PLOTS_DIR}/fractions'): os.mkdir(f'{PLOTS_DIR}/fractions')
+        for table in FRAC_VARIABLES.keys():
+            for var in FRAC_VARIABLES[table]:
+                frac_file = get_filename(MIPS[exp], exp, '1', table, var)
+                area_anomaly = cdo_area_diff_load(var=var, input=frac_file[0])/M2_IN_MILKM2
+                ncfile = nc.Dataset(LAND_FRAC_FILE)
+                mask = ncfile.variables['sftlf'][:]
+                area_anomaly[mask==0] = np.nan
+                lats = ncfile.variables['lat'][:]
+                lons = ncfile.variables['lon'][:]
 
-            np.save(f'{DATA_DIR}/{var}_area_anomaly.npy', area_anomaly.data)
+                np.save(f'{DATA_DIR}/{var}_{exp}_area_anomaly.npy', area_anomaly.data)
 
-            fig = plt.figure()
-            ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
-            abs_max = np.nanmax(np.abs(area_anomaly))
-            plt.pcolormesh(lons, lats, area_anomaly,
-                    vmax=abs_max/2, vmin=-abs_max/2,
-                    #cmap='nipy_spectral',#'PRGn', # nipy_spectral has a sharp color change at 0
-                    cmap=jaisnb,
-                    transform=ccrs.PlateCarree())
-            ax.coastlines() # Drawing coastlines covers the coastal gridpoints.
-            # Only needed for diverging colormaps that have white in the centre.
-            plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
-            plt.title(var.upper())
-            plt.tight_layout()
-            plt.savefig(f'{PLOTS_DIR}/fractions/'+var+'_anomaly.png', dpi=DPI)
+                fig = plt.figure()
+                ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+                abs_max = np.nanmax(np.abs(area_anomaly))
+                plt.pcolormesh(lons, lats, area_anomaly,
+                        vmax=abs_max/2, vmin=-abs_max/2,
+                        #cmap='nipy_spectral',#'PRGn', # nipy_spectral has a sharp color change at 0
+                        cmap=jaisnb,
+                        transform=ccrs.PlateCarree())
+                ax.coastlines() # Drawing coastlines covers the coastal gridpoints.
+                # Only needed for diverging colormaps that have white in the centre.
+                plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
+                plt.title(var.upper())
+                plt.tight_layout()
+                plt.savefig(f'{PLOTS_DIR}/fractions/{var}_{exp}_anomaly.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_land_cover_fractions':
