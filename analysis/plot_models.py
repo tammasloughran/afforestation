@@ -118,7 +118,7 @@ VARIABLES = {
 
 
 def make_model_plots():
-    os.path.exists(f'{PLOTS_DIR}/models'): os.mkdir(f'{PLOTS_DIR}/models')
+    if not os.path.exists(f'{PLOTS_DIR}/models'): os.mkdir(f'{PLOTS_DIR}/models')
     for table in VARIABLES.keys():
         for var in VARIABLES[table]:
             aff_data = {}
@@ -214,8 +214,12 @@ def make_model_plots():
                     aff_data[m] = aff_data[m][:-1]
                 if m=='NCC':
                     ssp585_data[m] = ssp585_data[m][:-1]
+                diff_model = aff_data[m] - ssp585_data[m]
+                if m=='CCma' and var=='cVeg':
+                    # CanESM5 cVeg has a large initial bias. Remove this bias.
+                    diff_model = diff_model - diff_model[0]
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
-                plt.plot(years, aff_data[m] - ssp585_data[m], label=models[m])
+                plt.plot(years, diff_model, label=models[m])
             # Load the ACCESS-ESM1-5 data.
             access_aff = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
             access_ssp585 = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
