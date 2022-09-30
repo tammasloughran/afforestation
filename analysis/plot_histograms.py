@@ -203,6 +203,8 @@ def make_histogram_plots():
             ssp585_data -= 273.15
             for_data[for_data>100] = np.nan
             ssp585_data[ssp585_data>100] = np.nan
+
+            # Kolmogorov-Smirnov test for difference of distributions.
             ks_test = stats.ks_2samp(for_data.flatten(), ssp585_data.flatten())
             print(f"{region} ks test p value is {ks_test.pvalue}")
             if ks_test.pvalue<0.05:
@@ -210,6 +212,7 @@ def make_histogram_plots():
             else:
                 print("The distributions are likely the same.")
 
+            # Plot histograms.
             n, bins, patches = plt.hist(
                     for_data.flatten()[is_not_nan(for_data.flatten())],
                     color='green',

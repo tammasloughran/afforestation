@@ -16,6 +16,7 @@ import pdb
 if __name__ == 'analysis.plot_regions':
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.cmip_files import LAND_FRAC_FILE, get_filename
+    from analysis.cdo_calc_load import cdo_mul_land_area
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
@@ -33,6 +34,7 @@ if __name__ == 'analysis.plot_regions':
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
     from cmip_files import LAND_FRAC_FILE, get_filename
+    from cdo_calc_load import cdo_mul_land_area
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
@@ -96,17 +98,6 @@ else:
 load_npy_files = True # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
-
-
-def cdo_mul_land_area(cdo_func)->None:
-    """Decorator to add multiplication of the land area and land cover fractions to the CDO command.
-    """
-    @functools.wraps(cdo_func)
-    def wrapper_mul_land_area(*args, **kwargs):
-        kwargs['input'] = f'-mul -mul {kwargs["input"]} -divc,100 {LAND_FRAC_FILE} '\
-                f'-gridarea {LAND_FRAC_FILE}'
-        return cdo_func(*args, **kwargs)
-    return wrapper_mul_land_area
 
 
 def plot_regions_map()->None:

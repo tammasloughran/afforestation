@@ -15,7 +15,7 @@ if __name__ == 'analysis.plot_afforestation':
             DATA_DIR,
             ENSEMBLES,
             KG_IN_PG,
-            MOLMASS_O2,
+            MOLMASS_O2, # kg/mol
             NENS,
             NTIMES,
             PLOTS_DIR,
@@ -29,7 +29,7 @@ else:
             DATA_DIR,
             ENSEMBLES,
             KG_IN_PG,
-            MOLMASS_O2,
+            MOLMASS_O2, # kg/mol
             NENS,
             NTIMES,
             PLOTS_DIR,

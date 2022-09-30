@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Plot the atmosphere co2 concentrations.
+"""This was originally supposed to plot the atmosphere co2 concentrations. But then it turned into
+an analysis of the global carbon budget in ACCESS forrestation simulation.
 """
 import os
 import glob
