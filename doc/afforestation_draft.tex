@@ -10,7 +10,7 @@
 \usepackage[style=numeric]{biblatex}
 \addbibresource{afforestation_references.bib}
 \linenumbers
-\title{Forestation in ACCESS-ESM1.5 \& maybe other models too... dunno yet}
+\title{Limited mitigation potentials under a high emissions scenario: multi-model and single model ensembles}
 \author{Tammas Loughran et al.}
 
 \begin{document}
@@ -22,10 +22,11 @@
 A considerable amount of anthropogenic carbon emissions comes from agricultural activities.
 In order to effectively limit global warming to below 2°C (or even 3°C), there must be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
-This study is motivated by existing studies on Forestation by Sonntag et al. (2016) \cite{sonntag_reforestation_2016} where the potential of forestation is quantified using and Earth System Model, where a high CO2 emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
+This study is motivated by existing studies on Forestation by Sonntag et al. (2016) \cite{sonntag_reforestation_2016} where the potential of forestation is quantified using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
-This study aims to quantify the CO2 removal potential of the forestation strategy using updated models at both the global scale and for Australia specifically.
-As part of the contributions to the CMIP5 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar forestation scenario.
+This study aims to quantify the CO$_2$ removal potential of the forestation strategy using CMIP6 models, both at the global and regional scale.
+Furthermore, the climate variability uncertainties are quantified from a single model ensemble of the ACCES-ESM1.5 model.
+As part of the contributions to the CMIP6 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar forestation scenario.
 This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6.
 ACCESS-ESM1.5 contributed 10 ensemble members to these experiments, and it was the only model to contribute multiple ensemble members to the CMIP6 afforestation experiment.
 
@@ -41,7 +42,7 @@ ACCESS-ESM1.5 contributed 10 ensemble members to these experiments, and it was t
 
 \begin{table}[]
     \begin{tabular}{llllllll}
-    \hline
+        \hline
 Model         & Fire & Nitrogen & Phosphorus & Dynamic Veg. & No. PFTs & No. natural PFTs & Reference                                         \\ \hline
 ACCESS-ESM1-5 & No   & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
 BCC-CSM2-MR   & No   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
@@ -110,7 +111,30 @@ These occur in deciduous broad leaf forests in eastern USA, China and western Ru
 
 \section{Results}
 
-\subsection{Climate}
+\begin{itemize}
+    \item Carbon
+    \item Climate
+    \item Regional analysis
+\end{itemize}
+
+\subsection{Model Inter-comparison}
+
+\begin{figure}[H]
+    \centering
+    %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
+    \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
+    \caption{cVeg in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
+    \label{fig:models}
+\end{figure}
+
+\begin{itemize}
+    \item CanESM5 has differing ensemble methods for esm-ssp585 and esm-ssp585-ssp126Lu. One uses r1i1p1f1 and another uses r1i1p2f1. Therefore, there is some additional perturbation applied to one of those experiments which causes the blue line to start at negative values.
+    \item ACCESS-ESM is roughly in the missgle of the spread. More similar to MPI-ESM and UKESM than other models.
+\end{itemize}
+
+\subsection{ACCESS-ESM1.5}
+
+\subsubsection{Climate}
 
 \begin{itemize}
     \item Climate warms about 4 \textcelsius{} by 2100 and precipitation increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
@@ -139,7 +163,7 @@ These occur in deciduous broad leaf forests in eastern USA, China and western Ru
     \label{fig:climate}
 \end{figure}
 
-\subsection{Carbon cycle}
+\subsubsection{Carbon cycle}
 
 \begin{itemize}
     \item There is an increase in vegetation carbon of about 25 Pg C by the end of the century.
@@ -270,7 +294,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \end{figure}
 
 
-\subsection{Regional analysis: Australia?}
+\subsubsection{Regional analysis}
 
 \begin{itemize}
     \item Australian cVeg increases by ~0.25 PgC in the forestation scenario. But the difference from the reference simulation is 0.
@@ -370,33 +394,34 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \label{fig:aus_region_cveg_tas}
 \end{figure}
 
-\subsection{Model inter-comparison}
-
-\begin{figure}[H]
-    \centering
-    %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
-    \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
-    \caption{cVeg in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
-    \label{fig:models}
-\end{figure}
-
-\begin{itemize}
-    \item CanESM5 has differing ensemble methods for esm-ssp585 and esm-ssp585-ssp126Lu. One uses r1i1p1f1 and another uses r1i1p2f1. Therefore, there is some additional perturbation applied to one of those experiments which causes the blue line to start at negative values.
-    \item ACCESS-ESM is roughly in the missgle of the spread. More similar to MPI-ESM and UKESM than other models.
-\end{itemize}
-
 \subsection{Notes/Discussion}
 
 \begin{itemize}
     \item The lack of climate warming mitigation potential in the forestation scenario may be due to redistribution of the global carbon budget into the natural sinks.
         An increase in vegetation uptake would lead to a decrease in atmospheric CO$_2$ accumulation, which would result in a reduction of partial CO$_2$ pressure on the ocean and hence lead to a reduction of CO$_2$ in the ocean sink.
     \item The LUH2 data set severely underestimates the tree cover that is originally dictated by IMAGE (the integrated assessment model that produces the SSP1-2.6 scenario).
-    \item The bio-geophysical impacts of growing trees could also warm the planet, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of forestation.
+    \item The bio-geophysical impacts of growing trees causes localized warming at the extreme ends of the temperature distribution, especial in the higher latitudes where trees tend to be slow growing and the bare ground either has a high albedo or is covered in snow. This warming might offset the climate mitigation potential of forestation.
 \end{itemize}
 
 \section{Conclusion?}
 
 \printbibliography
+
+\section{Supplementary Material}
+
+\subsection{PFTs}
+
+\begin{figure}[H]
+    \centering
+    %\begin{subfigure}[b]{0.4\linewidth}
+    %    \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_flux.png}
+    %\end{subfigure}
+    %\begin{subfigure}[b]{0.4\linewidth}
+    %    \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+    %\end{subfigure}
+    %\caption{???}
+    %\label{fig:??}
+\end{figure}
 
 \end{document}
 
