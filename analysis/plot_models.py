@@ -12,6 +12,7 @@ import cdo as cdo_module
 import matplotlib.pyplot as plt
 import numpy as np
 import cdo_decorators as cdod
+import pymannkendall as pmk
 import ipdb
 
 if __name__ == 'analysis.plot_afforestation':
@@ -40,7 +41,7 @@ else:
             )
 
 cdo = cdo_module.Cdo()
-cdo.debug = True
+cdo.debug = False
 
 # Local constants
 COLORS = {
@@ -220,6 +221,7 @@ def make_model_plots():
                     diff_model = diff_model - diff_model[0]
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, diff_model, label=models[m])
+
             # Load the ACCESS-ESM1-5 data.
             access_aff = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
             access_ssp585 = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
@@ -233,7 +235,25 @@ def make_model_plots():
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_diff.png', pdi=DPI)
+            plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_diff.png', dpi=DPI)
+
+
+            if var=='tas':
+                plt.figure()
+                for m in models.keys():
+                    diff_model = aff_data[m] - ssp585_data[m]
+                    trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
+                        diff_model,
+                        alpha=0.05,
+                        )
+                    print(f'{m} trend={trend}, p={p}, h={h}')
+                    trend_line = slope*np.arange(len(years)) + intercept
+                    if h: # Hypothesis that there exists a trend is true.
+                        plt.plot(years, trend_line, label=models[m])
+                    else:
+                        plt.plot(years, trend_line, label=models[m], linestyle='dotted')
+                plt.savefig(f'{PLOTS_DIR}/models/{var}_trends.png', dpi=DPI)
+
 
             # Plot only the afforestation scenario.
             plt.figure()
