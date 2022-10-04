@@ -20,6 +20,19 @@
 
 \maketitle
 
+\begin{center}
+    \Large
+    \vspace{0.9cm}
+    \textbf{Abstract}
+\end{center}
+
+\begin{itemize}
+    \item Impacts of global scale forrestation are still poorly understood.
+    \item Likely no impact of forestation on global climate under a high emissions and high global warming scenario. Climate is dominated by the warming signal.
+    \item Evidence of some increase in local scale warm extremes.
+    \item Evidence in a shift in the global carbon balance; increased uptake of carbon on the land of ~25 PgC by 2100 and a decrease in the uptake of carbon by the ocean.
+\end{itemize}
+
 \section{Introduction}
 
 A considerable amount of anthropogenic carbon emissions comes from agricultural activities.
@@ -27,44 +40,58 @@ In order to effectively limit global warming to below 2°C (or even 3°C), there
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
 This study is motivated by existing studies on Forestation by Sonntag et al. (2016) \cite{sonntag_reforestation_2016} where the potential of forestation is quantified using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
-This study aims to quantify the CO$_2$ removal potential of the forestation strategy using CMIP6 models, both at the global and regional scale.
+This study aims to:
+\begin{itemize}
+    \item Quantify the CO$_2$ removal potential of the forestation strategy using CMIP6 models, both at the global and regional scale.
+\end{itemize}
 Furthermore, the climate variability uncertainties are quantified from a single model ensemble of the ACCES-ESM1.5 model.
-As part of the contributions to the CMIP6 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar forestation scenario.
-This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6.
-ACCESS-ESM1.5 contributed 10 ensemble members to these experiments, and it was the only model to contribute multiple ensemble members to the CMIP6 afforestation experiment.
 
 \begin{itemize}
+    \item As part of the contributions to the CMIP6 LUMIP experiments, modelling groups were requested to do emissions driven simulations of a similar forestation scenario. This time using the Shared Socioeconomic Pathways' emissions from SSP5-8.5 and the land use of SSP1-2.6.
     \item existing studies on MPI-ESM CMIP5 version using RCP8.5 emissions with RCP4.5 land use. \cite{sonntag_reforestation_2016} \cite{sonntag_quantifying_2018}
-    \item esm-hist: emissions-driven simulations are initialized at 2015 using the esm-hist. \cite{eyring_overview_2016}
-    \item esm-ssp585: High emissions scenario that assumes that development is driven by fossil fuels. \cite{oneill_scenario_2016}
-    \item esm-ssp585-ssp126Lu: High emissions scenario from SSP5-8.5 but with the land use from SSP1-2.6. \cite{lawrence_land_2016}
-    \item SSP1-2.6: Challenges to adaptation and mitigation are both low. Land use changes characterized by decrease in pasture and crop and increase in natural lands. \cite{van_vuuren_energy_2017}
+    \item ACCESS-ESM1.5 contributed 10 ensemble members to these experiments, and it was the only model to contribute multiple ensemble members to the CMIP6 afforestation experiment.
 \end{itemize}
 
 \section{Methods}
 
-\begin{table}[]
-    \begin{tabular}{llllllll}
-        \hline
-Model         & Fire & Nitrogen & Phosphorus & Dynamic Veg. & No. PFTs & No. natural PFTs & Reference                                         \\ \hline
-ACCESS-ESM1-5 & No   & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
-BCC-CSM2-MR   & No   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
-CanESM5       & No   & No       & No         & Yes                & 9        & 7                   & \cite{swart_canadian_2019}     \\
-MIROC-ES2L    & No   & Yes      & No         & No                 & 14       & 13                  & \cite{hajima_development_2020} \\
-MPI-ESM1-2-LR & Yes  & Yes      & No         & Yes                & 13       & 12                  & \cite{giorgetta_climate_2013}  \\
-NorESM2-LM    & Yes  & Yes      & No         & No                 & 22       & 14                  & \cite{seland_norwegian_2020}   \\
-UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8                   & \cite{sellar_ukesm1_2019}      \\ \hline
-    \end{tabular}
-\end{table}
+\subsection{Experiments}
+
+The CMIP6 experimental design specifies a set of standard simulations called the Diagnostic, Evaluation and Characterization of Klima (DECK) \cite{eyring_overview_2016}, which are typically used as the foundation to study more specific research questions.
+The DECK includes a pre-industrial control simulation (\textit{piControl}) with constant greenhouse gas concentration forcings, and a historical (\textit{historical}) simulation with transient historical greenhouse gas concentration forcings.
+Furtermore, the DECK specifies corresponding simulations (\textit{esm-piControl} and \textit{esm-hist}) that are run in full "Earth system model" mode with a fully interactive dynamical carbon cycle and for the historical period, fossil fuel and industrial greenhouse gas emissions forcings.
+In order to capture the carbon cycle and dynamics of the entire Earth system in response to forestation, including biogeochemical feedbacks, we use only the Earth system model simulations from relevant intercomparison projects that are based on these emission-driven simulations.
+
+The forrestation scenario we use is the Land Use Model Intercomparison Project's \textit{esm-ssp585-ssp126Lu}, spanning the years 2015--2100 \cite{lawrence_land_2016}.
+This simulation features the surface fossil fuel related CO$_{2}$ emissions from the SSP5-8.5 scenario, and the land-use change from the SSP1-2.6 scenario \cite{oneill_scenario_2016}.
+The SSP5-8.5 scenario emissions represent a high emissions future pathway that results in a radiative forcing of 8.5 W m$^{-2}$ in 2100.
+The SSP1-2.6 scenario land-use change assumes a future of sustainable development \cite{van_vuuren_energy_2017}.
+This means low population growth, low pressures on land-use, environmentally friendly changes in diets and increased aggricultural efficiency and yields, resulting in abandonment of aggricultural lands.
+
+The reference simulation we use to compare to \textit{esm-ssp585-ssp126Lu} is the \textit{esm-ssp585} from the Coupled Climate-Carbon Cycle Model Intercomparison Project (C4MIP) \cite{jones_c4mip_2016}.
+This is the emissions-driven Earth system model simualtion corresponding to the SSP5-8.5 high greenhouse gas scenario.
+In general, the land use change in this scenario has less expansion of forested lands than \textit{esm-ssp585-ssp126Lu}, but is a mixture of weak forestation and deforestation.
+The notable difference in land-use change compared the forestation scenario is the lack of deforestation in the central African region (Figure S\ref{fig:ACCESS_land_cover}).
+By taking the difference between the forestation simulation and the \textit{esm-ssp585} simulation (Equation \ref{equ:diff}), we can examine the impact of forestation on the climate and the carbon cycle.
+
+\begin{itemize}
+    \item esm-hist: emissions-driven simulations are initialized at 2015 using the esm-hist. \cite{eyring_overview_2016}
+    \item esm-ssp585: High emissions scenario that assumes that development is driven by fossil fuels. \cite{oneill_scenario_2016}
+    \item SSP1-2.6: Challenges to adaptation and mitigation are both low. Land use changes characterized by decrease in pasture and crop and increase in natural lands. \cite{van_vuuren_energy_2017}
+\end{itemize}
+
+
+\begin{equation}
+    X|_{for} = X|_{esm-ssp585-ssp126Lu} - X|_{esm-ssp585}
+    \label{equ:diff}
+\end{equation}
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas.svg}
         \includegraphics[width=\linewidth]{../plots/land_areas.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas_diff.svg}
+
         \includegraphics[width=\linewidth]{../plots/land_areas_diff.png}
     \end{subfigure}
     \caption{Land use areas in ACCESS-ESM1.5. Left: ssp585 (dashed) and forestation scenario (solid). Right: difference between ssp585 and forestation scenario.}
@@ -109,6 +136,39 @@ Forestation is dominated by growth of evergreen broad leaf forests, followed by 
 Deciduous needle leaf forests only make a small fraction of forests and do not show any expansion.
 There are only a few areas where there is deforestation in the esm-ssp585-ssp126Lu experiment.
 These occur in deciduous broad leaf forests in eastern USA, China and western Russia (Figure \ref{fig:land_use_map}).
+
+\subsection{Participating models}
+
+There are seven Earth system models that participated in both LUMIP and C4MIP with simulations available for \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}.
+A brief overview of these models are presented in Table \ref{tab:models}.
+2 models included wildfire schemes, 3 models included dynamical vegetation, and 6 models included nitrogen nutrient limitaiton.
+ACCESS-ESM1-5 is the only model to include phosphorus limitation.
+Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members available for both simulations, of which there are 10 each.
+
+\begin{table}[H]
+    \begin{tabular}{llllllll}
+        \hline
+Model         & Fire & Nitrogen & Phosphorus & Dynamic Veg. & No. PFTs & No. natural PFTs & Reference                                         \\ \hline
+ACCESS-ESM1-5 & No   & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
+BCC-CSM2-MR   & No   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
+CanESM5       & No   & No       & No         & Yes                & 9        & 7                   & \cite{swart_canadian_2019}     \\
+MIROC-ES2L    & No   & Yes      & No         & No                 & 14       & 13                  & \cite{hajima_development_2020} \\
+MPI-ESM1-2-LR & Yes  & Yes      & No         & Yes                & 13       & 12                  & \cite{giorgetta_climate_2013}  \\
+NorESM2-LM    & Yes  & Yes      & No         & No                 & 22       & 14                  & \cite{seland_norwegian_2020}   \\
+UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8                   & \cite{sellar_ukesm1_2019}      \\ \hline
+    \end{tabular}
+    \caption{Models participating in both LUMIP and C4MIP with simulaions for both \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes aggricultural crops and pasture.}
+    \label{tab:models}
+\end{table}
+
+\subsection{Regional analysis}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{../plots/regional_analysis_map.png}
+    \caption{Box regions for regional analysis.}
+    \label{fig:box_regions}
+\end{figure}
 
 \section{Results}
 
@@ -311,13 +371,6 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \end{subfigure}
     \caption{Left: Australian region absolute carbon stocks. Right: Australian region  difference between forestation scenario and ssp585.}
     \label{fig:aus_region}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics{../plots/regional_analysis_map.png}
-    \caption{Box regions for regional analysis.}
-    \label{fig:box_regions}
 \end{figure}
 
 \begin{itemize}
