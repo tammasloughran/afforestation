@@ -1,3 +1,6 @@
+% Note: Figures are plotted using .png files for now since SVG rendering is very
+% slow for LaTeX. At a later date I will change the figures to .svg files. For example:
+%\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
 % Preamble.
 \documentclass[]{article}
 \usepackage[a4paper, total={170mm,257mm}, left=20mm, top=20mm,]{geometry}
@@ -81,11 +84,9 @@ Mid-century:
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas.svg}
         \includegraphics[width=\linewidth]{../plots/treeFrac_anomaly.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/land_areas_diff.svg}
         \includegraphics[width=\linewidth]{../plots/grassFrac_anomaly.png}
     \end{subfigure}
     \caption{ACCESS-ESM1.5 land-use area change from 2015 to 2100 in the forestation scenario. Left: forest. Right: Grass. In ACCESS-ESM1.5 LUH2 pasture fractions are allocated to C3 grass.}
@@ -121,10 +122,20 @@ These occur in deciduous broad leaf forests in eastern USA, China and western Ru
 
 \begin{figure}[H]
     \centering
-    %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
-    \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
-    \caption{cVeg in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
-    \label{fig:models}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_model_intercomparison_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLitter_model_intercomparison_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cSoil_model_intercomparison_diff.png}
+    \end{subfigure}
+    \caption{cLand, cVeg, cLitter and cSoil in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
+    \label{fig:models_cpools}
 \end{figure}
 
 \begin{itemize}
@@ -144,19 +155,15 @@ These occur in deciduous broad leaf forests in eastern USA, China and western Ru
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
         \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles.svg}
         \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png}
     \end{subfigure}
     \caption{Climate in esm-ssp585-ssp126Lu. Left: Absolute values from the forestation simulation (esm-ssp585-ssp126Lu). Right: difference between esm-ssp585-ssp126Lu simulation and esm-ssp585}
@@ -188,35 +195,27 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
 \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cLand_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/cLand_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \caption{Carbon pools. Left: esm-ssp585-ssp126Lu relative to the 2005–2025 period. Right: difference between the esm-ssp585-ssp126Lu and esm-ssp585.}
@@ -226,43 +225,33 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.svg}
         \includegraphics[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[inkscape=force,width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.svg}
         \includegraphics[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \caption{Carbon fluxes in esm-ssp585-ssp126Lu.  Left: relative to 2005–2025. Right: relative to ssp-585.}
@@ -303,27 +292,21 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_australia_anom.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_australia_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cLitter_aus_anom.svg}
         \includegraphics[width=\linewidth]{../plots/cLitter_australia_anom.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cLitter_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cLitter_australia_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cSoil_aus_anom.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_australia_anom.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cSoil_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cSoil_australia_diff.png}
     \end{subfigure}
     \caption{Left: Australian region absolute carbon stocks. Right: Australian region  difference between forestation scenario and ssp585.}
@@ -351,44 +334,20 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_amazonia_diff.png}
     \end{subfigure}
+
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/tas_amazonia_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_easternnorthamerica_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
-        \includegraphics[width=\linewidth]{../plots/tas_easternnorthamerica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_eastasia_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/tas_eastasia_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_borealnorthamerica_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/tas_borealnorthamerica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
         \includegraphics[width=\linewidth]{../plots/cVeg_centralafrica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        %\includesvg[width=\linewidth]{../plots/cVeg_aus_diff.svg}
-        \includegraphics[width=\linewidth]{../plots/tas_centralafrica_diff.png}
     \end{subfigure}
     \caption{Experiment differences for each region in \ref{fig:box_regions}}
     \label{fig:aus_region_cveg_tas}
@@ -409,18 +368,45 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 
 \section{Supplementary Material}
 
+
 \subsection{PFTs}
 
 \begin{figure}[H]
     \centering
-    %\begin{subfigure}[b]{0.4\linewidth}
-    %    \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_flux.png}
-    %\end{subfigure}
-    %\begin{subfigure}[b]{0.4\linewidth}
-    %    \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
-    %\end{subfigure}
-    %\caption{???}
-    %\label{fig:??}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/treeFrac_esm-ssp585_anomaly.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/grassFrac_esm-ssp585_anomaly.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cropFrac_esm-ssp585_anomaly.png}
+    \end{subfigure}
+    \caption{Difference in area of trees, grass and crop between 2015 and 2100 for esm-ssp585 in ACCESS-ESM1.5}
+    \label{fig:ACCESS_land_cover}
+\end{figure}
+
+\subsection{Regional analysis}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_amazonia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_easternnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_eastasia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_borealnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_centralafrica_diff.png}
+    \end{subfigure}
+    \caption{Mean surface air temperature for each region in ACCESS-ESM1-5.}
+    \label{fig:ACCESS_tas_regions}
 \end{figure}
 
 \end{document}
