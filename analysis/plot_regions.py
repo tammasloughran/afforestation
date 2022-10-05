@@ -78,7 +78,7 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
         'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
         'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
-        'Asia gridopint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
+        'Asia Gridpoint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
         }
 
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
@@ -111,16 +111,19 @@ def plot_regions_map()->None:
     ax.add_feature(cfeature.OCEAN)
     ax.add_feature(cfeature.COASTLINE)
     for region,box in REGIONS.items():
-        plt.plot([box[1][0],box[1][1],box[1][1],box[1][0],box[1][0]],
+        if 'point' in region:
+            plt.scatter(box[1][0], box[0][1])
+        else:
+            plt.plot([box[1][0],box[1][1],box[1][1],box[1][0],box[1][0]],
                 [box[0][1],box[0][1],box[0][0],box[0][0],box[0][1]],
                 transform=ccrs.PlateCarree())
-        plt.annotate(region, (box[1][0],box[0][0]))
+            plt.annotate(region, (box[1][0],box[0][0]))
     ax.set_xticks([-180,-120,-60,0,60,120,180], crs=ccrs.PlateCarree())
     ax.set_yticks([-90,-60,-30,0,30,60,90], crs=ccrs.PlateCarree())
     plt.xlabel('Longitude (°E)')
     plt.ylabel('Latitude (°N)')
     plt.title('Regions')
-    plt.tight_layout()
+    #plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/regional/regional_analysis_map.png')
     plt.close()
 
@@ -381,7 +384,7 @@ def make_regional_plots()->None:
 
 if __name__ != 'analysis.plot_regions':
     plot_regions_map()
-    make_regional_plots()
+    #make_regional_plots()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')

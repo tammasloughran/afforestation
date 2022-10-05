@@ -356,8 +356,10 @@ def make_model_plots():
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu")
             plt.legend()
-            plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png',
-                    dpi=DPI)
+            plt.savefig(
+                    f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png',
+                    dpi=DPI,
+                    )
 
 
 if __name__ != 'analysis.plot_models':

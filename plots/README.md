@@ -4,6 +4,6 @@ Plots output will end up in here
 Get images:
 
 ```
-rsync --update gadi:\~/afforestation/plots/\*.png .
+rsync --verbose --update --recursive gadi:\~/afforestation/plots/\*.png .
 ```
 
