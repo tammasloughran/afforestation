@@ -69,7 +69,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = True # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
@@ -192,32 +192,52 @@ def make_model_plots():
                     loader = cdo_pool_load_model
 
                 # Load the CMIP6 models.
-                file_list = sorted(get_filenames(
-                        'LUMIP',
-                        instit,
-                        MODELS[instit],
-                        'esm-ssp585-ssp126Lu',
-                        ENSEMBLES[instit],
-                        table,
-                        var,
-                        ))
-                filenames = '[ ' + ' '.join(file_list) + ' ]'
-                aff_data[instit] = loader(input=filenames, var=var)
-                file_list = sorted(get_filenames(
-                        'C4MIP',
-                        instit,
-                        MODELS[instit],
-                        'esm-ssp585',
-                        SSP585_ENSEMBLES[instit],
-                        table,
-                        var,
-                        ))
-                filenames = '[ ' + ' '.join(file_list) + ' ]'
-                ssp585_data[instit] = loader(input=filenames, var=var)
+                if not load_npy_files:
+                    file_list = sorted(get_filenames(
+                            'LUMIP',
+                            instit,
+                            MODELS[instit],
+                            'esm-ssp585-ssp126Lu',
+                            ENSEMBLES[instit],
+                            table,
+                            var,
+                            ))
+                    filenames = '[ ' + ' '.join(file_list) + ' ]'
+                    aff_data[instit] = loader(input=filenames, var=var)
+                    np.save(
+                            f'{DATA_DIR}/{var}_{MODELS[instit]}_aff_global.npy',
+                            aff_data[instit].data,
+                            )
+                    file_list = sorted(get_filenames(
+                            'C4MIP',
+                            instit,
+                            MODELS[instit],
+                            'esm-ssp585',
+                            SSP585_ENSEMBLES[instit],
+                            table,
+                            var,
+                            ))
+                    filenames = '[ ' + ' '.join(file_list) + ' ]'
+                    ssp585_data[instit] = loader(input=filenames, var=var)
+                    np.save(
+                            f'{DATA_DIR}/{var}_{MODELS[instit]}_ssp585_global.npy',
+                            ssp585_data[instit].data,
+                            )
+                else:
+                    aff_data[instit] = np.load(
+                            f'{DATA_DIR}/{var}_{MODELS[instit]}_aff_global.npy',
+                            )
+                    if var=='tas': aff_data[instit] -= 273.15
+                    ssp585_data[instit] = np.load(
+                            f'{DATA_DIR}/{var}_{MODELS[instit]}_ssp585_global.npy',
+                            )
+                    if var=='tas': ssp585_data[instit] -= 273.15
 
-            # Load the ACCESS-ESM1-5 data.
+            # Load the ACCESS-ESM1-5 data. I expect that the npy files already exist.
             access_aff = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
             access_ssp585 = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
+            if var=='tas': access_aff -= 273.15
+            if var=='tas': access_ssp585 -= 273.15
             diff = access_aff - access_ssp585
             ens_mean = np.mean(diff, axis=0)
 
@@ -271,6 +291,9 @@ def make_model_plots():
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'])
                 else:
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'], linestyle='dotted')
+                if slope>0: sign = '+'
+                else: sign = '-'
+                axes[0].set_title(f'ACCESS-ESM1-5      {sign}')
                 for i,m in enumerate(MODELS.keys()):
                     diff_model = aff_data[m] - ssp585_data[m]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
@@ -286,6 +309,9 @@ def make_model_plots():
                     else:
                         axes[i+1].plot(years, trend_line, color=COLORS[m],
                                 linestyle='dotted')
+                    if slope>0: sign = '+'
+                    else: sign = '-'
+                    axes[i+1].set_title(f'{MODELS[m]}      {sign}')
                 axes[7].set_axis_off()
                 fig.add_subplot(111, frameon=False)
                 plt.tick_params(
@@ -298,7 +324,7 @@ def make_model_plots():
                 plt.plot([0], [0], color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
                 for m in MODELS.keys():
                     plt.plot([0], [0], color=COLORS[m], label=MODELS[m])
-                plt.legend(loc='lower right')
+                #plt.legend(loc='lower right')
                 plt.xlabel('Year')
                 if var=='tas':
                     plt.ylabel('Temperature (°C)')
@@ -306,12 +332,11 @@ def make_model_plots():
                     plt.ylabel('Precipitation (mm/day)')
                 fig.suptitle(f'{var} global mean trends')
                 plt.tight_layout()
+                plt.subplots_adjust(left=0.15,) # tight_layout leaves some extra space on the left.
                 plt.savefig(f'{PLOTS_DIR}/models/{var}_trends.png', dpi=DPI)
 
             # Plot only the afforestation scenario for absolute values.
             plt.figure()
-            access_aff = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
-            access_ssp585 = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
             diff = access_aff
             ens_mean = np.mean(diff, axis=0)
             years = list(range(2015, 2015 + ens_mean.shape[0]))
