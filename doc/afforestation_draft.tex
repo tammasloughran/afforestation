@@ -11,6 +11,7 @@
 \usepackage{lineno} % Enable line numbers.
 \usepackage{textcomp}
 \usepackage[style=numeric]{biblatex}
+\usepackage{amsmath}
 \addbibresource{afforestation_references.bib}
 \linenumbers
 \title{Limited mitigation potentials under a high emissions scenario: multi-model and single model ensembles}
@@ -70,7 +71,7 @@ This means low population growth, low pressures on land-use, environmentally fri
 The reference simulation we use to compare to \textit{esm-ssp585-ssp126Lu} is the \textit{esm-ssp585} from the Coupled Climate-Carbon Cycle Model Intercomparison Project (C4MIP) \cite{jones_c4mip_2016}.
 This is the emissions-driven Earth system model simualtion corresponding to the SSP5-8.5 high greenhouse gas scenario.
 In general, the land use change in this scenario has less expansion of forested lands than \textit{esm-ssp585-ssp126Lu}, but is a mixture of weak forestation and deforestation.
-The notable difference in land-use change compared the forestation scenario is the lack of deforestation in the central African region (Figure S\ref{fig:ACCESS_land_cover}).
+The notable difference in land-use change compared the forestation scenario is the deforestation in the central African region (Figure S\ref{fig:ACCESS_land_cover}).
 By taking the difference between the forestation simulation and the \textit{esm-ssp585} simulation (Equation \ref{equ:diff}), we can examine the impact of forestation on the climate and the carbon cycle.
 
 \begin{itemize}
@@ -125,9 +126,7 @@ Mid-century:
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/CABLE_forests.png}
     \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/CABLE_forests_deciduous_needle.png}
-    \end{subfigure}
+
     \caption{CABLE tree PFTs for the SSP1-2.6 scenario.}
     \label{fig:CABLE_PFTs}
 \end{figure}
@@ -202,6 +201,13 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
     \item CanESM5 has differing ensemble methods for esm-ssp585 and esm-ssp585-ssp126Lu. One uses r1i1p1f1 and another uses r1i1p2f1. Therefore, there is some additional perturbation applied to one of those experiments which causes the blue line to start at negative values.
     \item ACCESS-ESM is roughly in the missgle of the spread. More similar to MPI-ESM and UKESM than other models.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../plots/tas_trends.png}
+    \caption{Surface air temperature trends in the difference between the forrestation scenario and the reference simulaiton. Dotted lines indicate trends that are not statistically significant at the 5\% level. '+' and '-' denote the sign of the trend.}
+    \label{fig:models_tas_trends}
+\end{figure}
 
 \subsection{ACCESS-ESM1.5}
 
@@ -420,7 +426,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \printbibliography
 
 \section{Supplementary Material}
-
+\setcounter{figure}{0}
 
 \subsection{PFTs}
 
@@ -437,6 +443,15 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \end{subfigure}
     \caption{Difference in area of trees, grass and crop between 2015 and 2100 for esm-ssp585 in ACCESS-ESM1.5}
     \label{fig:ACCESS_land_cover}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CABLE_forests_deciduous_needle.png}
+    \end{subfigure}
+    \caption{Global change in deciduous needleleaf forrest in ACCESS-ESM1-5.}
+    \label{fig:ACCESS_dec_needle_cover}
 \end{figure}
 
 \subsection{Regional analysis}
