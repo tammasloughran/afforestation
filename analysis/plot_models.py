@@ -69,7 +69,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = True # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
@@ -77,17 +77,17 @@ MODELS = {
         'BCC':'BCC-CSM2-MR',
         'CCma':'CanESM5',
         'MIROC':'MIROC-ES2L',
+        'MOHC':'UKESM1-0-LL',
         'MPI-M':'MPI-ESM1-2-LR',
         'NCC':'NorESM2-LM',
-        'MOHC':'UKESM1-0-LL',
         }
 COLORS = {
         'CSIRO':color_cycle[0],
         'BCC':color_cycle[1],
         'CCma':color_cycle[2],
         'MIROC':color_cycle[3],
-        'MPI-M':color_cycle[4],
-        'MOHC':color_cycle[5],
+        'MOHC':color_cycle[4],
+        'MPI-M':color_cycle[5],
         'NCC':color_cycle[6],
         }
 ENSEMBLES = {
@@ -107,21 +107,21 @@ SSP585_ENSEMBLES = {
         'NCC':'r1i1p1f1',
         }
 VARIABLES = {
-        #'Lmon':[
-        #    #'gpp',
-        #    #'npp',
-        #    #'ra',
-        #    #'rh',
-        #    #'nbp',
-        #    'cVeg',
-        #    'cLitter',
-        #    ],
-        #'Emon':[
-        #    'cSoil',
-        #    'cLand',
-        #    ],
+        'Lmon':[
+            #'gpp',
+            #'npp',
+            #'ra',
+            #'rh',
+            #'nbp',
+            'cVeg',
+            'cLitter',
+            ],
+        'Emon':[
+            'cSoil',
+            'cLand',
+            ],
         'Amon':[
-            #'pr',
+            'pr',
             'tas',
             ],
         }
@@ -129,6 +129,14 @@ VARIABLES = {
 
 def make_model_plots():
     if not os.path.exists(f'{PLOTS_DIR}/models'): os.mkdir(f'{PLOTS_DIR}/models')
+    # Create container dicts and variables for aggregating soil and litter pools.
+    litter_soil_for = {}
+    litter_soil_ssp585 = {}
+    for m in MODELS.keys():
+        litter_soil_for[m] = 0
+        litter_soil_ssp585[m] = 0
+    access_litter_soil_for = 0
+    access_litter_soil_ssp585 = 0
     for table in VARIABLES.keys():
         for var in VARIABLES[table]:
             print(f'\nProcessing {var}:')
@@ -233,6 +241,15 @@ def make_model_plots():
                             )
                     if var=='tas': ssp585_data[instit] -= 273.15
 
+                # Aggregate soil and litter pools
+                if var=='cSoil':
+                    litter_soil_for[instit] += aff_data[instit]
+                    litter_soil_ssp585[instit] += ssp585_data[instit]
+                if var=='cLitter':
+                    litter_soil_for[instit] += aff_data[instit]
+                    litter_soil_ssp585[instit] += ssp585_data[instit]
+
+
             # Load the ACCESS-ESM1-5 data. I expect that the npy files already exist.
             access_aff = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
             access_ssp585 = np.load(f'{DATA_DIR}/{var}_ACCESS-ESM1.5_esm-ssp585_global.npy')
@@ -240,6 +257,14 @@ def make_model_plots():
             if var=='tas': access_ssp585 -= 273.15
             diff = access_aff - access_ssp585
             ens_mean = np.mean(diff, axis=0)
+
+            # Aggregate ACCESS soil and litter.
+            if var=='cSoil':
+                access_litter_soil_for += access_aff
+                access_litter_soil_ssp585 += access_ssp585
+            if var=='clitter':
+                access_litter_soil_for += access_aff
+                access_litter_soil_ssp585 += access_ssp585
 
             # Some models have a slightly different time period.
             for m in MODELS.keys():
@@ -254,15 +279,17 @@ def make_model_plots():
             if not var=='tas' and not var=='pr':
                 plt.figure()
                 years = list(range(2015, 2015 + ens_mean.shape[0]))
-                plt.plot(years, ens_mean, label='ACCESS-ESM1-5')
+                plt.plot(years, ens_mean, label='ACCESS-ESM1-5', color=COLORS['CSIRO'])
                 for m in MODELS.keys():
+                    if m=='MOHC' and var=='cLitter': continue
                     diff_model = aff_data[m] - ssp585_data[m]
-                    if m=='CCma' and var=='cVeg':
-                        # CanESM5 cVeg has a large initial bias in cVeg. Remove this bias.
+                    if m=='CCma' and (var=='cVeg' or var=='cSoil'):
+                        # CanESM5 cVeg has a large initial bias in cVeg and cSoil. Remove this bias.
                         diff_model = diff_model - diff_model[0]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
                     plt.plot(years, diff_model, color=COLORS[m], label=MODELS[m])
                 for e in range(10):
+                    years = list(range(2015, 2015 + diff.shape[1]))
                     plt.plot(years, diff[e,:], color='gray', alpha=0.4)
                 if var=='tas':
                     plt.ylabel('Temperature (°C)')
@@ -346,6 +373,7 @@ def make_model_plots():
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, aff_data[m], color=COLORS[m], label=MODELS[m])
             for e in range(10):
+                years = list(range(2015, 2015 + diff.shape[1]))
                 plt.plot(years, diff[e,:], color='gray', alpha=0.4)
             if var=='tas':
                 plt.ylabel('Temperature (°C)')
@@ -361,6 +389,32 @@ def make_model_plots():
                     dpi=DPI,
                     )
 
+    # Plot the soil+litter out of the variable loops.
+    plt.figure()
+    # Bias correct CanESM.
+    litter_soil_for['CCma'] = litter_soil_for['CCma'] - litter_soil_for['CCma'][0]
+    litter_soil_ssp585['CCma'] = litter_soil_ssp585['CCma'] - litter_soil_ssp585['CCma'][0]
+    litter_soil_diff = {}
+    for m in MODELS.keys():
+        # Some models do not have year 2100 in one of the simulations.
+        if m=='MPI-M': litter_soil_for[m] = litter_soil_for[m][:-1]
+        if m=='NCC': litter_soil_ssp585[m] = litter_soil_ssp585[m][:-1]
+        litter_soil_diff[m] = litter_soil_for[m] - litter_soil_ssp585[m]
+    access_litter_soil_diff = access_litter_soil_for - access_litter_soil_ssp585
+    access_litter_soil_diff_ensmean = access_litter_soil_diff.mean(axis=0)
+    years = list(range(2015, 2015 + ens_mean.shape[0]))
+    plt.plot(years, access_litter_soil_diff_ensmean, label='ACCESS-ESM1-5', color=COLORS['CSIRO'])
+    for m in MODELS.keys():
+        years = list(range(2015, 2015 + litter_soil_diff[m].shape[0]))
+        plt.plot(years, litter_soil_diff[m], color=COLORS[m], label=MODELS[m])
+    for e in range(10):
+        years = list(range(2015, 2015 + access_litter_soil_diff.shape[1]))
+        plt.plot(years, access_litter_soil_diff[e,:], color='gray', alpha=0.4)
+    plt.ylabel('Pg(C)')
+    plt.xlabel('Year')
+    plt.title(f"cSoil+cLitter for esm-ssp585-ssp126Lu - esm-ssp585")
+    plt.legend()
+    plt.savefig(f'{PLOTS_DIR}/models/cSoil+cLitter_model_intercomparison_diff.png', dpi=DPI)
 
 if __name__ != 'analysis.plot_models':
     make_model_plots()
