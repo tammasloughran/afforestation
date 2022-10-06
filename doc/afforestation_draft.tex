@@ -1,3 +1,4 @@
+% Draft manuscript on forestation in CMIP6 to be submitted to ESD? or similar journal.
 % Note: Figures are plotted using .png files for now since SVG rendering is very
 % slow for LaTeX. At a later date I will change the figures to .svg files. For example:
 %\includesvg[width=\linewidth]{../plots/cVeg_aus_anom.svg}
@@ -10,7 +11,7 @@
 \usepackage{subcaption} % Allows subfigures and captions
 \usepackage{lineno} % Enable line numbers.
 \usepackage{textcomp}
-\usepackage[style=numeric]{biblatex}
+\usepackage[style=authoryear]{biblatex}
 \usepackage{amsmath}
 \addbibresource{afforestation_references.bib}
 \linenumbers
@@ -27,8 +28,10 @@
     \textbf{Abstract}
 \end{center}
 
+\raggedright
+
 \begin{itemize}
-    \item Impacts of global scale forrestation are still poorly understood.
+    \item Impacts of global scale forestation are still poorly understood.
     \item Likely no impact of forestation on global climate under a high emissions and high global warming scenario. Climate is dominated by the warming signal.
     \item Evidence of some increase in local scale warm extremes.
     \item Evidence in a shift in the global carbon balance; increased uptake of carbon on the land of ~25 PgC by 2100 and a decrease in the uptake of carbon by the ocean.
@@ -39,7 +42,7 @@
 A considerable amount of anthropogenic carbon emissions comes from agricultural activities.
 In order to effectively limit global warming to below 2°C (or even 3°C), there must be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation (known as reforestation and afforestation of lands were not previously occupied by forest).
-This study is motivated by existing studies on Forestation by Sonntag et al. (2016) \cite{sonntag_reforestation_2016} where the potential of forestation is quantified using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
+This study is motivated by existing studies on Forestation by \cite{sonntag_reforestation_2016} where the potential of forestation is quantified using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the "forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
 This study aims to:
 \begin{itemize}
@@ -57,29 +60,23 @@ Furthermore, the climate variability uncertainties are quantified from a single 
 
 \subsection{Experiments}
 
-The CMIP6 experimental design specifies a set of standard simulations called the Diagnostic, Evaluation and Characterization of Klima (DECK) \cite{eyring_overview_2016}, which are typically used as the foundation to study more specific research questions.
+The CMIP6 experimental design specifies a set of standard simulations called the Diagnostic, Evaluation and Characterization of Klima (DECK) \parencite{eyring_overview_2016}, which are typically used as the foundation to study more specific research questions.
 The DECK includes a pre-industrial control simulation (\textit{piControl}) with constant greenhouse gas concentration forcings, and a historical (\textit{historical}) simulation with transient historical greenhouse gas concentration forcings.
-Furtermore, the DECK specifies corresponding simulations (\textit{esm-piControl} and \textit{esm-hist}) that are run in full "Earth system model" mode with a fully interactive dynamical carbon cycle and for the historical period, fossil fuel and industrial greenhouse gas emissions forcings.
-In order to capture the carbon cycle and dynamics of the entire Earth system in response to forestation, including biogeochemical feedbacks, we use only the Earth system model simulations from relevant intercomparison projects that are based on these emission-driven simulations.
+Furthermore, the DECK specifies corresponding simulations (\textit{esm-piControl} and \textit{esm-hist}) that are run in full ``Earth system model" mode with a fully interactive dynamical carbon cycle and for the historical period, fossil fuel and industrial greenhouse gas emissions forcings.
+In order to capture the carbon cycle and dynamics of the entire Earth system in response to forestation, including biogeochemical feedbacks, we use only the Earth system model simulations from relevant intercomparison projects. These emissions-driven simulations are initialized at 2015 from the end of the \textit{esm-hist} experiment.
 
-The forrestation scenario we use is the Land Use Model Intercomparison Project's \textit{esm-ssp585-ssp126Lu}, spanning the years 2015--2100 \cite{lawrence_land_2016}.
-This simulation features the surface fossil fuel related CO$_{2}$ emissions from the SSP5-8.5 scenario, and the land-use change from the SSP1-2.6 scenario \cite{oneill_scenario_2016}.
+The forestation scenario we use is the Land Use Model Intercomparison Project's \textit{esm-ssp585-ssp126Lu}, spanning the years 2015--2100 \parencite{lawrence_land_2016}.
+This simulation features the surface fossil fuel related CO$_{2}$ emissions from the SSP5-8.5 scenario, and the land-use change from the SSP1-2.6 scenario \parencite{oneill_scenario_2016}.
 The SSP5-8.5 scenario emissions represent a high emissions future pathway that results in a radiative forcing of 8.5 W m$^{-2}$ in 2100.
-The SSP1-2.6 scenario land-use change assumes a future of sustainable development \cite{van_vuuren_energy_2017}.
-This means low population growth, low pressures on land-use, environmentally friendly changes in diets and increased aggricultural efficiency and yields, resulting in abandonment of aggricultural lands.
+The SSP1-2.6 scenario land-use change assumes a future of sustainable development \parencite{van_vuuren_energy_2017}.
+This means low population growth, low pressures on land-use, environmentally friendly changes in diets and increased agricultural efficiency and yields, resulting in abandonment of agricultural lands.
+This allows for the expansion of natural lands and forest cover.
 
-The reference simulation we use to compare to \textit{esm-ssp585-ssp126Lu} is the \textit{esm-ssp585} from the Coupled Climate-Carbon Cycle Model Intercomparison Project (C4MIP) \cite{jones_c4mip_2016}.
-This is the emissions-driven Earth system model simualtion corresponding to the SSP5-8.5 high greenhouse gas scenario.
+The reference simulation we use to compare to \textit{esm-ssp585-ssp126Lu} is the \textit{esm-ssp585} from the Coupled Climate-Carbon Cycle Model Intercomparison Project (C4MIP) \parencite{jones_c4mip_2016}.
+This is the emissions-driven Earth system model simulation corresponding to the SSP5-8.5 high greenhouse gas scenario that assumes that development is driven by fossil fuels \parencite{oneill_scenario_2016}.
 In general, the land use change in this scenario has less expansion of forested lands than \textit{esm-ssp585-ssp126Lu}, but is a mixture of weak forestation and deforestation.
 The notable difference in land-use change compared the forestation scenario is the deforestation in the central African region (Figure S\ref{fig:ACCESS_land_cover}).
 By taking the difference between the forestation simulation and the \textit{esm-ssp585} simulation (Equation \ref{equ:diff}), we can examine the impact of forestation on the climate and the carbon cycle.
-
-\begin{itemize}
-    \item esm-hist: emissions-driven simulations are initialized at 2015 using the esm-hist. \cite{eyring_overview_2016}
-    \item esm-ssp585: High emissions scenario that assumes that development is driven by fossil fuels. \cite{oneill_scenario_2016}
-    \item SSP1-2.6: Challenges to adaptation and mitigation are both low. Land use changes characterized by decrease in pasture and crop and increase in natural lands. \cite{van_vuuren_energy_2017}
-\end{itemize}
-
 
 \begin{equation}
     X|_{for} = X|_{esm-ssp585-ssp126Lu} - X|_{esm-ssp585}
@@ -99,15 +96,12 @@ By taking the difference between the forestation simulation and the \textit{esm-
     \label{fig:land_use}
 \end{figure}
 
-By the end of the century:
-\begin{itemize}
-    \item Forrest expands by: 1.59 million km²
-    \item Abandonment: -1.11 million km²
-\end{itemize}
-Mid-century:
-\begin{itemize}
-    \item Crop minimum: -2.74 million km²
-\end{itemize}
+The land-use change dataset used in all CMIP6 experiments is the Land-use Harmonization dataset version 2 (LUH2; \cite{hurtt_harmonization_2020}).
+Each model has a unique representation of woody tree biomes and pre-industrial potential vegetation.
+Therefore, each model interprets the distribution of natural lands from LUH2 to plant functional types (PFTs) differently.
+Combined with differences in grid resolution, this results in a variety of changes global tree cover for each model (see Figure \ref{fig:CABLE_PFTs}).
+As an example, ACCESS-ESM1-5 has by the end of the century a forest expansion of 1.59 million km² and agricultural abandonment of -1.11 million km².
+By mid-century crops reach a minimum of 2.74 million km² less than in 2015, before rising again in the latter half of the century (Figure \ref{fig:land_use}).
 
 \begin{figure}[H]
     \centering
@@ -124,10 +118,12 @@ Mid-century:
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/treeFrac_models.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/CABLE_forests.png}
     \end{subfigure}
-
-    \caption{CABLE tree PFTs for the SSP1-2.6 scenario.}
+    \caption{Global mean tree cover fraction for each model and CABLE tree PFT areas for the SSP1-2.6 scenario.}
     \label{fig:CABLE_PFTs}
 \end{figure}
 
@@ -142,12 +138,13 @@ There are seven Earth system models that participated in both LUMIP and C4MIP wi
 A brief overview of these models are presented in Table \ref{tab:models}.
 2 models included wildfire schemes, 3 models included dynamical vegetation, and 6 models included nitrogen nutrient limitaiton.
 ACCESS-ESM1-5 is the only model to include phosphorus limitation.
-Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members available for both simulations, of which there are 10 each.
+Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members available for both simulations, of which there are 10 for each experiment.
 
 \begin{table}[H]
+    \centering
     \begin{tabular}{llllllll}
         \hline
-Model         & Fire & Nitrogen & Phosphorus & Dynamic Veg. & No. PFTs & No. natural PFTs & Reference                                         \\ \hline
+Model         & Fire & N & P & Dyn. Veg. & No. PFTs & Nat. PFTs & Ref.                                         \\ \hline
 ACCESS-ESM1-5 & No   & Yes      & Yes        & No                 & 10       & 9                   & \cite{ziehn_australian_2020}   \\
 BCC-CSM2-MR   & No   & Yes      & No         & No                 & 14       & 11                  & \cite{li_development_2019}     \\
 CanESM5       & No   & No       & No         & Yes                & 9        & 7                   & \cite{swart_canadian_2019}     \\
@@ -156,7 +153,7 @@ MPI-ESM1-2-LR & Yes  & Yes      & No         & Yes                & 13       & 1
 NorESM2-LM    & Yes  & Yes      & No         & No                 & 22       & 14                  & \cite{seland_norwegian_2020}   \\
 UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8                   & \cite{sellar_ukesm1_2019}      \\ \hline
     \end{tabular}
-    \caption{Models participating in both LUMIP and C4MIP with simulaions for both \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes aggricultural crops and pasture.}
+    \caption{Models participating in both LUMIP and C4MIP with simulations for both \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes agricultural crops and pasture.}
     \label{tab:models}
 \end{table}
 
@@ -188,10 +185,7 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
         \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLitter_model_intercomparison_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cSoil_model_intercomparison_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cSoil+cLitter_model_intercomparison_diff.png}
     \end{subfigure}
     \caption{cLand, cVeg, cLitter and cSoil in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
     \label{fig:models_cpools}
@@ -199,17 +193,57 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
 
 \begin{itemize}
     \item CanESM5 has differing ensemble methods for esm-ssp585 and esm-ssp585-ssp126Lu. One uses r1i1p1f1 and another uses r1i1p2f1. Therefore, there is some additional perturbation applied to one of those experiments which causes the blue line to start at negative values.
-    \item ACCESS-ESM is roughly in the missgle of the spread. More similar to MPI-ESM and UKESM than other models.
+    \item ACCESS-ESM is roughly in the middle of the model spread. More similar to MPI-ESM and UKESM than other models.
 \end{itemize}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{../plots/tas_trends.png}
-    \caption{Surface air temperature trends in the difference between the forrestation scenario and the reference simulaiton. Dotted lines indicate trends that are not statistically significant at the 5\% level. '+' and '-' denote the sign of the trend.}
+    \caption{Surface air temperature trends in the difference between the forestation scenario and the reference simulaiton. Dotted lines indicate trends that are not statistically significant at the 5\% level. '+' and '-' denote the sign of the trend.}
     \label{fig:models_tas_trends}
 \end{figure}
 
 \subsection{ACCESS-ESM1.5}
+
+\subsection{Changes to the Global Carbon Cycle}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/carbon_budget_esm-ssp585-ssp126Lu.png}
+    \end{subfigure}
+    \caption{Top left: Atmospheric CO$_2$ concentration in the forestation scenario and ssp585. Top right: carbon flux budget in the forestation scenario.}
+    \label{fig:atmosphere_carbon}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_flux.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+    \end{subfigure}
+    \caption{Left: Difference between the forestation scenario and ssp585 in downward ocean carbon mass flux. Right: Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux}
+    \label{fig:ocean_carbon}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}llll@{}}
+    \hline
+        & $\Delta$ Carbon (Pg) & \% present day & \% of 2080-2100 ssp585 \\ \hline
+cLand   & 22.0±5.3    & 1.3±0.3        & 1.3±0.3                \\
+cVeg    & 24.8±2.7    & 3.7±0.4        & 3.3±0.4                \\
+cLitter & 0.4±0.3     & 0.8±0.6        & 0.9±0.7                \\
+cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
+    \end{tabular}
+    \caption{Cpools expressed as percentage of the present day carbon content or the end of ssp585}
+    \label{tab:cpools_table}
+\end{table}
 
 \subsubsection{Climate}
 
@@ -236,27 +270,13 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
     \label{fig:climate}
 \end{figure}
 
-\subsubsection{Carbon cycle}
+\subsection{Regional/local changes in vegetation and extremes}
 
 \begin{itemize}
     \item There is an increase in vegetation carbon of about 25 Pg C by the end of the century.
     \item The increased CO$_2$ draw-down from the combined effect of forestation and CO$_2$ fertilization seems to be offset by the increase in respiration in the litter and soil by the end of the century.
     \item cSoil is lower than SSP585 by about 4 Pg carbon.
 \end{itemize}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{@{}llll@{}}
-    \hline
-        & $\Delta$ Carbon (Pg) & \% present day & \% of 2080-2100 ssp585 \\ \hline
-cLand   & 22.0±5.3    & 1.3±0.3        & 1.3±0.3                \\
-cVeg    & 24.8±2.7    & 3.7±0.4        & 3.3±0.4                \\
-cLitter & 0.4±0.3     & 0.8±0.6        & 0.9±0.7                \\
-cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
-    \end{tabular}
-    \caption{Cpools expressed as percentage of the present day carbon content or the end of ssp585}
-    \label{tab:cpools_table}
-\end{table}
 
 \begin{figure}[H]
     \centering
@@ -324,29 +344,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \label{fig:cflux}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/carbon_budget_esm-ssp585-ssp126Lu.png}
-    \end{subfigure}
-    \caption{Top left: Atmospheric CO$_2$ concentration in the forestation scenario and ssp585. Top right: carbon flux budget in the forestation scenario.}
-    \label{fig:atmosphere_carbon}
-\end{figure}
 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_flux.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
-    \end{subfigure}
-    \caption{Left: Difference between the forestation scenario and ssp585 in downward ocean carbon mass flux. Right: Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux}
-    \label{fig:ocean_carbon}
-\end{figure}
 
 
 \subsubsection{Regional analysis}
@@ -456,7 +454,7 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/CABLE_forests_deciduous_needle.png}
     \end{subfigure}
-    \caption{Global change in deciduous needleleaf forrest in ACCESS-ESM1-5.}
+    \caption{Global change in deciduous needleleaf forest in ACCESS-ESM1-5.}
     \label{fig:ACCESS_dec_needle_cover}
 \end{figure}
 
@@ -484,4 +482,3 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \end{figure}
 
 \end{document}
-
