@@ -69,7 +69,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+#load_npy_files = True # Uncomment to override previous check.
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
@@ -128,6 +128,7 @@ VARIABLES = {
 
 
 def make_model_plots():
+    print('Starting model intercomparison analysis.')
     if not os.path.exists(f'{PLOTS_DIR}/models'): os.mkdir(f'{PLOTS_DIR}/models')
     # Create container dicts and variables for aggregating soil and litter pools.
     litter_soil_for = {}
@@ -320,7 +321,12 @@ def make_model_plots():
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'], linestyle='dotted')
                 if slope>0: sign = '+'
                 else: sign = '-'
-                axes[0].set_title(f'ACCESS-ESM1-5      {sign}')
+                axes[0].annotate(
+                        f'ACCESS-ESM1-5 ({sign})',
+                        (0,1),
+                        xycoords='axes fraction',
+                        fontsize=8,
+                        )
                 for i,m in enumerate(MODELS.keys()):
                     diff_model = aff_data[m] - ssp585_data[m]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
@@ -338,7 +344,12 @@ def make_model_plots():
                                 linestyle='dotted')
                     if slope>0: sign = '+'
                     else: sign = '-'
-                    axes[i+1].set_title(f'{MODELS[m]}      {sign}')
+                    axes[i+1].annotate(
+                            f'{MODELS[m]} ({sign})',
+                            (0,1),
+                            xycoords='axes fraction',
+                            fontsize=8,
+                            )
                 axes[7].set_axis_off()
                 fig.add_subplot(111, frameon=False)
                 plt.tick_params(
@@ -351,15 +362,14 @@ def make_model_plots():
                 plt.plot([0], [0], color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
                 for m in MODELS.keys():
                     plt.plot([0], [0], color=COLORS[m], label=MODELS[m])
-                #plt.legend(loc='lower right')
                 plt.xlabel('Year')
                 if var=='tas':
                     plt.ylabel('Temperature (°C)')
                 else:
                     plt.ylabel('Precipitation (mm/day)')
                 fig.suptitle(f'{var} global mean trends')
-                plt.tight_layout()
-                plt.subplots_adjust(left=0.15,) # tight_layout leaves some extra space on the left.
+                #plt.tight_layout()
+                #plt.subplots_adjust(left=0.15,) # tight_layout leaves some extra space on the left.
                 plt.savefig(f'{PLOTS_DIR}/models/{var}_trends.png', dpi=DPI)
 
             # Plot only the afforestation scenario for absolute values.
