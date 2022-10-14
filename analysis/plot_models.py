@@ -69,26 +69,28 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = True # Uncomment to override previous check.
+#load_npy_files = False # Uncomment to override previous check.
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 MODELS = {
         'BCC':'BCC-CSM2-MR',
         'CCma':'CanESM5',
+        'NOAA-GFDL':'GFDL-ESM4',
         'MIROC':'MIROC-ES2L',
-        'MOHC':'UKESM1-0-LL',
         'MPI-M':'MPI-ESM1-2-LR',
         'NCC':'NorESM2-LM',
+        'MOHC':'UKESM1-0-LL',
         }
 COLORS = {
         'CSIRO':color_cycle[0],
         'BCC':color_cycle[1],
         'CCma':color_cycle[2],
-        'MIROC':color_cycle[3],
-        'MOHC':color_cycle[4],
+        'NOAA-GFDL':color_cycle[3],
+        'MIROC':color_cycle[4],
         'MPI-M':color_cycle[5],
         'NCC':color_cycle[6],
+        'MOHC':'limegreen',
         }
 ENSEMBLES = {
         'BCC':'r1i1p1f1',
@@ -97,6 +99,7 @@ ENSEMBLES = {
         'MOHC':'r1i1p1f2',
         'MPI-M':'r1i1p1f1',
         'NCC':'r1i1p1f1',
+        'NOAA-GFDL':'r1i1p1f1',
         }
 SSP585_ENSEMBLES = {
         'BCC':'r1i1p1f1',
@@ -105,6 +108,7 @@ SSP585_ENSEMBLES = {
         'MOHC':'r1i1p1f2',
         'MPI-M':'r1i1p1f1',
         'NCC':'r1i1p1f1',
+        'NOAA-GFDL':'r1i1p1f1',
         }
 VARIABLES = {
         'Lmon':[
@@ -145,6 +149,7 @@ def make_model_plots():
             ssp585_data = {}
             for instit in MODELS.keys():
                 if instit=='MOHC' and var=='cLitter': continue # Skip missing data.
+                if instit=='NOAA-GFDL' and not table=='Amon': continue # GFDL only has pr and tas
                 print('    -', instit, MODELS[instit])
                 # Create the gridarea.nc file for this model.
                 data_files = glob.glob(f'{DATA_DIR}/*')
@@ -183,7 +188,7 @@ def make_model_plots():
 
 
                 @cdod.cdo_cat(input2='')
-                @cdod.cdo_mul(input2=model_land_frac)
+                @cdod.cdo_ifthen(input1=model_land_frac)
                 @cdod.cdo_fldmean()
                 @cdod.cdo_yearmonmean
                 def cdo_clim_load_model(var:str, input:str)->np.ma.MaskedArray:
@@ -283,6 +288,7 @@ def make_model_plots():
                 plt.plot(years, ens_mean, label='ACCESS-ESM1-5', color=COLORS['CSIRO'])
                 for m in MODELS.keys():
                     if m=='MOHC' and var=='cLitter': continue
+                    if m=='NOAA-GFDL': continue # GFDL only has pr and tas
                     diff_model = aff_data[m] - ssp585_data[m]
                     if m=='CCma' and (var=='cVeg' or var=='cSoil'):
                         # CanESM5 cVeg has a large initial bias in cVeg and cSoil. Remove this bias.
@@ -350,15 +356,17 @@ def make_model_plots():
                             xycoords='axes fraction',
                             fontsize=8,
                             )
-                axes[7].set_axis_off()
-                fig.add_subplot(111, frameon=False)
-                plt.tick_params(
-                        labelcolor='none',
-                        which='both',
-                        top=False,
-                        bottom=False,
-                        left=False,
-                        right=False)
+                    axes[i+1].set_xlim(2015,2100)
+                # This disables the lower right subfigure. Might need when adding/removing models.
+                #axes[7].set_axis_off()
+                #fig.add_subplot(111, frameon=False)
+                #plt.tick_params(
+                #        labelcolor='none',
+                #        which='both',
+                #        top=False,
+                #        bottom=False,
+                #        left=False,
+                #        right=False)
                 plt.plot([0], [0], color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
                 for m in MODELS.keys():
                     plt.plot([0], [0], color=COLORS[m], label=MODELS[m])
@@ -380,6 +388,7 @@ def make_model_plots():
             plt.plot(years, ens_mean, color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
             for m in MODELS.keys():
                 if m=='MOHC' and var=='cLitter': continue # Skip missing data.
+                if m=='NOAA-GFDL' and var not in ['tas', 'pr']: continue # GFDL only has pr and tas
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, aff_data[m], color=COLORS[m], label=MODELS[m])
             for e in range(10):
@@ -406,6 +415,7 @@ def make_model_plots():
     litter_soil_ssp585['CCma'] = litter_soil_ssp585['CCma'] - litter_soil_ssp585['CCma'][0]
     litter_soil_diff = {}
     for m in MODELS.keys():
+        if m=='NOAA-GFDL': continue # GFDL only has pr and tas
         # Some models do not have year 2100 in one of the simulations.
         if m=='MPI-M': litter_soil_for[m] = litter_soil_for[m][:-1]
         if m=='NCC': litter_soil_ssp585[m] = litter_soil_ssp585[m][:-1]
@@ -415,6 +425,7 @@ def make_model_plots():
     years = list(range(2015, 2015 + ens_mean.shape[0]))
     plt.plot(years, access_litter_soil_diff_ensmean, label='ACCESS-ESM1-5', color=COLORS['CSIRO'])
     for m in MODELS.keys():
+        if m=='NOAA-GFDL': continue # GFDL only has pr and tas
         years = list(range(2015, 2015 + litter_soil_diff[m].shape[0]))
         plt.plot(years, litter_soil_diff[m], color=COLORS[m], label=MODELS[m])
     for e in range(10):
