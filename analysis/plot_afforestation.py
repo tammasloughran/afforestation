@@ -80,7 +80,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = False # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 
 # Load data for only afforested grid cells.
@@ -185,6 +185,52 @@ def make_veg_plots()->None:
             plt.savefig(f'{PLOTS_DIR}/global/'+ \
                     f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png', dpi=DPI)
             plt.close()
+
+
+@cdod.cdo_cat(input2='')
+@cdod.cdo_yearmonmean
+def cdo_load_clim_map(var:str, input:str)->np.ma.MaskedArray:
+    """Use cdo to load the first and last years of the future scenario and calculate the
+    temporal anomaly between them.
+    """
+    return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+def make_clim_maps()->None:
+    """Load climate data and run plotting routine.
+    """
+    if not os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
+    model = 'ACCESS-ESM1.5'
+    for table in ['Amon',]:
+        for var in CLIM_VARIABLES[table]:
+            print(f"Processing {var}")
+            # Load data
+            if load_npy_files:
+                diff_data = np.load(f'{DATA_DIR}/{var}_{model}_diff.npy')
+                lats = np.load(f'{DATA_DIR}/lats.npy')
+                lons = np.load(f'{DATA_DIR}/lons.npy')
+            else:
+                NTIMES = 86
+                aff_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
+                ssp585_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
+                for e,ens in enumerate(ENSEMBLES):
+                    aff_file = '[ '+get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]+' ]'
+                    ssp585_file = '[ '+get_filename('C4MIP', 'esm-ssp585', ens, table, var)[0]+' ]'
+                    aff_data[e,...] = cdo_load_clim_map(input=aff_file, var=var)
+                    ssp585_data[e,...] = cdo_load_clim_map(input=ssp585_file, var=var)
+                diff_data = aff_data - ssp585_data
+                aff_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]
+                lats = nc.Dataset(aff_file, 'r').variables['lat'][:]
+                lons = nc.Dataset(aff_file, 'r').variables['lon'][:]
+                np.save(f'{DATA_DIR}/{var}_{model}_diff.npy',diff_data.data)
+                np.save(f'{DATA_DIR}/lats.npy', lats.data)
+                np.save(f'{DATA_DIR}/lons.npy', lons.data)
+
+            # Calculate ensemble mean for the last 20 years
+            diff_ens_mean = diff_data[:,-20:,...].mean(axis=(0,1))
+
+            # Plot
+            plot_map(lons, lats, diff_ens_mean, var, label='difference')
 
 
 def make_clim_plots()->None:
@@ -317,6 +363,7 @@ def make_clim_aff_only()->None:
 if __name__ != 'analysis.plot_afforestation':
     make_veg_plots()
     make_clim_plots()
+    make_clim_maps()
     make_veg_maps()
     make_clim_aff_only()
 
