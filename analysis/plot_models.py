@@ -73,7 +73,7 @@ else:
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
-MODELS = {
+MODELS = { # ACCESS is excluded here. Needs separate plotting for ensembles.
         'BCC':'BCC-CSM2-MR',
         'CCma':'CanESM5',
         'NOAA-GFDL':'GFDL-ESM4',
@@ -90,7 +90,7 @@ COLORS = {
         'MIROC':color_cycle[4],
         'MPI-M':color_cycle[5],
         'NCC':color_cycle[6],
-        'MOHC':'red',
+        'MOHC':color_cycle[8],
         }
 ENSEMBLES = {
         'BCC':'r1i1p1f1',
@@ -131,7 +131,9 @@ VARIABLES = {
         }
 
 
-def make_model_plots():
+def make_model_plots()->None:
+    """Create plots of carbon pools and climate trends for all models.
+    """
     print('Starting model intercomparison analysis.')
     if not os.path.exists(f'{PLOTS_DIR}/models'): os.mkdir(f'{PLOTS_DIR}/models')
     # Create container dicts and variables for aggregating soil and litter pools.
@@ -272,7 +274,7 @@ def make_model_plots():
                 access_litter_soil_for += access_aff
                 access_litter_soil_ssp585 += access_ssp585
 
-            # Some models have a slightly different time period.
+            # Some models have a slightly different time period for each experiment.
             for m in MODELS.keys():
                 if m=='MOHC' and var=='cLitter':
                     continue # Skip missing data.
@@ -284,8 +286,14 @@ def make_model_plots():
             # Plot the difference between simulations for cpools.
             if not var=='tas' and not var=='pr':
                 plt.figure()
+                # Plot ACCESS ensemble mean and range.
                 years = list(range(2015, 2015 + ens_mean.shape[0]))
                 plt.plot(years, ens_mean, label='ACCESS-ESM1-5', color=COLORS['CSIRO'])
+                plt.fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
+                # The following plots individual ensemble members as gray lines.
+                #for e in range(10):
+                #    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
+                # Plot other models.
                 for m in MODELS.keys():
                     if m=='MOHC' and var=='cLitter': continue
                     if m=='NOAA-GFDL': continue # GFDL only has pr and tas
@@ -295,12 +303,9 @@ def make_model_plots():
                         diff_model = diff_model - diff_model[0]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
                     plt.plot(years, diff_model, color=COLORS[m], label=MODELS[m])
-                # Plot ACCESS ensembles
-                years = list(range(2015, 2015 + diff.shape[1]))
-                plt.fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
-                # The following plots individual ensemble members as gray lines.
-                #for e in range(10):
-                #    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
+                # Plot features.
+                plt.xlim(years[0], years[-1])
+                plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 plt.ylabel('Pg(C)')
                 plt.xlabel('Year')
                 plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
@@ -331,6 +336,7 @@ def make_model_plots():
                         xycoords='axes fraction',
                         fontsize=8,
                         )
+                axes[0].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 for i,m in enumerate(MODELS.keys()):
                     diff_model = aff_data[m] - ssp585_data[m]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
@@ -354,25 +360,26 @@ def make_model_plots():
                             xycoords='axes fraction',
                             fontsize=8,
                             )
-                    axes[i+1].set_xlim(2015,2100)
+                    axes[i+1].set_xlim(years[0], years[-1])
+                    axes[i+1].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 # This disables the lower right subfigure. Might need when adding/removing models.
                 #axes[7].set_axis_off()
-                #fig.add_subplot(111, frameon=False)
-                #plt.tick_params(
-                #        labelcolor='none',
-                #        which='both',
-                #        top=False,
-                #        bottom=False,
-                #        left=False,
-                #        right=False)
-                plt.plot([0], [0], color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
-                for m in MODELS.keys():
-                    plt.plot([0], [0], color=COLORS[m], label=MODELS[m])
+                # Add invidible subplot for common axes labels.
+                fig.add_subplot(111, frameon=False)
+                plt.tick_params(
+                        labelcolor='none',
+                        which='both',
+                        top=False,
+                        bottom=False,
+                        left=False,
+                        right=False,
+                        )
+                #plt.plot([0], [0], color=COLORS['CSIRO'], label='ACCESS-ESM1-5') # For legend.
+                #for m in MODELS.keys():
+                #    plt.plot([0], [0], color=COLORS[m], label=MODELS[m])
                 plt.xlabel('Year')
-                if var=='tas':
-                    plt.ylabel('Temperature (°C)')
-                else:
-                    plt.ylabel('Precipitation (mm/day)')
+                if var=='tas': plt.ylabel('Temperature (°C)')
+                else: plt.ylabel('Precipitation (mm/day)')
                 fig.suptitle(f'{var} global mean trends')
                 #plt.tight_layout()
                 #plt.subplots_adjust(left=0.15,) # tight_layout leaves some extra space on the left.
@@ -380,22 +387,26 @@ def make_model_plots():
 
             # Plot only the afforestation scenario for absolute values.
             plt.figure()
-            diff = access_aff
-            ens_mean = np.mean(diff, axis=0)
+            # Plot ACCESS ensemble mean and range
+            ens_mean = np.mean(access_aff, axis=0)
             years = list(range(2015, 2015 + ens_mean.shape[0]))
             plt.plot(years, ens_mean, color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
+            plt.fill_between(
+                    years,
+                    access_aff.max(axis=0),
+                    access_aff.min(axis=0),
+                    color='lightblue',
+                    )
+            # The following plots individual ensemble members as grey lines.
+            #for e in range(10):
+            #    plt.plot(years, access_aff[e,:], color='gray', alpha=0.4)
             for m in MODELS.keys():
                 if m=='MOHC' and var=='cLitter': continue # Skip missing data.
                 if m=='NOAA-GFDL' and var not in ['tas', 'pr']: continue # GFDL only has pr and tas
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, aff_data[m], color=COLORS[m], label=MODELS[m])
-            # Plot ACCESS ensembles
-            years = list(range(2015, 2015 + diff.shape[1]))
-            plt.fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
-            # The following plots individual ensemble members as grey lines.
-            #for e in range(10):
-            #    years = list(range(2015, 2015 + diff.shape[1]))
-            #    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
+            # Plot features.
+            plt.xlim(years[0], years[-1])
             if var=='tas':
                 plt.ylabel('Temperature (°C)')
             elif var=='pr':
@@ -410,7 +421,7 @@ def make_model_plots():
                     dpi=DPI,
                     )
 
-    # Plot the soil+litter out of the variable loops.
+    # Plot the soil+litter outside of the variable loops.
     plt.figure()
     # Bias correct CanESM.
     litter_soil_for['CCma'] = litter_soil_for['CCma'] - litter_soil_for['CCma'][0]
@@ -422,26 +433,28 @@ def make_model_plots():
         if m=='MPI-M': litter_soil_for[m] = litter_soil_for[m][:-1]
         if m=='NCC': litter_soil_ssp585[m] = litter_soil_ssp585[m][:-1]
         litter_soil_diff[m] = litter_soil_for[m] - litter_soil_ssp585[m]
+    # Plot ACCESS first.
     access_litter_soil_diff = access_litter_soil_for - access_litter_soil_ssp585
     access_litter_soil_diff_ensmean = access_litter_soil_diff.mean(axis=0)
     years = list(range(2015, 2015 + ens_mean.shape[0]))
     plt.plot(years, access_litter_soil_diff_ensmean, label='ACCESS-ESM1-5', color=COLORS['CSIRO'])
-    for m in MODELS.keys():
-        if m=='NOAA-GFDL': continue # GFDL only has pr and tas
-        years = list(range(2015, 2015 + litter_soil_diff[m].shape[0]))
-        plt.plot(years, litter_soil_diff[m], color=COLORS[m], label=MODELS[m])
-    # Plot ACCESS ensembles
-    years = list(range(2015, 2015 + diff.shape[1]))
     plt.fill_between(
             years,
             access_litter_soil_diff.max(axis=0),
             access_litter_soil_diff.min(axis=0),
             color='lightblue',
             )
-    # The following plots individual ensemble members as grey lines.
+    # The following plots individual ensemble members as gray lines.
     #for e in range(10):
-    #    years = list(range(2015, 2015 + access_litter_soil_diff.shape[1]))
     #    plt.plot(years, access_litter_soil_diff[e,:], color='gray', alpha=0.4)
+    # Plot other models.
+    for m in MODELS.keys():
+        if m=='NOAA-GFDL': continue # GFDL only has pr and tas
+        years = list(range(2015, 2015 + litter_soil_diff[m].shape[0]))
+        plt.plot(years, litter_soil_diff[m], color=COLORS[m], label=MODELS[m])
+    # Plot features.
+    plt.xlim(years[0], years[-1])
+    plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
     plt.ylabel('Pg(C)')
     plt.xlabel('Year')
     plt.title(f"cSoil+cLitter for esm-ssp585-ssp126Lu - esm-ssp585")
