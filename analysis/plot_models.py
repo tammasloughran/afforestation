@@ -90,7 +90,7 @@ COLORS = {
         'MIROC':color_cycle[4],
         'MPI-M':color_cycle[5],
         'NCC':color_cycle[6],
-        'MOHC':'limegreen',
+        'MOHC':'red',
         }
 ENSEMBLES = {
         'BCC':'r1i1p1f1',
@@ -295,15 +295,13 @@ def make_model_plots():
                         diff_model = diff_model - diff_model[0]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
                     plt.plot(years, diff_model, color=COLORS[m], label=MODELS[m])
-                for e in range(10):
-                    years = list(range(2015, 2015 + diff.shape[1]))
-                    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
-                if var=='tas':
-                    plt.ylabel('Temperature (°C)')
-                elif var=='pr':
-                    plt.ylabel('Precipitation (mm/day)')
-                else:
-                    plt.ylabel('Pg(C)')
+                # Plot ACCESS ensembles
+                years = list(range(2015, 2015 + diff.shape[1]))
+                plt.fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
+                # The following plots individual ensemble members as gray lines.
+                #for e in range(10):
+                #    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
+                plt.ylabel('Pg(C)')
                 plt.xlabel('Year')
                 plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
                 plt.legend()
@@ -391,9 +389,13 @@ def make_model_plots():
                 if m=='NOAA-GFDL' and var not in ['tas', 'pr']: continue # GFDL only has pr and tas
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, aff_data[m], color=COLORS[m], label=MODELS[m])
-            for e in range(10):
-                years = list(range(2015, 2015 + diff.shape[1]))
-                plt.plot(years, diff[e,:], color='gray', alpha=0.4)
+            # Plot ACCESS ensembles
+            years = list(range(2015, 2015 + diff.shape[1]))
+            plt.fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
+            # The following plots individual ensemble members as grey lines.
+            #for e in range(10):
+            #    years = list(range(2015, 2015 + diff.shape[1]))
+            #    plt.plot(years, diff[e,:], color='gray', alpha=0.4)
             if var=='tas':
                 plt.ylabel('Temperature (°C)')
             elif var=='pr':
@@ -428,9 +430,18 @@ def make_model_plots():
         if m=='NOAA-GFDL': continue # GFDL only has pr and tas
         years = list(range(2015, 2015 + litter_soil_diff[m].shape[0]))
         plt.plot(years, litter_soil_diff[m], color=COLORS[m], label=MODELS[m])
-    for e in range(10):
-        years = list(range(2015, 2015 + access_litter_soil_diff.shape[1]))
-        plt.plot(years, access_litter_soil_diff[e,:], color='gray', alpha=0.4)
+    # Plot ACCESS ensembles
+    years = list(range(2015, 2015 + diff.shape[1]))
+    plt.fill_between(
+            years,
+            access_litter_soil_diff.max(axis=0),
+            access_litter_soil_diff.min(axis=0),
+            color='lightblue',
+            )
+    # The following plots individual ensemble members as grey lines.
+    #for e in range(10):
+    #    years = list(range(2015, 2015 + access_litter_soil_diff.shape[1]))
+    #    plt.plot(years, access_litter_soil_diff[e,:], color='gray', alpha=0.4)
     plt.ylabel('Pg(C)')
     plt.xlabel('Year')
     plt.title(f"cSoil+cLitter for esm-ssp585-ssp126Lu - esm-ssp585")
