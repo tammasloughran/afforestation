@@ -48,12 +48,11 @@ def print_stats()->None:
                 )
 
     # Prinnt as a table
-    table = [
-            {
-                '':var,
-                '$\Delta$ Carbon (Pg)':f'{last_20_mean[var].mean():.1f}±{last_20_mean[var].std():.1f}',
-                '% present day':f'{diff_p_present[var].mean():.1f}±{diff_p_present[var].std():.1f}',
-                '% of 2080-2100 ssp585':f'{diff_p_ssp585[var].mean():.1f}±{diff_p_ssp585[var].std():.1f}',
+    table = [ {
+            '':var,
+            '$\Delta$ Carbon (Pg)':f'{last_20_mean[var].mean():.1f}±{last_20_mean[var].std():.1f}',
+            '% present day':f'{diff_p_present[var].mean():.1f}±{diff_p_present[var].std():.1f}',
+            '% of 2080-2100 ssp585':f'{diff_p_ssp585[var].mean():.1f}±{diff_p_ssp585[var].std():.1f}',
             } for var in VARIABLES]
     print(markdownTable(table).setParams(row_sep='markdown').getMarkdown())
 

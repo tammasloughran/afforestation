@@ -4,15 +4,21 @@
 ```
 .
 ├── analysis
-│   ├── baseline.py             Calculate baseline values over a base period.
+│   ├── __init__.py             Analysis package init file.
+│   ├── __main__.py             Main entry point program.
 │   ├── cdo_calc_load.py        CDO calculations and data loading.
 │   ├── cmip_files.py           Locations and function for CMIP files.
 │   ├── constants.py            Constants definitions.
-│   ├── __init__.py             Analysis package init file. (empty)
-│   ├── __main__.py             Main entry point program.
+│   ├── cstock_stats.py         Table of C stock stats.
+│   ├── jaisnb.py               A custom colormap.
 │   ├── plot_afforestation.py   Carbon plots script.
-│   ├── plot_australia.py       Regional Plots (Australia)
-│   └── plot_land_cover_fractions.py Plotting script for land cover types.
+│   ├── plot_atmosphere.py      Atmosphere plots script.
+│   ├── plot_histograms.py      Histograms plots.
+│   ├── plot_land_cover_fractions.py Plotting script for land cover types.
+│   ├── plot_models.py          Plotting script for model intercomparison.
+│   ├── plot_ocean.py           Plotting for ocean.
+│   ├── plot_regions.py         Plotting for regional analysis.
+│   └── plot_temp_lai.py        Temperature and LAI correlation.
 ├── data
 │   └── README.md
 ├── doc                         Notes and paper draft go here.

@@ -1,5 +1,4 @@
 __all__ = [
-        'baseline',
         'cdo_calc_load',
         'cmip_files',
         'constants',
