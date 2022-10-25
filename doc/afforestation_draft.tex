@@ -81,7 +81,7 @@ This allows for the expansion of natural lands and forest cover.
 
 The reference simulation we use to compare to \textit{esm-ssp585-ssp126Lu} is the \textit{esm-ssp585} from the Coupled Climate-Carbon Cycle Model Intercomparison Project (C4MIP) \parencite{jones_c4mip_2016}.
 This is the emissions-driven Earth system model simulation corresponding to the SSP5-8.5 high greenhouse gas scenario that assumes that development is driven by fossil fuels \parencite{oneill_scenario_2016}.
-In general, the land use change in this scenario has less expansion of forested lands than \textit{esm-ssp585-ssp126Lu}, but is a mixture of weak forestation and deforestation.
+In general, the land use change in this scenario has less expansion of forested lands than \textit{esm-ssp585-ssp126Lu}, but is a mixture of moderate forestation and deforestation.
 The notable difference in land-use change compared the forestation scenario is the deforestation in the central African region (Figure S\ref{fig:ACCESS_land_cover}).
 By taking the difference between the forestation simulation and the \textit{esm-ssp585} simulation (Equation \ref{equ:diff}), we can examine the impact of forestation on the climate and the carbon cycle.
 
@@ -174,6 +174,10 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
     \label{fig:box_regions}
 \end{figure}
 
+\subsection{Statistical methods}
+
+We calculate trends in the difference of global mean temperatures and precipitation to examine the change in temperature as forests expand. For this we use the Sen
+
 \section{Results and Discussion}
 
 \subsection{Model Inter-comparison}
@@ -189,7 +193,7 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/cSoil+cLitter_model_intercomparison_diff.png}
     \end{subfigure}
-    \caption{cLand, cVeg, cLitter and cSoil in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models.}
+    \caption{cLand, cVeg and cLitter+cSoil in esm-ssp585-ssp126Lu scenario for 6 CMIP6 models. ACCESS-ESM is plotted as the ensemble mean and the blue shading indicates the ACCESS-ESM1-5 ensemble range.}
     \label{fig:models_cpools}
 \end{figure}
 
@@ -202,7 +206,7 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{../plots/tas_trends.png}
-    \caption{Surface air temperature trends in the difference between the forestation scenario and the reference simulaiton. Dotted lines indicate trends that are not statistically significant at the 5\% level. '+' and '-' denote the sign of the trend.}
+    \caption{Surface air temperature trends in the difference between the forestation scenario and the reference simulaiton. Solid lines indicate trends that are statistically significant at the 5\% level, and dotted lines are not significant trends. '+' and '-' denote the sign of the trend.}
     \label{fig:models_tas_trends}
 \end{figure}
 
@@ -213,12 +217,12 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
+        \includegraphics[width=\linewidth]{../plots/CO2_atm_ppm_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/carbon_budget_esm-ssp585-ssp126Lu.png}
+        \includegraphics[width=\linewidth]{../plots/esm-ssp585-ssp126Lu_budget.png}
     \end{subfigure}
-    \caption{Top left: Atmospheric CO$_2$ concentration in the forestation scenario and ssp585. Top right: carbon flux budget in the forestation scenario.}
+    \caption{Top left: Difference in atmospheric CO$_2$ concentration between the forestation scenario and ssp585. Shading indicates the ensemble range. Top right: ensemble mean of carbon flux budget in the forestation scenario.}
     \label{fig:atmosphere_carbon}
 \end{figure}
 
@@ -230,7 +234,7 @@ UKESM1-0-LL   & No   & Yes      & No         & Yes                & 12       & 8
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
     \end{subfigure}
-    \caption{Left: Difference between the forestation scenario and ssp585 in downward ocean carbon mass flux. Right: Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux}
+    \caption{Left: Difference between the forestation scenario and ssp585 in downward ocean carbon mass flux. Right: Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux. Shading indicates the ensemble range.}
     \label{fig:ocean_carbon}
 \end{figure}
 
@@ -258,16 +262,16 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles.png}
+        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1.5_esm-ssp585_ensembles.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles.png}
+        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1-5_esm-ssp585_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
     \end{subfigure}
     \caption{Climate in esm-ssp585-ssp126Lu. Left: Absolute values from the forestation simulation (esm-ssp585-ssp126Lu). Right: difference between esm-ssp585-ssp126Lu simulation and esm-ssp585}
     \label{fig:climate}
@@ -284,22 +288,22 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
 \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
@@ -314,34 +318,34 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/gpp_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/gpp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/gpp_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/npp_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/npp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/npp_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/ra_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/ra_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/ra_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/rh_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/rh_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/rh_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+        \includegraphics[width=\linewidth]{../plots/nbp_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/nbp_ACCESS-ESM1-5_esm-ssp585-ssp126Lu_ensembles_diff.png}
+        \includegraphics[width=\linewidth]{../plots/nbp_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
     \end{subfigure}
     \caption{Carbon fluxes in esm-ssp585-ssp126Lu.  Left: relative to 2005–2025. Right: relative to ssp-585.}
     \label{fig:cflux}
@@ -389,20 +393,20 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_amazonia_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLand_amazonia_diff.png}
     \end{subfigure}
 
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_easternnorthamerica_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLand_easternnorthamerica_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_eastasia_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLand_eastasia_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_borealnorthamerica_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLand_borealnorthamerica_diff.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_centralafrica_diff.png}
+        \includegraphics[width=\linewidth]{../plots/cLand_centralafrica_diff.png}
     \end{subfigure}
     \caption{Experiment differences for each region in \ref{fig:box_regions}}
     \label{fig:aus_region_cveg_tas}
@@ -428,6 +432,14 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 \section{Supplementary Material}
 \setcounter{figure}{0}
 
+\subsection{Atmosphere}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/CO2_aff_and_ssp585.png}
+    \end{subfigure}
+\end{figure}
+
 \subsection{PFTs}
 
 \begin{figure}[H]
@@ -452,6 +464,15 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \end{subfigure}
     \caption{Global change in deciduous needleleaf forest in ACCESS-ESM1-5.}
     \label{fig:ACCESS_dec_needle_cover}
+\end{figure}
+
+\subsection{Model intercomparison}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../plots/pr_trends.png}
+    \caption{Surface global precipitation rate trends in the difference between the forestation scenario and the reference simulaiton. Solid lines indicate trends that are statistically significant at the 5\% level, and dotted lines are not significant trends. '+' and '-' denote the sign of the trend.}
+    \label{fig:models_tas_trends}
 \end{figure}
 
 \subsection{Regional analysis}
