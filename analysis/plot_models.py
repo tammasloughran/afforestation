@@ -304,7 +304,7 @@ def make_model_plots()->None:
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
                     plt.plot(years, diff_model, color=COLORS[m], label=MODELS[m])
                 # Plot features.
-                plt.xlim(years[0], years[-1])
+                plt.xlim(left=years[0], right=years[-1])
                 plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 plt.ylabel('Pg(C)')
                 plt.xlabel('Year')
@@ -360,7 +360,7 @@ def make_model_plots()->None:
                             xycoords='axes fraction',
                             fontsize=8,
                             )
-                    axes[i+1].set_xlim(years[0], years[-1])
+                    axes[i+1].set_xlim(left=years[0], right=years[-1])
                     axes[i+1].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 # This disables the lower right subfigure. Might need when adding/removing models.
                 #axes[7].set_axis_off()
@@ -406,7 +406,7 @@ def make_model_plots()->None:
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, aff_data[m], color=COLORS[m], label=MODELS[m])
             # Plot features.
-            plt.xlim(years[0], years[-1])
+            plt.xlim(left=years[0], right=years[-1])
             if var=='tas':
                 plt.ylabel('Temperature (°C)')
             elif var=='pr':
@@ -453,7 +453,7 @@ def make_model_plots()->None:
         years = list(range(2015, 2015 + litter_soil_diff[m].shape[0]))
         plt.plot(years, litter_soil_diff[m], color=COLORS[m], label=MODELS[m])
     # Plot features.
-    plt.xlim(years[0], years[-1])
+    plt.xlim(left=years[0], right=years[-1])
     plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
     plt.ylabel('Pg(C)')
     plt.xlabel('Year')

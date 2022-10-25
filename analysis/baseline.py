@@ -31,7 +31,7 @@ else:
             )
 
 cdo = cdo_module.Cdo(tempdir='.')
-cdo.debug = True
+cdo.debug = False
 
 
 def reference_period(infile1:str, infile2:str, outfile:str, pyear:list=[2005, 2024]):

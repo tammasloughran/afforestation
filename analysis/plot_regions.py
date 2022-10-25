@@ -51,7 +51,7 @@ else:
             )
 
 cdo = Cdo()
-cdo.debug = True
+cdo.debug = False
 
 COLORS = {
         'gpp':'green',
@@ -95,7 +95,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = True # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -114,9 +114,11 @@ def plot_regions_map()->None:
         if 'point' in region:
             plt.scatter(box[1][0], box[0][1])
         else:
-            plt.plot([box[1][0],box[1][1],box[1][1],box[1][0],box[1][0]],
-                [box[0][1],box[0][1],box[0][0],box[0][0],box[0][1]],
-                transform=ccrs.PlateCarree())
+            plt.plot(
+                    [box[1][0],box[1][1],box[1][1],box[1][0],box[1][0]],
+                    [box[0][1],box[0][1],box[0][0],box[0][0],box[0][1]],
+                    transform=ccrs.PlateCarree(),
+                    )
             plt.annotate(region, (box[1][0],box[0][0]))
     ax.set_xticks([-180,-120,-60,0,60,120,180], crs=ccrs.PlateCarree())
     ax.set_yticks([-90,-60,-30,0,30,60,90], crs=ccrs.PlateCarree())
@@ -124,38 +126,49 @@ def plot_regions_map()->None:
     plt.ylabel('Latitude (°N)')
     plt.title('Regions')
     #plt.tight_layout()
-    plt.savefig(f'{PLOTS_DIR}/regional/regional_analysis_map.png')
+    plt.savefig(f'{PLOTS_DIR}/regional/regional_analysis_map.png', dpi=DPI)
     plt.close()
 
 
-def plot_veg_region(years, data, data_mean, data_std, var, region, label='')->None:
+def plot_veg_region(
+            years:np.ndarray,
+            data:np.ndarray,
+            var:str,
+            region:str,
+            label:str='')->None:
     """Plot vegetation data for regional analysis.
     """
+    if not os.path.exists(f'{PLOTS_DIR}/regional'): os.mkdir(f'{PLOTS_DIR}/regional')
     plt.figure()
-    for i,ens in enumerate(ENSEMBLES):
-        plt.plot(years, data[i,...], color='grey', alpha=0.4)
-    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var], alpha=0.4)
-    plt.plot(years, data_mean, color=COLORS[var])
+    #for i,ens in enumerate(ENSEMBLES):
+    #    plt.plot(years, data[i,...], color='grey', alpha=0.4)
+    plt.fill_between(years, data.min(axis=0), data.max(axis=0), color=COLORS[var], alpha=0.5)
+    plt.plot(years, data.mean(axis=0), color=COLORS[var])
     plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
     plt.xlim(left=years[0], right=years[-1])
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
     plt.title(f"ACCES-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
-    plt.savefig(f'{PLOTS_DIR}/regional/{var}_{reg}_{label}.png')
+    plt.savefig(f'{PLOTS_DIR}/regional/{var}_{reg}_{label}.png', dpi=DPI)
     plt.close()
 
 
-def plot_clim_region(years, data, data_mean, data_std, var, region, label='')->None:
+def plot_clim_region(
+            years:np.ndarray,
+            data:np.ndarray,
+            var:str,
+            region:str,
+            label:str='')->None:
     """Plot climate data for regional analysis.
     """
     plt.figure()
-    for i,ens in enumerate(ENSEMBLES):
-        plt.plot(years, data[i,...], color='grey', alpha=0.4)
-    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var], alpha=0.4)
-    plt.plot(years, data_mean, color=COLORS[var])
+    #for i,ens in enumerate(ENSEMBLES):
+    #    plt.plot(years, data[i,...], color='grey', alpha=0.4)
+    plt.fill_between(years, data.min(axis=0), data.max(axis=0), color=COLORS[var], alpha=0.5)
+    plt.plot(years, data.mean(axis=0), color=COLORS[var])
     if label=='diff':
-        plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
+        plt.hlines(0, years[0], years[-1], linewidth=0.5, color='black')
     plt.xlim(left=years[0], right=years[-1])
     if var=='pr':
         plt.ylabel('mm/day')
@@ -171,7 +184,7 @@ def plot_clim_region(years, data, data_mean, data_std, var, region, label='')->N
 def make_regional_plots()->None:
     """Load data and generate regional analysis plots.
     """
-    if os.path.exists(f'{PLOTS_DIR}/regional'): os.mkdir(f'{PLOTS_DIR}/regional')
+    if not os.path.exists(f'{PLOTS_DIR}/regional'): os.mkdir(f'{PLOTS_DIR}/regional')
     stats_file = open('regions_stats.md', 'w')
     model = 'ACCESS-ESM1-5'
     for region,box in REGIONS.items():
@@ -226,7 +239,7 @@ def make_regional_plots()->None:
         # Vegetation variables
         for table in TABLES:
             for var in VARIABLES[table]:
-                print("Processing", var)
+                print("    - Processing", var)
                 # Get the reference period value.
                 ref_file = f'[ {DATA_DIR}/{var}_{model}_esm-hist-aff_ensmean_200501-202412mean.nc ]'
                 if var in ['cVeg','cLitter','cSoil','cLand']:
@@ -269,18 +282,10 @@ def make_regional_plots()->None:
                 # Clalculate the difference.
                 diff_data = aff_data - ssp585_data
 
-                # Calculate the ensemble mean and standard deviation.
-                anom_data_mean = anom_data.mean(axis=0)
-                anom_data_std = anom_data.std(axis=0, ddof=1)
-                diff_data_mean = diff_data.mean(axis=0)
-                diff_data_std = diff_data.std(axis=0, ddof=1)
-
                 # Plot.
                 plot_veg_region(
                         years,
                         anom_data,
-                        anom_data_mean,
-                        anom_data_std,
                         var,
                         region,
                         label='anom',
@@ -288,8 +293,6 @@ def make_regional_plots()->None:
                 plot_veg_region(
                         years,
                         diff_data,
-                        diff_data_mean,
-                        diff_data_std,
                         var,
                         region,
                         label='diff',
@@ -354,8 +357,6 @@ def make_regional_plots()->None:
             plot_clim_region(
                     years,
                     aff_data,
-                    aff_data.mean(axis=0),
-                    aff_data.std(axis=0, ddof=1),
                     var,
                     region,
                     label='aff',
@@ -363,8 +364,6 @@ def make_regional_plots()->None:
             plot_clim_region(
                     years,
                     diff_data,
-                    diff_data.mean(axis=0),
-                    diff_data.std(axis=0, ddof=1),
                     var,
                     region,
                     label='diff',
@@ -373,8 +372,6 @@ def make_regional_plots()->None:
             #plot_clim_region(
             #        years,
             #        ssp585_data,
-            #        ssp585_data.mean(axis=0),
-            #        ssp585_data.std(axis=0, ddof=1),
             #        var,
             #        region,
             #        label='ssp585',
@@ -384,7 +381,7 @@ def make_regional_plots()->None:
 
 if __name__ != 'analysis.plot_regions':
     plot_regions_map()
-    #make_regional_plots()
+    make_regional_plots()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')

@@ -7,6 +7,7 @@ import glob
 import os
 import pdb
 import sys
+import warnings
 
 from cdo import Cdo
 import cdo_decorators as cdod
@@ -14,6 +15,7 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import numpy as np
 import netCDF4 as nc
+from shapely.errors import ShapelyDeprecationWarning
 
 if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
@@ -52,8 +54,9 @@ else:
             VARIABLES,
             )
 
+warnings.filterwarnings(action='ignore', category=ShapelyDeprecationWarning)
 cdo = Cdo()
-cdo.debug = True
+cdo.debug = False
 
 # Local constants
 COLORS = {'gpp':'green',
@@ -80,7 +83,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 
 # Load data for only afforested grid cells.
@@ -89,39 +92,29 @@ NLAT = treeFrac.shape[0]
 NLON = treeFrac.shape[1]
 
 
-def plot_ensembles(years, data, data_mean, data_std, var)->None:
+def plot_ensembles(years:np.ndarray, data:np.ndarray, var:str)->None:
     """Plot all ensemble members with ensemble mean and standard deviation.
     """
     model = 'ACCESS-ESM1.5'
     plt.figure()
-    for ens in ENSEMBLES:
-        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
-    plt.plot(years, data_mean, color=COLORS[var], label="Ensemble mean")
-    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var],
-            label="+-1$\sigma$", alpha=0.4)
-    plt.hlines(0, years[0], years[-1], colors='black', linestyles='dotted')
+    #for ens in ENSEMBLES:
+    #    plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
+    plt.plot(years, data.mean(axis=0), color=COLORS[var], label="Ensemble mean")
+    plt.fill_between(
+            years,
+            data.min(axis=0),
+            data.max(axis=0),
+            color=COLORS[var],
+            label="Ensemble range",
+            alpha=0.4,
+            )
+    plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
     plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
-    plt.ylabel(f'{var.upper()} anomaly (PgC/year)')
-    plt.title(f"{model} {var.upper()}")
-
-
-def plot_ensembles_clim(years, data, data_mean, data_std, var)->None:
-    """Plot all ensemble members with ensemble mean and standard deviation.
-    """
-    model = 'ACCESS-ESM1.5'
-    plt.figure()
-    for ens in ENSEMBLES:
-        plt.plot(years, data[int(ens)-1], color='lightgray', linewidth=0.6, alpha=0.4)
-    plt.plot(years, data_mean, color=COLORS[var], label="Ensemble mean")
-    plt.fill_between(years, data_mean+data_std, data_mean-data_std, color=COLORS[var],
-            label="+-1$\sigma$", alpha=0.4)
-    plt.xlim(left=years[0], right=years[-1])
-    plt.xlabel('Year')
-    if var=='tas':
-        plt.ylabel(var.upper()+' ($^{\circ}$C)')
-    elif var=='pr':
-        plt.ylabel(f'{var.upper()} (mm/day)')
+    if var[0]=='c': plt.ylabel(f'{var.upper()} anomaly [Pg(C)]')
+    elif var=='tas': plt.ylabel(var.upper()+' anomaly ($^{\circ}$C)')
+    elif var=='pr': plt.ylabel(f'{var.upper()} (mm/day)')
+    else: plt.ylabel(f'{var.upper()} anomaly [Pg(C)/year]')
     plt.title(f"{model} {var.upper()}")
 
 
@@ -146,7 +139,7 @@ def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='
 def make_veg_plots()->None:
     """Load vegetation data and run plotting routine.
     """
-    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
+    if not os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     model = 'ACCESS-ESM1.5'
     for table in TABLES:
         for var in VARIABLES[table]:
@@ -164,26 +157,26 @@ def make_veg_plots()->None:
             # Anomaly, mean and standard deviation relative to 2015 baseline. Demonstrates overall
             # impact of climate, CO2 forcing and afforestation on pool/flux.
             data_anomaly = aff_data - global_sum_baselines[var]
-            data_ens_mean = np.mean(data_anomaly, axis=0)
-            data_ens_std = np.std(data_anomaly, axis=0, ddof=1)
 
             # Anomaly relative to the esm-ssp585 scenario from C4MIP. Demonstrates only the changes
             # due to afforestation.
             data_aff_diff = aff_data - ssp585_data
-            data_aff_diff_mean = np.mean(data_aff_diff, axis=0)
-            data_aff_diff_std = np.std(data_aff_diff, axis=0, ddof=1)
 
             # Plot the graphs for anomalies relative to 2015.
             years = list(range(2015, 2101))
-            plot_ensembles(years, data_anomaly, data_ens_mean, data_ens_std, var)
-            plt.savefig(f'{PLOTS_DIR}/global/'+ \
-                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_anomalies.png', dpi=DPI)
+            plot_ensembles(years, data_anomaly, var)
+            plt.savefig(
+                    f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585-ssp126Lu_ensembles_anomalies.png',
+                    dpi=DPI,
+                    )
             plt.close()
 
             # Plot the graphs for anomalies relative to the esm-ssp585
-            plot_ensembles(years, data_aff_diff, data_aff_diff_mean, data_aff_diff_std, var)
-            plt.savefig(f'{PLOTS_DIR}/global/'+ \
-                    f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png', dpi=DPI)
+            plot_ensembles(years, data_aff_diff, var)
+            plt.savefig(
+                    f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png',
+                    dpi=DPI,
+                    )
             plt.close()
 
 
@@ -214,7 +207,8 @@ def make_clim_maps()->None:
                 aff_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
                 ssp585_data = np.ones((NENS,NTIMES,NLAT,NLON))*np.nan
                 for e,ens in enumerate(ENSEMBLES):
-                    aff_file = '[ '+get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]+' ]'
+                    aff_file = '[ '+ \
+                            get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]+' ]'
                     ssp585_file = '[ '+get_filename('C4MIP', 'esm-ssp585', ens, table, var)[0]+' ]'
                     aff_data[e,...] = cdo_load_clim_map(input=aff_file, var=var)
                     ssp585_data[e,...] = cdo_load_clim_map(input=ssp585_file, var=var)
@@ -236,7 +230,7 @@ def make_clim_maps()->None:
 def make_clim_plots()->None:
     """Load climate data run plotting routine.
     """
-    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
+    if not os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     model = 'ACCESS-ESM1.5'
     table = 'Amon'
     for var in CLIM_VARIABLES[table]:
@@ -257,25 +251,17 @@ def make_clim_plots()->None:
         elif var=='pr':
             aff_data *= SEC_IN_DAY
             ssp585_data *= SEC_IN_DAY
-        aff_mean = np.mean(aff_data, axis=0)
-        ssp585_mean = np.mean(ssp585_data, axis=0)
-        aff_std = np.std(aff_data, axis=0, ddof=1)
-        ssp585_std = np.std(ssp585_data, axis=0, ddof=1)
 
         # Plot
         years = list(range(2015, 2101))
-        plot_ensembles_clim(years, aff_data, aff_mean, aff_std, var)
-        plt.savefig(f'{PLOTS_DIR}/global/'+\
-                f'{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png', dpi=DPI)
+        plot_ensembles(years, aff_data, var)
+        plt.savefig(f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png', dpi=DPI)
         plt.close()
-        plot_ensembles_clim(years, ssp585_data, ssp585_mean, ssp585_std, var)
-        plt.savefig(f'{PLOTS_DIR}/global/'+\
-                f'{var}_{model}_esm-ssp585_ensembles.png', dpi=DPI)
+        plot_ensembles(years, ssp585_data, var)
+        plt.savefig(f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585_ensembles.png', dpi=DPI)
         plt.close()
-        plot_ensembles_clim(years, ssp585_data-aff_data, ssp585_mean-aff_mean,
-                aff_std, var)
-        plt.savefig(f'{PLOTS_DIR}/global/'+\
-                f'{var}_{model}_esm-ssp585_ensembles_diff.png', dpi=DPI)
+        plot_ensembles(years, ssp585_data-aff_data, var)
+        plt.savefig(f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585_ensembles_diff.png', dpi=DPI)
         plt.close()
 
 
@@ -283,7 +269,7 @@ def make_veg_maps()->None:
     """Create maps of ensemble mean anomaly for the difference of the afforestation experiment
     and the esm-ssp585 scenario.
     """
-    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
+    if not os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     for table in TABLES:
         for var in VARIABLES[table]:
             # Load the data.
@@ -296,7 +282,8 @@ def make_veg_maps()->None:
                 aff_data = np.ones((NENS,NLAT,NLON))*np.nan
                 ssp585_data = np.ones((NENS,NLAT,NLON))*np.nan
                 for e,ens in enumerate(ENSEMBLES):
-                    aff_file = '[ '+get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]+' ]'
+                    aff_file = '[ ' + \
+                            get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)[0]+' ]'
                     ssp585_file = '[ '+get_filename('C4MIP', 'esm-ssp585', ens, table, var)[0]+' ]'
                     aff_data[e,...] = cdo_load_anomaly_map(input=aff_file, var=var)
                     ssp585_data[e,...] = cdo_load_anomaly_map(input=ssp585_file, var=var)
@@ -325,7 +312,7 @@ def cdo_clim_map_load(var:str, input:str)->np.ma.MaskedArray:
 def make_clim_aff_only()->None:
     """Make plots of climate variables for where there are afforesed gridcells only.
     """
-    if os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
+    if not os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
     # Load data for only afforested grid cells.
     treeFrac = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
     NLAT = treeFrac.shape[0]
@@ -348,8 +335,8 @@ def make_clim_aff_only()->None:
         lats = nc.Dataset(aff_file[0], 'r').variables['lat'][:]
         coslats = np.cos(lats[:,None]*np.ones((NLAT,NLON)))
         clim_diff = np.nansum(clim_diff*coslats, axis=(-1,-2))/np.sum(coslats)
-
         np.save(f'{DATA_DIR}/{var}_aff_only.np', clim_diff.data)
+
         # Plot
         years = list(range(2015, 2015 + NTIMES))
         plt.plot(years, clim_diff.mean(axis=0), color='black')
@@ -365,7 +352,7 @@ if __name__ != 'analysis.plot_afforestation':
     make_clim_plots()
     make_clim_maps()
     make_veg_maps()
-    make_clim_aff_only()
+    #make_clim_aff_only()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')

@@ -38,7 +38,7 @@ else:
 import ipdb
 
 cdo = Cdo()
-cdo.debug = True
+cdo.debug = False
 
 OCEAN_VARIABLES = {
         'Omon':[
@@ -78,17 +78,25 @@ def cdo_load_ocean_flux(var:str, input:str)->np.ma.MaskedArray:
     return cdo.copy(input=input, returnCdf=True, options='-L').variables[var][:].squeeze()
 
 
-def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:str='flux')->None:
+def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var:str, label:str='flux')->None:
     """Create a plot of ocean carbon for all ensembles.
-    Input data is in CO2 but plot is converted to C 
+    Input data is in CO2 but plot is converted to C.
     """
     years = list(range(2015, 2015+NTIMES))
     plt.figure()
     diff = (aff_data - ssp585_data)*C_IN_CO2_RATIO
-    for e,ens in enumerate(ENSEMBLES):
-        plt.plot(years, diff[e,:], color='lightblue', alpha=0.5)
+    #for e,ens in enumerate(ENSEMBLES):
+    #    plt.plot(years, diff[e,:], color='lightblue', alpha=0.5)
+    plt.fill_between(
+            years,
+            diff.min(axis=0),
+            diff.max(axis=0),
+            color='lightblue',
+            alpha=0.7,
+            )
     plt.plot(years, diff.mean(axis=0), color='darkblue', label=f'{var} Aff. - SSP585')
-    plt.hlines(0, years[0], years[-1], color='black', linestyle='dashed')
+    plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
+    plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
     if label=='flux':
         plt.title('ACCESS-ESM1.5 Difference Ocean Downward Carbon flux')
@@ -96,7 +104,7 @@ def plot_ocean_carbon(aff_data:np.ndarray, ssp585_data:np.ndarray, var, label:st
     else:
         plt.title('ACCESS-ESM1.5 Difference Cumulative Ocean Carbon')
         plt.ylabel('$\Delta$C [Pg(C)]')
-    plt.legend()
+    #plt.legend()
     plt.savefig(f'{PLOTS_DIR}/{var}_ocean_carbon_aff_ssp585_{label}.png')
 
 

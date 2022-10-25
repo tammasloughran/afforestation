@@ -52,7 +52,7 @@ else:
 import ipdb
 
 cdo = Cdo()
-cdo.debug = True
+cdo.debug = False
 
 CO2_VARIABLES = {
         'Emon':'co23D', # CO2 concentration (mixing ratio) in kg/kg.
@@ -100,7 +100,9 @@ def load_archive_carbon(var:str, input:str)->np.ma.MaskedArray:
 
 
 def make_co2_plot()->None:
-    """Load the CO2 data either from netcdf files with CDO or numpy files and plot.
+    """Load the CO2 mixing ratio data and plot the concentration obsolute and difference.
+    Also plot the values converted to atmospheric mass of C, which assumes a fixed total mass of
+    the atmosphere.
     """
     aff_co2_data = np.ones((NENS,NTIMES))*np.nan
     ssp585_co2_data = np.ones((NENS,NTIMES))*np.nan
@@ -163,91 +165,117 @@ def make_co2_plot()->None:
             label='esm-ssp585',
             )
     plt.legend()
+    plt.title('Atmospheric concentration of CO$_2$')
     plt.xlabel('Year')
     plt.ylabel('CO$_2$ concentration (ppm)')
     plt.savefig(f'{PLOTS_DIR}/CO2_aff_and_ssp585.png')
 
+    # Plot the concentration difference.
+    fig = plt.figure()
+    years = list(range(2015, 2015+NTIMES))
+    diff = aff_co2_data - ssp585_co2_data
+    diff *= KGKG_TO_MOLMOL*MIL
+    plt.fill_between(years, diff.min(axis=0), diff.max(axis=0), color='royalblue', alpha=0.4)
+    plt.plot(years, diff.mean(axis=0), color='royalblue', label='aff - ssp585')
+    plt.hlines(0, years[0], years[-1], linewidth=0.5, color='black')
+    plt.xlim(left=years[0], right=years[-1])
+    plt.xlabel('Year')
+    plt.ylabel('$\Delta$ CO$_2$ (ppm)')
+    plt.title('Difference in Atmospheric concentration of CO$_2$')
+    plt.savefig(f'{PLOTS_DIR}/CO2_atm_ppm_diff.png')
+
     # Plot mass difference.
     fig = plt.figure()
-    for e,ens in enumerate(ENSEMBLES):
-        years = list(range(2015, 2015+NTIMES))
-        plt.plot(
-                years,
-                (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
-                color='royalblue',
-                linewidth=0.6,
-                alpha=0.4,
-                )
+    years = list(range(2015, 2015+NTIMES))
+    #for e,ens in enumerate(ENSEMBLES):
+    #    plt.plot(
+    #            years,
+    #            (aff_co2_data[e,:] - ssp585_co2_data[e,:])*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
+    #            color='royalblue',
+    #            linewidth=0.6,
+    #            alpha=0.4,
+    #            )
+    diff = aff_co2_data - ssp585_co2_data
+    diff *= (MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO
+    plt.fill_between(years, diff.min(axis=0), diff.max(axis=0), color='royalblue', alpha=0.4)
     plt.plot(
         years,
-        (aff_co2_data - ssp585_co2_data).mean(axis=0)*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
+        diff.mean(axis=0),
         color='royalblue',
         label='aff - ssp585',
         )
-    plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
-    plt.legend()
+    plt.hlines(0, years[0], years[-1], linewidth=0.5, color='black')
+    plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
     plt.ylabel('Carbon mass [Pg(C)]')
+    plt.title('Difference in Atmospheric Mass of C')
     plt.savefig(f'{PLOTS_DIR}/CO2_atm_mass_diff.png')
 
-    ## Carbon budget
-    # Ocean
-    for_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')*C_IN_CO2_RATIO
-    ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')*C_IN_CO2_RATIO
-    # Land
-    for_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
-    for_cland_flux = np.concatenate([np.repeat(np.nan, 10)[:,None], np.diff(for_cland, 1)], axis=1)
-    ssp585_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585_global.npy')
-    ssp585_cland_flux = np.concatenate(
-            [np.repeat(np.nan, 10)[:,None], np.diff(ssp585_cland, 1)], axis=1)
-    # Fossil fuel emissions
-    emissions_file = nc.Dataset(f'{DATA_DIR}/ssp585_emissions_global.nc', 'r')
-    ffemissions = emissions_file.variables['field1561'][1:].squeeze()*C_IN_CO2_RATIO
+    ### Carbon budget
+    # This is commented out because I wrote a new carbon budget using the correct variables
+    # from the ACCESS archive. See function make_carbon_budget_plot.
+    ## Ocean
+    #for_ocean = np.load(f'{DATA_DIR}/fgco2_aff_ocean_carbon_data.npy')*C_IN_CO2_RATIO
+    #ssp585_ocean = np.load(f'{DATA_DIR}/fgco2_ssp585_ocean_carbon_data.npy')*C_IN_CO2_RATIO
+    ## Land
+    #for_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_global.npy')
+    #for_cland_flux = np.concatenate([np.repeat(np.nan, 10)[:,None], np.diff(for_cland, 1)], axis=1)
+    #ssp585_cland = np.load(f'{DATA_DIR}/cLand_ACCESS-ESM1.5_esm-ssp585_global.npy')
+    #ssp585_cland_flux = np.concatenate(
+    #        [np.repeat(np.nan, 10)[:,None], np.diff(ssp585_cland, 1)], axis=1)
+    ## Fossil fuel emissions
+    #emissions_file = nc.Dataset(f'{DATA_DIR}/ssp585_emissions_global.nc', 'r')
+    #ffemissions = emissions_file.variables['field1561'][1:].squeeze()*C_IN_CO2_RATIO
 
-    # This is kind of cheating. I'm inferring the atmosphere component of the budget as the
-    # resiual of the other terms.
-    for_cland_flux_mean = for_cland_flux.mean(axis=0)
-    for_cland_flux_mean[0] = 0
-    ssp585_cland_flux_mean = ssp585_cland_flux.mean(axis=0)
-    for_ocean_mean = for_ocean.mean(axis=0)
-    ssp585_ocean_mean = ssp585_ocean.mean(axis=0)
-    for_atmosphere = ffemissions - for_cland_flux_mean - for_ocean_mean
-    ssp585_atmosphere = ffemissions - ssp585_cland_flux_mean - ssp585_ocean_mean
+    ## This is kind of cheating. I'm inferring the atmosphere component of the budget as the
+    ## resiual of the other terms.
+    #for_cland_flux_mean = for_cland_flux.mean(axis=0)
+    #for_cland_flux_mean[0] = 0
+    #ssp585_cland_flux_mean = ssp585_cland_flux.mean(axis=0)
+    #for_ocean_mean = for_ocean.mean(axis=0)
+    #ssp585_ocean_mean = ssp585_ocean.mean(axis=0)
+    #for_atmosphere = ffemissions - for_cland_flux_mean - for_ocean_mean
+    #ssp585_atmosphere = ffemissions - ssp585_cland_flux_mean - ssp585_ocean_mean
 
-    fig = plt.figure()
-    years = list(range(2015, 2015+NTIMES))
-    plt.fill_between(years, ffemissions, color='grey', label='Fossil fuel emissions')
-    plt.fill_between(
-            years, -1*for_atmosphere-for_ocean_mean-for_cland_flux_mean,
-            color='lightblue', label='Atmospheric accumulation')
-    plt.fill_between(years, -1*for_ocean_mean-for_cland_flux_mean, color='blue', label='Ocean sink')
-    plt.fill_between(years, -1*for_cland_flux_mean, color='green', label='Land sink')
-    plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
-    plt.legend(loc='lower left')
-    plt.xlabel('Year')
-    plt.ylabel('Carbon flux [Pg(C)/year]')
-    plt.savefig(f'{PLOTS_DIR}/carbon_budget_esm-ssp585-ssp126Lu.png')
+    #fig = plt.figure()
+    #years = list(range(2015, 2015+NTIMES))
+    #plt.fill_between(years, ffemissions, color='grey', label='Fossil fuel emissions')
+    #plt.fill_between(
+    #        years, -1*for_atmosphere-for_ocean_mean-for_cland_flux_mean,
+    #        color='lightblue', label='Atmospheric accumulation')
+    #plt.fill_between(years, -1*for_ocean_mean-for_cland_flux_mean, color='blue', label='Ocean sink')
+    #plt.fill_between(years, -1*for_cland_flux_mean, color='green', label='Land sink')
+    #plt.hlines(0, years[0], years[-1], linestyle='dashed', color='black')
+    #plt.legend(loc='lower left')
+    #plt.xlabel('Year')
+    #plt.ylabel('Carbon flux [Pg(C)/year]')
+    #plt.savefig(f'{PLOTS_DIR}/carbon_budget_esm-ssp585-ssp126Lu.png')
 
-    plt.figure()
-    plt.plot(
-            years[1:],
-            np.diff(aff_co2_data.mean(axis=0), axis=0)*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
-            color='blue',
-            label='My calculated C to atm. converted from kg/kg to Pg(C)',
-            )
-    ssp585_atmosphere[0] = 0
-    plt.plot(
-            years,
-            for_atmosphere,
-            color='red',
-            label='Inferred residual (EFF - SOCEAN - SLAND)',
-            )
-    plt.title("GATM esm-ssp585")
-    plt.legend()
-    plt.show()
+    # Plot the difference between my estimated GATM and the inferred residual to see how wrong
+    # I am. Spoiler: I'm quite wrong.
+    #plt.figure()
+    #plt.plot(
+    #        years[1:],
+    #        np.diff(aff_co2_data.mean(axis=0), axis=0)*(MASS_ATM/KG_IN_PG)*C_IN_CO2_RATIO,
+    #        color='blue',
+    #        label='My calculated C to atm. converted from kg/kg to Pg(C)',
+    #        )
+    #ssp585_atmosphere[0] = 0
+    #plt.plot(
+    #        years,
+    #        for_atmosphere,
+    #        color='red',
+    #        label='Inferred residual (EFF - SOCEAN - SLAND)',
+    #        )
+    #plt.title("GATM esm-ssp585")
+    #plt.legend()
+    #plt.show()
 
 
-def make_carbon_budget_plot():
+def make_carbon_budget_plot()->None:
+    """Load emissions, and natural sinks data from the ACCESS archive data and plot the cabon
+    budget for the esm-ssp595-ssp126Lu experiment.
+    """
     variables = [
             'socean',
             'sland',
@@ -281,6 +309,7 @@ def make_carbon_budget_plot():
     plt.fill_between(years, gatm, color='lightblue', label='Atmospheric accumulation')
     plt.fill_between(years, socean, color='blue', label='Ocean sink')
     plt.fill_between(years, sland, color='green', label='Land sink')
+    plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Years')
     plt.ylabel('Pg(C)/year')
     plt.legend(loc='upper left')
@@ -289,7 +318,7 @@ def make_carbon_budget_plot():
 
 
 if __name__ != 'analysis.plot_atmosphere':
-    #make_co2_plot()
+    make_co2_plot()
     make_carbon_budget_plot()
 
     # Clean up temp files.
