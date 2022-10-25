@@ -19,37 +19,39 @@ from shapely.errors import ShapelyDeprecationWarning
 
 if __name__ == 'analysis.plot_afforestation':
     # plot_afforestation.py imported as a module of the analysis package.
-    from analysis.baseline import global_sum_baselines
     from analysis.cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
-    from analysis.cmip_files import get_filename
+    from analysis.cmip_files import get_filename, LAND_FRAC_FILE
     from analysis.jaisnb import jaisnb
     from analysis.constants import (
             CLIM_VARIABLES,
             DATA_DIR,
             DPI,
             ENSEMBLES,
+            KG_IN_PG,
             M2_IN_MILKM2,
             NENS,
             PLOTS_DIR,
             SEC_IN_DAY,
+            SEC_IN_YEAR,
             TABLES,
             VARIABLES,
             )
 else:
     # plot_afforestation.py is main program or imported as a module from another script.
-    from baseline import global_sum_baselines
     from cdo_calc_load import cdo_fetch_ensembles, cdo_load_anomaly_map
-    from cmip_files import get_filename
+    from cmip_files import get_filename, LAND_FRAC_FILE
     from jaisnb import jaisnb
     from constants import (
             CLIM_VARIABLES,
             DATA_DIR,
             DPI,
             ENSEMBLES,
+            KG_IN_PG,
             M2_IN_MILKM2,
             NENS,
             PLOTS_DIR,
             SEC_IN_DAY,
+            SEC_IN_YEAR,
             TABLES,
             VARIABLES,
             )
@@ -90,6 +92,14 @@ load_npy_files = True # Uncomment to override previous check.
 treeFrac = np.load(f'{DATA_DIR}/treeFrac_area_anomaly.npy')/M2_IN_MILKM2
 NLAT = treeFrac.shape[0]
 NLON = treeFrac.shape[1]
+
+
+def reference_period(infile1:str, infile2:str, outfile:str, pyear:list=[2005, 2024]):
+    """Extract a map of the mean over the reference period using CDO.
+    The reference period spans 20 years centred on the start of the future simulation (2015), so
+    [2005, 2024].
+    """
+    cdo.timmean(input=f'-selyear,{pyear[0]}/{pyear[1]} -cat '+infile1+' '+infile2, output=outfile)
 
 
 def plot_ensembles(years:np.ndarray, data:np.ndarray, var:str)->None:
@@ -140,6 +150,51 @@ def make_veg_plots()->None:
     """Load vegetation data and run plotting routine.
     """
     if not os.path.exists(f'{PLOTS_DIR}/global'): os.mkdir(f'{PLOTS_DIR}/global')
+
+    # Options.
+    ## Recalculate the ensemble means from the CMORized CMIP6 data. If not, assume it's been done.
+    recalculate_ens_mean = False
+
+    # Local variables.
+    global_sum_baselines = {}
+    # Calculate the maps of base period means for each variable and ensemble member.
+    print("\rCalculating baseline values.")
+    for table in TABLES:
+        for var in VARIABLES[table]:
+            if recalculate_ens_mean:
+                for ens in ENSEMBLES:
+                    esmhist_files = get_filename('CMIP', 'esm-hist', ens, table, var)
+                    aff_files = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)
+                    output_file = f'{var}_ACCESS-ESM1-5_esm-hist-aff_r{ens}i1p1f1_200501-202412mean.nc'
+                    reference_period(esmhist_files[-1], aff_files[0], output_file)
+                # The analysis for all ensemble members should be with respect to the same baseline
+                # value. So I calculate the ensemble mean here.
+                cdo.ensmean(input=f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc',
+                        output=f'{DATA_DIR}/' \
+                                f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
+                # Clean up unneeded ensemble files.
+                efiles = glob.glob(f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc')
+                for f in efiles:
+                    os.remove(f)
+            # Calculate the global sum of each variable's ensemble mean. If a flux, convert to /year.
+            # Need to also multiply by the grid cell area and land fraction.
+            # LAND_FRAC_FILE is in % so must be divided by 100 first.
+            # kg m-2 s-2 -> *land_frac*landarea*SEC_IN_YEAR/KG_IN_PG -> Pg/year
+            if var in ['cVeg','cLitter','cSoil','cLand']:
+                time_units = 1
+            else:
+                time_units = SEC_IN_YEAR
+            global_sum_baselines[var] = cdo.divc(str(KG_IN_PG),
+                    input=f'-mulc,{time_units} -fldsum -mul -mul ' \
+                            f'{DATA_DIR}/' \
+                            f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc ' \
+                            f'-divc,100 {LAND_FRAC_FILE} -gridarea {LAND_FRAC_FILE}',
+                    options='-L',
+                    returnCdf=True).variables[var][:][0,0,0]
+
+    print("Global sum baseline values:")
+    print(global_sum_baselines)
+
     model = 'ACCESS-ESM1.5'
     for table in TABLES:
         for var in VARIABLES[table]:
