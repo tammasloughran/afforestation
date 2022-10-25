@@ -318,6 +318,7 @@ def make_model_plots()->None:
                 axes = axes.flatten()
                 years = list(range(2015, 2015 + ens_mean.shape[0]))
                 axes[0].plot(years, ens_mean, label='ACCESS-ESM1-5')
+                axes[0].fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
                 trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
                         diff.mean(axis=0), # ACCESS-ESM1.5
                         alpha=0.05,

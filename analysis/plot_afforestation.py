@@ -102,7 +102,7 @@ def reference_period(infile1:str, infile2:str, outfile:str, pyear:list=[2005, 20
     cdo.timmean(input=f'-selyear,{pyear[0]}/{pyear[1]} -cat '+infile1+' '+infile2, output=outfile)
 
 
-def plot_ensembles(years:np.ndarray, data:np.ndarray, var:str)->None:
+def plot_ensembles(years:np.ndarray, data:np.ndarray, var:str, hlines:bool=True)->None:
     """Plot all ensemble members with ensemble mean and standard deviation.
     """
     model = 'ACCESS-ESM1.5'
@@ -118,7 +118,7 @@ def plot_ensembles(years:np.ndarray, data:np.ndarray, var:str)->None:
             label="Ensemble range",
             alpha=0.4,
             )
-    plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
+    if hlines: plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
     plt.xlim(left=years[0], right=years[-1])
     plt.xlabel('Year')
     if var[0]=='c': plt.ylabel(f'{var.upper()} anomaly [Pg(C)]')
@@ -132,15 +132,19 @@ def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='
     """Plot a map of the difference between the start of the future period and the last year.
     """
     fig = plt.figure()
-    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax = plt.axes(projection=ccrs.Robinson())
     max_abs = np.abs(data).max()
     plt.pcolormesh(lons, lats, data, cmap=jaisnb, vmax=max_abs, vmin=-max_abs,
             transform=ccrs.PlateCarree())
     ax.coastlines()
     if var in ['cVeg','cLitter','cSoil','cLand']:
-        plt.colorbar(label='Pg(C)', orientation='horizontal')
+        plt.colorbar(label='Pg(C)', orientation='horizontal', pad=0.05)
+    elif var in ['pr']:
+        plt.colorbar(label='mm/day', orientation='horizontal', pad=0.05)
+    elif var in ['tas']:
+        plt.colorbar(label='°C', orientation='horizontal', pad=0.05)
     else:
-        plt.colorbar(label='Pg(C)/year', orientation='horizontal')
+        plt.colorbar(label='Pg(C)/year', orientation='horizontal', pad=0.05)
     plt.title(var+' '+label)
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/global/{var}_ACCESS-ESM1.5_aff-esm-ssp585_{label}.png', dpi=DPI)
@@ -165,13 +169,18 @@ def make_veg_plots()->None:
                 for ens in ENSEMBLES:
                     esmhist_files = get_filename('CMIP', 'esm-hist', ens, table, var)
                     aff_files = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', ens, table, var)
-                    output_file = f'{var}_ACCESS-ESM1-5_esm-hist-aff_r{ens}i1p1f1_200501-202412mean.nc'
-                    reference_period(esmhist_files[-1], aff_files[0], output_file)
+                    reference_period(
+                            esmhist_files[-1],
+                            aff_files[0],
+                            f'{var}_ACCESS-ESM1-5_esm-hist-aff_r{ens}i1p1f1_200501-202412mean.nc'
+                            )
                 # The analysis for all ensemble members should be with respect to the same baseline
                 # value. So I calculate the ensemble mean here.
-                cdo.ensmean(input=f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc',
+                cdo.ensmean(
+                        input=f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc',
                         output=f'{DATA_DIR}/' \
-                                f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc')
+                                f'{var}_ACCESS-ESM1-5_esm-hist-aff_ensmean_200501-202412mean.nc',
+                        )
                 # Clean up unneeded ensemble files.
                 efiles = glob.glob(f'{var}_ACCESS-ESM1-5_esm-hist-aff_r*i1p1f1_200501-202412mean.nc')
                 for f in efiles:
@@ -226,7 +235,7 @@ def make_veg_plots()->None:
                     )
             plt.close()
 
-            # Plot the graphs for anomalies relative to the esm-ssp585
+            # Plot the graphs for difference relative to the esm-ssp585
             plot_ensembles(years, data_aff_diff, var)
             plt.savefig(
                     f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585-ssp126Lu_ensembles_diff.png',
@@ -309,13 +318,13 @@ def make_clim_plots()->None:
 
         # Plot
         years = list(range(2015, 2101))
-        plot_ensembles(years, aff_data, var)
+        plot_ensembles(years, aff_data, var, hlines=False)
         plt.savefig(f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585-ssp126Lu_ensembles.png', dpi=DPI)
         plt.close()
-        plot_ensembles(years, ssp585_data, var)
+        plot_ensembles(years, ssp585_data, var, hlines=False)
         plt.savefig(f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585_ensembles.png', dpi=DPI)
         plt.close()
-        plot_ensembles(years, ssp585_data-aff_data, var)
+        plot_ensembles(years, ssp585_data-aff_data, var, hlines=True)
         plt.savefig(f'{PLOTS_DIR}/global/{var}_{model}_esm-ssp585_ensembles_diff.png', dpi=DPI)
         plt.close()
 
@@ -407,7 +416,7 @@ if __name__ != 'analysis.plot_afforestation':
     make_clim_plots()
     make_clim_maps()
     make_veg_maps()
-    #make_clim_aff_only()
+    #make_clim_aff_only() # This didn't really work out.
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')

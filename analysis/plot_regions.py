@@ -95,7 +95,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -301,7 +301,7 @@ def make_regional_plots()->None:
         # Climate Variables
         table = 'Amon'
         for var in CLIM_VARIABLES[table]:
-            print("Processing", var)
+            print("    - Processing", var)
             # Load the afforestation data.
             if load_npy_files:
                 aff_data = np.load(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_{rname}.npy')
@@ -380,7 +380,7 @@ def make_regional_plots()->None:
 
 
 if __name__ != 'analysis.plot_regions':
-    plot_regions_map()
+    #plot_regions_map()
     make_regional_plots()
 
     # Clean up

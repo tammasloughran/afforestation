@@ -3,12 +3,12 @@
 """
 import numpy as np
 from markdownTable import markdownTable
-if __name__ == 'analysis.plot_regions':
+try:
     # plot_afforestation.py imported as a module of the analysis package.
     from analysis.constants import (
             DATA_DIR,
             )
-else:
+except:
     # plot_afforestation.py is main program or imported as a module from another script.
     from constants import (
             DATA_DIR,

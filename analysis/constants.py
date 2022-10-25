@@ -3,7 +3,7 @@ C_IN_CO2_RATIO = 0.27291 # 0.27291 %mass of C in co2 to convert from co2 to C
 CLIM_VARIABLES = {
         'Amon':[
             'tas',
-            #'pr',
+            'pr',
             ],
         'Emon':[]}
 DATA_DIR = './data'
