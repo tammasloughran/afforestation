@@ -112,11 +112,11 @@ SSP585_ENSEMBLES = {
         }
 VARIABLES = {
         'Lmon':[
-            #'gpp',
-            #'npp',
-            #'ra',
-            #'rh',
-            #'nbp',
+            'gpp',
+            'npp',
+            'ra',
+            'rh',
+            'nbp',
             'cVeg',
             'cLitter',
             ],
@@ -151,6 +151,7 @@ def make_model_plots()->None:
             ssp585_data = {}
             for instit in MODELS.keys():
                 if instit=='MOHC' and var=='cLitter': continue # Skip missing data.
+                if instit=='BCC' and var=='nbp': continue # Skip missing data.
                 if instit=='NOAA-GFDL' and not table=='Amon': continue # GFDL only has pr and tas
                 print('    -', instit, MODELS[instit])
                 # Create the gridarea.nc file for this model.
@@ -187,6 +188,29 @@ def make_model_plots()->None:
                 model_land_frac = f'/g/data/p66/tfl561/CMIP6/C4MIP/{instit}/{MODELS[instit]}' \
                         f'/esm-ssp585/{SSP585_ENSEMBLES[instit]}/fx/sftlf/gn/latest' \
                         f'/sftlf_fx_{MODELS[instit]}_esm-ssp585_{SSP585_ENSEMBLES[instit]}_gn.nc'
+                if instit=='BCC': # BCC land frac file is 0-1
+                    frac_unit = 1
+                else:
+                    frac_unit = 100
+
+
+                # The loader function needs to be defined in this loop to account
+                # for the model resolution.
+                @cdod.cdo_cat(input2='')
+                @cdod.cdo_mul(input2=model_land_frac)
+                @cdod.cdo_divc(str(frac_unit))
+                @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea_{MODELS[instit]}.nc')
+                @cdod.cdo_fldsum
+                @cdod.cdo_mulc(str(SEC_IN_DAY))
+                @cdod.cdo_muldpm
+                @cdod.cdo_yearsum
+                @cdod.cdo_divc(str(KG_IN_PG))
+                def cdo_flux_load_model(var:str, input:str)->np.ma.MaskedArray:
+                    return cdo.copy(
+                            input=input,
+                            options='-L',
+                            returnCdf=True,
+                            ).variables[var][:].squeeze()
 
 
                 @cdod.cdo_cat(input2='')
@@ -204,6 +228,8 @@ def make_model_plots()->None:
                 # Select pool or climate loader for this variable.
                 if var in ['pr', 'tas']:
                     loader = cdo_clim_load_model
+                elif var in ['gpp','npp','nbp','ra','rh']:
+                    loader = cdo_flux_load_model
                 else:
                     loader = cdo_pool_load_model
 
@@ -296,8 +322,12 @@ def make_model_plots()->None:
                 # Plot other models.
                 for m in MODELS.keys():
                     if m=='MOHC' and var=='cLitter': continue
+                    if m=='BCC' and var=='nbp': continue # Skip missing data.
                     if m=='NOAA-GFDL': continue # GFDL only has pr and tas
-                    diff_model = aff_data[m] - ssp585_data[m]
+                    try:
+                        diff_model = aff_data[m] - ssp585_data[m]
+                    except:
+                        ipdb.set_trace()
                     if m=='CCma' and (var=='cVeg' or var=='cSoil'):
                         # CanESM5 cVeg has a large initial bias in cVeg and cSoil. Remove this bias.
                         diff_model = diff_model - diff_model[0]
@@ -306,7 +336,10 @@ def make_model_plots()->None:
                 # Plot features.
                 plt.xlim(left=years[0], right=years[-1])
                 plt.hlines(0, years[0], years[-1], color='black', linewidth=0.5)
-                plt.ylabel('Pg(C)')
+                if var in ['gpp', 'npp', 'nbp', 'ra', 'rh']:
+                    plt.ylabel('Pg(C)/year')
+                else:
+                    plt.ylabel('Pg(C)')
                 plt.xlabel('Year')
                 plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
                 plt.legend()
@@ -403,6 +436,7 @@ def make_model_plots()->None:
             #    plt.plot(years, access_aff[e,:], color='gray', alpha=0.4)
             for m in MODELS.keys():
                 if m=='MOHC' and var=='cLitter': continue # Skip missing data.
+                if m=='BCC' and var=='nbp': continue # Skip missing data.
                 if m=='NOAA-GFDL' and var not in ['tas', 'pr']: continue # GFDL only has pr and tas
                 years = list(range(2015, 2015 + aff_data[m].shape[0]))
                 plt.plot(years, aff_data[m], color=COLORS[m], label=MODELS[m])
