@@ -85,7 +85,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = True # Uncomment to override previous check.
+#load_npy_files = True # Uncomment to override previous check.
 
 
 # Load data for only afforested grid cells.
@@ -131,10 +131,17 @@ def plot_ensembles(years:np.ndarray, data:np.ndarray, var:str, hlines:bool=True)
 def plot_map(lons:np.ndarray, lats:np.ndarray, data:np.ndarray, var:str, label='')->None:
     """Plot a map of the difference between the start of the future period and the last year.
     """
+    # Slect the correct colormap
+    if var=='tas':
+        cmap = 'bwr' # Diverging blue, white red.
+    elif var=='pr':
+        cmap = 'BrBG' # Diverging Brown to blue-green.
+    else:
+        cmap = jaisnb # Diverging colorful.
     fig = plt.figure()
     ax = plt.axes(projection=ccrs.Robinson())
     max_abs = np.abs(data).max()
-    plt.pcolormesh(lons, lats, data, cmap=jaisnb, vmax=max_abs, vmin=-max_abs,
+    plt.pcolormesh(lons, lats, data, cmap=cmap, vmax=max_abs, vmin=-max_abs,
             transform=ccrs.PlateCarree())
     ax.coastlines()
     if var in ['cVeg','cLitter','cSoil','cLand']:

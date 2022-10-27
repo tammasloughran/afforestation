@@ -19,7 +19,7 @@ else:
                                     SEC_IN_DAY, SEC_IN_YEAR, TABLES, VARIABLES)
 
 cdo = cdo_module.Cdo(tempdir='.')
-cdo.debug = True
+cdo.debug = False
 
 
 def cdo_mul_land_area(cdo_func):
@@ -48,13 +48,15 @@ def cdo_sec2mon(cdo_func:FunctionType)->np.ma.MaskedArray:
 
 
 @cdod.cdo_cat(input2='')
-@cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+#@cdod.cdo_masklonlatbox('-180','180','-60','90') # Mask to remove Antarctica.
+#@cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for land only. Comment for land+ocean.
 @cdod.cdo_fldmean(weights='TRUE')
 @cdod.cdo_yearmonmean
 def cdo_clim_load(var:str, input:str)->np.ma.MaskedArray:
     """Load global climate variable using CDO. Please refer to the following decorators:
     @cdod.cdo_cat(input2='')
-    @cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+    #@cdod.cdo_masklonlatbox('-180','180','-60','90') # Mask to remove Antarctica.
+    #@cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for land only. Comment for land+ocean.
     @cdod.cdo_fldmean(weights='TRUE')
     @cdod.cdo_yearmonmean
     """

@@ -69,7 +69,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = False # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
@@ -113,16 +113,16 @@ SSP585_ENSEMBLES = {
 VARIABLES = {
         'Lmon':[
             'gpp',
+            'nbp',
             'npp',
             'ra',
             'rh',
-            'nbp',
-            'cVeg',
             'cLitter',
+            'cVeg',
             ],
         'Emon':[
-            'cSoil',
             'cLand',
+            'cSoil',
             ],
         'Amon':[
             'pr',
@@ -169,22 +169,6 @@ def make_model_plots()->None:
                             )[0]
                     cdo.gridarea(input=afile, output=f'{DATA_DIR}/gridarea_{MODELS[instit]}.nc')
 
-
-                # The loader function needs to be defined in this loop to account
-                # for the model resolution.
-                @cdod.cdo_cat(input2='')
-                @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea_{MODELS[instit]}.nc')
-                @cdod.cdo_fldsum
-                @cdod.cdo_yearmonmean
-                @cdod.cdo_divc(str(KG_IN_PG))
-                def cdo_pool_load_model(var:str, input:str)->np.ma.MaskedArray:
-                    return cdo.copy(
-                            input=input,
-                            options='-L',
-                            returnCdf=True,
-                            ).variables[var][:].squeeze()
-
-
                 model_land_frac = f'/g/data/p66/tfl561/CMIP6/C4MIP/{instit}/{MODELS[instit]}' \
                         f'/esm-ssp585/{SSP585_ENSEMBLES[instit]}/fx/sftlf/gn/latest' \
                         f'/sftlf_fx_{MODELS[instit]}_esm-ssp585_{SSP585_ENSEMBLES[instit]}_gn.nc'
@@ -194,8 +178,33 @@ def make_model_plots()->None:
                     frac_unit = 100
 
 
-                # The loader function needs to be defined in this loop to account
-                # for the model resolution.
+                # The loader functions need to be defined in this loop to account for the model
+                # resolution.
+                @cdod.cdo_cat(input2='')
+                @cdod.cdo_mul(input2=model_land_frac)
+                @cdod.cdo_divc(str(frac_unit))
+                @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea_{MODELS[instit]}.nc')
+                @cdod.cdo_fldsum
+                @cdod.cdo_yearmonmean
+                @cdod.cdo_divc(str(KG_IN_PG))
+                def cdo_pool_load_model(var:str, input:str)->np.ma.MaskedArray:
+                    """Load global climate variable using CDO. Please refer to the following
+                    decorators:
+                    @cdod.cdo_cat(input2='')
+                    @cdod.cdo_mul(input2=model_land_frac)
+                    @cdod.cdo_divc(str(frac_unit))
+                    @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea_{MODELS[instit]}.nc')
+                    @cdod.cdo_fldsum
+                    @cdod.cdo_yearmonmean
+                    @cdod.cdo_divc(str(KG_IN_PG))
+                    """
+                    return cdo.copy(
+                            input=input,
+                            options='-L',
+                            returnCdf=True,
+                            ).variables[var][:].squeeze()
+
+
                 @cdod.cdo_cat(input2='')
                 @cdod.cdo_mul(input2=model_land_frac)
                 @cdod.cdo_divc(str(frac_unit))
@@ -206,6 +215,18 @@ def make_model_plots()->None:
                 @cdod.cdo_yearsum
                 @cdod.cdo_divc(str(KG_IN_PG))
                 def cdo_flux_load_model(var:str, input:str)->np.ma.MaskedArray:
+                    """Load global climate variable using CDO. Please refer to the following
+                    decorators:
+                    @cdod.cdo_cat(input2='')
+                    @cdod.cdo_mul(input2=model_land_frac)
+                    @cdod.cdo_divc(str(frac_unit))
+                    @cdod.cdo_mul(input2=f'{DATA_DIR}/gridarea_{MODELS[instit]}.nc')
+                    @cdod.cdo_fldsum
+                    @cdod.cdo_mulc(str(SEC_IN_DAY))
+                    @cdod.cdo_muldpm
+                    @cdod.cdo_yearsum
+                    @cdod.cdo_divc(str(KG_IN_PG))
+                    """
                     return cdo.copy(
                             input=input,
                             options='-L',
@@ -214,10 +235,19 @@ def make_model_plots()->None:
 
 
                 @cdod.cdo_cat(input2='')
-                @cdod.cdo_ifthen(input1=model_land_frac)
-                @cdod.cdo_fldmean()
+                #@cdod.cdo_masklonlatbox('-180','180','-60','90') # Exclude Antarctica
+                #@cdod.cdo_ifthen(input1=model_land_frac) # Land only. Comment for land+ocean
+                @cdod.cdo_fldmean(weights='TRUE')
                 @cdod.cdo_yearmonmean
                 def cdo_clim_load_model(var:str, input:str)->np.ma.MaskedArray:
+                    """Load global climate variable using CDO. Please refer to the following
+                    decorators:
+                    @cdod.cdo_cat(input2='')
+                    #@cdod.cdo_masklonlatbox('-180','180','-60','90') # Mask to remove Antarctica.
+                    @cdod.cdo_ifthen(input1=LAND_FRAC_FILE) # Mask for climate over land only.
+                    @cdod.cdo_fldmean(weights='TRUE')
+                    @cdod.cdo_yearmonmean
+                    """
                     return cdo.copy(
                             input=input,
                             options='-L',
@@ -269,11 +299,12 @@ def make_model_plots()->None:
                     aff_data[instit] = np.load(
                             f'{DATA_DIR}/{var}_{MODELS[instit]}_aff_global.npy',
                             )
-                    if var=='tas': aff_data[instit] -= 273.15
                     ssp585_data[instit] = np.load(
                             f'{DATA_DIR}/{var}_{MODELS[instit]}_ssp585_global.npy',
                             )
-                    if var=='tas': ssp585_data[instit] -= 273.15
+                # Correct units.
+                if var=='tas' and aff_data[instit][0]>100: aff_data[instit] -= 273.15
+                if var=='tas' and ssp585_data[instit][0]>100: ssp585_data[instit] -= 273.15
 
                 # Aggregate soil and litter pools
                 if var=='cSoil':
