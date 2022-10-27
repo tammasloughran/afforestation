@@ -477,6 +477,8 @@ def make_model_plots()->None:
                 plt.ylabel('Temperature (°C)')
             elif var=='pr':
                 plt.ylabel('Precipitation (mm/day)')
+            elif var in ['gpp','npp','ra','rh','nbp']:
+                plt.ylabel('Pg(C)/year')
             else:
                 plt.ylabel('Pg(C)')
             plt.xlabel('Year')
