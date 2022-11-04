@@ -7,8 +7,9 @@ __all__ = [
         'plot_atmosphere',
         'plot_histograms',
         'plot_land_cover_fractions',
+        'plot_model_trees',
         'plot_models',
         'plot_ocean',
         'plot_regions',
-        'plot_temp_lai'
+        'plot_temp_lai',
         ]

@@ -39,6 +39,7 @@ else:
 
 warnings.filterwarnings(action='ignore', category=ShapelyDeprecationWarning)
 warnings.filterwarnings(action='ignore', category=stats.SpearmanRConstantInputWarning)
+warnings.filterwarnings(action='ignore', category=RuntimeWarning)
 
 files = glob.glob('./*')
 if PLOTS_DIR not in files:

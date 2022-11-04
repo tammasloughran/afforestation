@@ -32,6 +32,9 @@ from ananlysis.plot_histograms import (
 from analysis.cstock_stats import (
         print_stats,
         )
+from analysis.plot_model_trees import (
+        make_tree_frac_plots,
+        )
 
 files = os.listdir('.')
 if 'data' not in files: od.mkdir(DATA_DIR)
@@ -53,6 +56,7 @@ def main():
     make_model_plots()
     make_histogram_plots()
     print_stats()
+    make_tree_frac_plots()
 
 
 sys.exit(main())

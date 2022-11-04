@@ -429,7 +429,7 @@ def make_model_plots()->None:
                     axes[i+1].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 # This disables the lower right subfigure. Might need when adding/removing models.
                 #axes[7].set_axis_off()
-                # Add invidible subplot for common axes labels.
+                # Add invisible subplot for common axes labels.
                 fig.add_subplot(111, frameon=False)
                 plt.tick_params(
                         labelcolor='none',
