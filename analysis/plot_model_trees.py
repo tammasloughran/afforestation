@@ -20,10 +20,10 @@ import shapely
 
 if __name__ == 'analysis.plot_model_trees':
     from analysis.cmip_files import get_filenames
-    from analysis.constants import DATA_DIR
+    from analysis.constants import DATA_DIR, PLOTS_DIR, DPI
 else:
     from cmip_files import get_filenames
-    from constants import DATA_DIR
+    from constants import DATA_DIR, PLOTS_DIR, DPI
 
 warnings.filterwarnings('ignore', category=FutureWarning, module='pandas')
 warnings.filterwarnings('ignore', category=shapely.errors.ShapelyDeprecationWarning)
@@ -98,7 +98,7 @@ def plot_global_sum_area()->None:
     plt.ylabel('Area (million km$^2$)')
     plt.title('Tree area')
     plt.legend()
-    plt.savefig('tree_area_ssp126_all_models.png', dpi=200)
+    plt.savefig(f'{PLOTS_DIR}/tree_area_ssp126_all_models_global_sum.png', dpi=DPI)
 
 
 def plot_global_mean_frac()->None:
@@ -128,7 +128,7 @@ def plot_global_mean_frac()->None:
     plt.ylabel('Fraction %')
     plt.title('Tree fraction')
     plt.legend()
-    plt.savefig('tree_fraction_ssp126_all_models_globalmean.png', dpi=200)
+    plt.savefig(f'{PLOTS_DIR}/tree_fraction_ssp126_all_models_globalmean.png', dpi=DPI)
 
 
 def plot_area_by_lat()->None:
@@ -183,7 +183,7 @@ def plot_area_by_lat()->None:
     plt.ylabel('Latitude °N')
     cbar_ax = fig.add_axes([0.1, 0.085, 0.85, 0.04])
     plt.colorbar(cax=cbar_ax, label='Area (million km$^2$)', orientation='horizontal', pad=0.05)
-    plt.savefig('tree_area_zonsum_ssp126_all_models.png', dpi=200)
+    plt.savefig(f'{PLOTS_DIR}/tree_area_ssp126_all_models_zonsum.png', dpi=DPI)
 
 
 def plot_frac_by_lat()->None:
@@ -236,7 +236,7 @@ def plot_frac_by_lat()->None:
     plt.ylabel('Latitude °N')
     cbar_ax = fig.add_axes([0.1, 0.085, 0.85, 0.04])
     plt.colorbar(cax=cbar_ax, label='Fraction %', orientation='horizontal', pad=0.05)
-    plt.savefig('tree_area_zonsum_ssp126_all_models.png', dpi=200)
+    plt.savefig(f'{PLOTS_DIR}/tree_area_ssp126_all_models_zonmean.png', dpi=DPI)
 
 
 def plot_map_tree_area_change()->None:
@@ -293,7 +293,7 @@ def plot_map_tree_area_change()->None:
             orientation='horizontal',
             pad=0.05,
             )
-    plt.show()
+    plt.savefig(f'{PLOTS_DIR}/tree_area_map_2015-2100_delta.png', dpi=DPI)
 
 
 def make_tree_frac_plots()->None:
