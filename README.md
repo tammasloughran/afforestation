@@ -16,6 +16,7 @@
 │   ├── plot_histograms.py      Histograms plots.
 │   ├── plot_land_cover_fractions.py Plotting script for land cover types.
 │   ├── plot_models.py          Plotting script for model intercomparison.
+│   ├── plot_model_trees.py     Plotting script for model intercomparison of treeFrac.
 │   ├── plot_ocean.py           Plotting for ocean.
 │   ├── plot_regions.py         Plotting for regional analysis.
 │   └── plot_temp_lai.py        Temperature and LAI correlation.
