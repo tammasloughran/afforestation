@@ -50,7 +50,7 @@ Forests cover approximately 31\% of the global land surface (cite FAO) and are r
 Forestation is therefore often thought of as a viable strategy to remove CO$_2$ from the atmosphere and mitigate global warming.
 In order to effectively limit global warming to below 2°C consistent with the Paris Agreement, there must be not only a reduction of fossil fuel emissions, but also CO$_2$ removal to offset industrial and agricultural activities that are dificult to decarbonize.
 There must also be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
-This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation, either as reforestation when damaged forests are restored or as afforestation of lands were not previously occupied by forest.
+This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation, either as reforestation when degraded forests are restored, or as afforestation of lands that were not previously occupied by forest.
 
 Forestation and deforrestation affect he climate in two main ways.
 Firstly by biogeochemical effects, i.e. changes to the global carbon cycle and carbon storage pools that impact the radiative absorption of the atmosphere.
@@ -67,8 +67,13 @@ However, such simplified estimates assume that the land carbon storage is stable
 More sophisticated modelling studies better represent the complexity of the net effects of biogeophysical and biogeochemical impacts.
 For example, \cite{sonntag_reforestation_2016} quantified the CO$_2$ removal potential using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the ``forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
-They find that a decrease in 85 ppm (215 Pg(C)) of atmospheric CO$_2$ concentrations by 2100 from forrestation results in a cooling of 0.27 K globally.
-Maybe mention  \cite{sonntag_quantifying_2018} as well?
+They find that a decrease in 85 ppm (215 Pg(C)) of atmospheric CO$_2$ concentrations by 2100 from forrestation results in a cooling of 0.27 K globally. \footnote{Maybe mention Sonntag et al 2018 here as well?}
+
+Historically, there has been substantial deforestation in temperate forests of Eurasia and North America and in the last few decades deforrestation has been foccused on the tropics (\cite{goldewijk_estimating_2001}).
+The net effect of deforestation is to cool the climate globally due to an increase in albedo  (\cite{davin_climatic_2010}).
+\cite{boysen_global_2020} show a cooling of -0.22$\pm$0.2 $^{\circ}$C among 9 climate models in idealized simulations.
+\cite{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incident of hot extremes by 5.5-0.9\%. \footnote{Still not sure which stat from this paper to include here.}
+However, the effect of future afforestation mat not necessarity be merely the inverse of the effect of future deforrestation.
 
 This study aims to quantify the CO$_2$ removal potential of the forestation strategy using CMIP6 models, both at the global and regional scale.
 The CMIP6 experiments present a standard set of experiments to draw on for understanding model uncertainty in the climate mitigation potential of forrestation.
@@ -117,32 +122,27 @@ By taking the difference between the forestation simulation and the \textit{esm-
 The land-use change dataset used in all CMIP6 experiments is the Land-use Harmonization dataset version 2 (LUH2; \cite{hurtt_harmonization_2020}).
 Each model has a unique representation of woody tree biomes and pre-industrial potential vegetation.
 Therefore, each model interprets the distribution of natural lands from LUH2 to plant functional types (PFTs) differently.
-Combined with differences in grid resolution, this results in a variety of changes global tree cover for each model (see Figure \ref{fig:CABLE_PFTs}).
-As an example, ACCESS-ESM1-5 has by the end of the century a forest expansion of 1.59 million km² and agricultural abandonment of -1.11 million km².
-By mid-century crops reach a minimum of 2.74 million km² less than in 2015, before rising again in the latter half of the century (Figure \ref{fig:land_use}).
+Combined with differences in grid resolution, this results in a variety of changes global tree cover for each model (see Figure \ref{fig:tree_area}).
+As an example, by the end of the century ACCESS-ESM1-5 has a forest expansion of 1.59 million km² and agricultural abandonment of 1.11 million km².
+By mid-century, crops reach a minimum of 2.74 million km² less than in 2015, before rising again in the latter half of the century (Figure \ref{fig:land_use}).
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/treeFrac_anomaly.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/grassFrac_anomaly.png}
-    \end{subfigure}
-    \caption{ACCESS-ESM1.5 land-use area change from 2015 to 2100 in the forestation scenario. Left: forest. Right: Grass. In ACCESS-ESM1.5 LUH2 pasture fractions are allocated to C3 grass.}
+    \includegraphics[width=\linewidth]{../plots/tree_area_map_2015-2100_delta.png}
+    \caption{Tree cover area change between 2015 to 2100 in the forestation scenario for each model.}
     \label{fig:land_use_map}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/treeFrac_models.png}
+        \includegraphics[width=\linewidth]{../plots/tree_area_ssp126_all_models.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/CABLE_forests.png}
     \end{subfigure}
     \caption{Global mean tree cover fraction for each model and CABLE tree PFT areas for the SSP1-2.6 scenario.}
-    \label{fig:CABLE_PFTs}
+    \label{fig:tree_area}
 \end{figure}
 
 Forestation is dominated by growth of evergreen broad leaf forests, followed by evergreen needle leaf forests, then deciduous broad leaf forests.
