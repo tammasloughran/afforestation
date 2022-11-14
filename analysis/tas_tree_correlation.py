@@ -146,6 +146,7 @@ def make_correlation_plot()->None:
     plt.colorbar(orientation='horizontal', pad=0.05)
     plt.title('Correlation between TAS and treeFrac')
     plt.tight_layout()
+    plt.savefig(f'{PLOTS_DIR}/correlation_tree_tas.png', dpi=DPI)
 
     plt.figure()
     ax = plt.axes(projection=ccrs.Robinson())
@@ -161,7 +162,7 @@ def make_correlation_plot()->None:
     plt.colorbar(orientation='horizontal', pad=0.05)
     plt.title('Number of significant correlations')
     plt.tight_layout()
-    plt.show()
+    plt.savefig(f'{PLOTS_DIR}/correlation_tree_tas_significance.png', dpi=DPI)
 
 if __name__=='__main__':
     make_correlation_plot()
