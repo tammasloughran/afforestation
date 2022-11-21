@@ -2,6 +2,7 @@
 """Plot the atmosphere co2 concentrations for all models.
 """
 import os
+import sys
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
@@ -60,7 +61,7 @@ CO2_VARIABLES = {
         'Amon':'co2', # Mole fraction of CO2. esm-ssp585 only
         }
 MODELS = [ # Some models have missing co2 data for one of the experiments.
-        #'ACCESS-ESM1-5',
+        'ACCESS-ESM1-5',
         'BCC-CSM2-MR',
         #'CanESM5',
         #'GFDL-ESM4',
@@ -109,6 +110,37 @@ COLORS = {
         'NCC':color_cycle[6],
         'MOHC':color_cycle[8],
         }
+TO_PPM = 1000000
+
+# CMIP6 CO2 concentration data taken from
+# https://tntcat.iiasa.ac.at/SspDb/dsd?Action=htmlpage&page=10
+remind_magpie_co2 = [
+        379.850,
+        390.505,
+        417.249,
+        452.767,
+        499.678,
+        559.692,
+        635.793,
+        730.025,
+        841.520,
+        963.842,
+        1088.970,
+        ]
+remind_magpie_years = [
+        2005,
+        2010,
+        2020,
+        2030,
+        2040,
+        2050,
+        2060,
+        2070,
+        2080,
+        2090,
+        2100,
+        ]
+
 
 load_cdo = False
 load_npy = not load_cdo
@@ -136,6 +168,9 @@ def make_co2_models_plot()->None:
     for model in MODELS:
         print(f"Loading model {model}")
         if load_cdo:
+            if model=='ACCESS-ESM1-5':
+                print(model, 'will not be loaded from cdo. Use .npy files.')
+                continue
             table = A_OR_AER[model]
             for_co2_files = sorted(get_filenames(
                     'LUMIP',
@@ -164,11 +199,21 @@ def make_co2_models_plot()->None:
             np.save(f'{DATA_DIR}/{model}_co2_for.npy', for_co2_data[model].data)
             np.save(f'{DATA_DIR}/{model}_co2_ssp585.npy', ssp585_co2_data[model].data)
         else:
-            for_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_for.npy')
-            ssp585_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_ssp585.npy')
+            if model=='ACCESS-ESM1-5':
+                try:
+                    for_co2_data[model] = np.load(f'{DATA_DIR}/aff_co2_data.npy')
+                except:
+                    print('Need to create ACCESS-ESM1-5 co2 .npy file first.')
+                    sys.exit(1)
+                for_co2_data[model] = for_co2_data[model].mean(axis=0)*KGKG_TO_MOLMOL
+                ssp585_co2_data[model] = np.load(f'{DATA_DIR}/ssp585_co2_data.npy')
+                ssp585_co2_data[model] = ssp585_co2_data[model].mean(axis=0)*KGKG_TO_MOLMOL
 
-    # Plot
-    TO_PPM = 1000000
+            else:
+                for_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_for.npy')
+                ssp585_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_ssp585.npy')
+
+    # Plot absolute values.
     plt.figure
     for model in MODELS:
         years = np.arange(2015, 2015+len(for_co2_data[model]))
@@ -186,10 +231,42 @@ def make_co2_models_plot()->None:
                 label=model+' esm-ssp585',
                 linestyle='dashed',
                 )
+    plt.plot(
+            remind_magpie_years,
+            remind_magpie_co2,
+            color='black',
+            label='REMIND-MAGPIE SSP5-8.5',
+            linestyle='solid',
+            )
+    plt.xlim(2010, 2100)
     plt.xlabel('Years')
     plt.ylabel('CO$_2$ mixing ratio (ppm)')
     plt.legend()
     plt.savefig(f'{PLOTS_DIR}/models/models_co2.png', dpi=DPI)
+
+    # Plot relative to ssp585
+    plt.figure()
+    for model in MODELS:
+        # MPI is missing a year in ssp585 and NorESM is missing a year in forestation scenario.
+        if model=='MPI-ESM1-2-LR':
+            for_co2_data[model] = for_co2_data[model][:-1]
+        if model=='NorESM2-LM':
+            ssp585_co2_data[model] = ssp585_co2_data[model][:-1]
+            continue # Actually don't even plot NorESM here. It's the wrong data anyway.
+        years = np.arange(2015, 2015+len(for_co2_data[model]))
+        plt.plot(
+                years,
+                for_co2_data[model]*TO_PPM - ssp585_co2_data[model]*TO_PPM,
+                color=COLORS[INSTIT[model]],
+                label=model,
+                )
+    plt.hlines(0, 2015, 2100, color='black', linewidth=0.5)
+    plt.xlim(2015, 2100)
+    plt.xlabel('Years')
+    plt.ylabel('$\Delta$ CO$_2$ mixing ratio (ppm)')
+    plt.legend()
+    plt.title('Difference between forestation and esm-ssp585')
+    plt.savefig(f'{PLOTS_DIR}/models/models_co2_diff.png', dpi=DPI)
 
 
 if __name__ != 'analysis.plot_models_co2':
