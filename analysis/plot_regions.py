@@ -148,7 +148,7 @@ def plot_veg_region(
     plt.xlim(left=years[0], right=years[-1])
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
-    plt.title(f"ACCES-ESM1.5 {region} {var}")
+    plt.title(f"ACCESE-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/regional/{var}_{reg}_{label}.png', dpi=DPI)
     plt.close()
@@ -175,7 +175,7 @@ def plot_clim_region(
     elif var=='tas':
         plt.ylabel('$^\circ$C')
     plt.xlabel('Time (Year)')
-    plt.title(f"ACCES-ESM1.5 {region} {var}")
+    plt.title(f"ACCESS-ESM1.5 {region} {var}")
     reg = region.replace(' ', '').lower()
     plt.savefig(f'{PLOTS_DIR}/regional/{var}_{reg}_{label}.png', dpi=DPI)
     plt.close()

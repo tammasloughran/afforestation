@@ -17,6 +17,7 @@ import netCDF4 as nc
 import numpy as np
 from cdo import Cdo
 import shapely
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 if __name__ == 'analysis.plot_model_trees':
     from analysis.cmip_files import get_filenames
@@ -64,6 +65,17 @@ ENSEMBLES = {
         'GFDL-ESM4':'r1i1p1f1',
         }
 M2_TOMILKM2 = 1000000000000
+#cdict = {'red':   [[0.0,  84/255, 84/255],
+#                   [0.5,  1.0, 1.0],
+#                   [1.0,  0.0, 0.0]],
+#         'green': [[0.0, 48/255, 48/255],
+#                   [0.5, 1.0, 1.0],
+#                   [1.0,  68/255, 68/255]],
+#         'blue':  [[0.0,  5/255, 5/255],
+#                   [0.5,  1.0, 1.0],
+#                   [1.0,  27/255, 27/255]]}
+#CMAP = LinearSegmentedColormap('diverging_trees', segmentdata=cdict, N=256)
+CMAP = 'bwr'
 
 
 def my_num2date(times:np.ndarray, units:str, calendar:str)->list:
@@ -164,7 +176,7 @@ def plot_area_by_lat()->None:
                 label=model,
                 vmin=-0.5,
                 vmax=0.5,
-                cmap='bwr',
+                cmap=CMAP,
                 shading='auto',
                 )
         plt.title(model, fontsize=8)
@@ -217,7 +229,7 @@ def plot_frac_by_lat()->None:
                 label=model,
                 vmin=-40,
                 vmax=40,
-                cmap='bwr',
+                cmap=CMAP,
                 shading='auto',
                 )
         plt.title(model, fontsize=8)
@@ -276,7 +288,7 @@ def plot_map_tree_area_change()->None:
                 lons,
                 lats,
                 tree_area[-1]-tree_area[0],
-                cmap='bwr',
+                cmap=CMAP,
                 vmin=-0.025,
                 vmax=0.025,
                 transform=ccrs.PlateCarree(),
