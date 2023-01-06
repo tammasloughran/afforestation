@@ -46,8 +46,8 @@
 
 \section{Introduction}
 
-Forests cover approximately 31\% of the global land surface (cite something from FAO?) and are responsible for the removal of 30\% of total anthropogenic emissions from the atmosphere (\cite{friedlingstein_global_2022}).
-Forestation is therefore often thought of as a viable strategy to remove CO$_2$ from the atmosphere and mitigate global warming.
+Forests cover approximately 31\% of the global land surface \parencite{fao_global_2020} and are responsible for the removal of 30\% of total anthropogenic emissions from the atmosphere (\cite{friedlingstein_global_2022}).
+Forestation is therefore often thought of as a viable strategy to remove CO$_2$ from the atmosphere and mitigate global warming \parencite{smith_long-term_2022}.
 In order to effectively limit global warming to below 2°C consistent with the Paris Agreement, there must be not only a reduction of fossil fuel emissions, but also CO$_2$ removal to offset industrial and agricultural activities that are difficult to decarbonize.
 There must also be a shift in the reliance of global diets away from agricultural practices that emit greenhouse gasses into the atmosphere (via e.g. forest clearing or ruminating herbivores).
 This shift typically implies widespread abandonment of agricultural lands and an increase in natural vegetation, either as reforestation when degraded forests are restored, or as afforestation of lands that were not previously occupied by forest.
@@ -59,6 +59,12 @@ In general, forestation causes a global cooling biogeochemical effect as carbon 
 However, the biogophysical impacts of forestation is more varied, with a cooling effect in the low–mid latitudes via enhanced evapotranspiration and further increased cloud cover reflecting incoming shortwave radiation.
 In the mid-high latitudes the biogeophysical impacts are a net warming effect because of the decrease of albedo from dark vegetation relative to the surfaces that are seasonally covered in snow.
 
+Historically, there has been substantial deforestation in temperate forests of Eurasia and North America and in the last few decades deforestation has been focused on the tropics (\cite{goldewijk_estimating_2001}).
+The net effect of deforestation is to cool the climate globally due to an increase in albedo  (\cite{davin_climatic_2010}).
+\cite{boysen_global_2020} show a cooling of -0.22$\pm$0.2 $^{\circ}$C among 9 climate models in idealized simulations.
+\cite{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incident of hot extremes by 5.5-0.9\%. \footnote{Still not sure which stat from this paper to include here.}
+However, the effect of future afforestation may not necessarily be merely the inverse of the effect of future deforestation.
+
 There have been a number of previous studies on the potential of forestation to remove CO$_2$ from the atmosphere, each using different methods of quantification.
 For example, \cite{lenton_radiative_2009} used a simplified ``back-of-the-envelope" analytical calculation approach to estimate the radiative forcing effect of forestation, finding that it has substantial potential relative to most other geoengineering methods.
 They estimate a removal of 73 Pg(C) by forestation can result in a decrease of 0.37 W m$^{-2}$ radiative forcing by 2100.
@@ -67,14 +73,14 @@ However, such simplified estimates assume that the land carbon storage is stable
 More sophisticated modelling studies better represent the complexity of the net effects of biogeophysical and biogeochemical impacts.
 For example, \cite{sonntag_reforestation_2016} quantified the CO$_2$ removal potential using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the ``forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 version of the MPI-ESM and the CMIP5 representative concentration pathways.
-They find that a decrease in 85 ppm (215 Pg(C)) of atmospheric CO$_2$ concentrations by 2100 from forestation results in a cooling of 0.27 K globally. \footnote{Maybe mention Sonntag et al 2018 here as well? And de hertog et al 2022}
+They find that a decrease in 85 ppm (215 Pg(C)) of atmospheric CO$_2$ concentrations by 2100 from forestation results in a cooling of 0.27 K globally (also reiterated in \cite{sonntag_quantifying_2018}).
 
-Historically, there has been substantial deforestation in temperate forests of Eurasia and North America and in the last few decades deforestation has been focused on the tropics (\cite{goldewijk_estimating_2001}).
-The net effect of deforestation is to cool the climate globally due to an increase in albedo  (\cite{davin_climatic_2010}).
-\cite{boysen_global_2020} show a cooling of -0.22$\pm$0.2 $^{\circ}$C among 9 climate models in idealized simulations.
-\cite{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incident of hot extremes by 5.5-0.9\%. \footnote{Still not sure which stat from this paper to include here.}
-However, the effect of future afforestation mat not necessarily be merely the inverse of the effect of future deforestation.
+Some experiments designs are more idealised and represent a more extreme deployment of forestation, where a significant portion of non-forested land are forested.
+\cite{de_hertog_biogeophysical_2022}, for example conducted an experiment with where all non-forested land except bare ground are forested in a checkerboard pattern.
+While this is unfeasable in the real world, it allows for diagnosis of local and non-local effects of forestation.
+The models here show that the local biogeophysical effects forestation produce a cooling in the tropics, while the non-local effects are large scale warming from forestation. 
 
+So far, a multi-model intercomparrison of the potential of forestation to remove CO2 and mitigate climate change under a realistic scenario is absent from the literature.
 This study aims to quantify the CO$_2$ removal potential of the forestation strategy using CMIP6 models, both at the global and regional scale.
 The CMIP6 experiments present a standard set of experiments to draw on for understanding model uncertainty in the climate mitigation potential of forestation.
 In particular, ACCESS-ESM1.5 contributed multiple single model ensembles to these experiments allowing us to examine the climate variability uncertainties from a single model.
@@ -142,7 +148,7 @@ MPI-ESM1-2-LR & Yes  & Yes & No  & Yes   & 13       & 12      & 1.9°           
 NorESM2-LM    & Yes  & Yes & No  & No    & 22       & 14      & 2×2°            & \cite{seland_norwegian_2020}   \\
 UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°     & \cite{sellar_ukesm1_2019}      \\ \hline
     \end{tabular}
-    \caption{Models participating in both LUMIP and C4MIP with simulations for both \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes agricultural crops and pasture.}
+    \caption{Models participating in both Land-Use Mmodel Intercomparison Project and Coupled Climate-Carbon model Intercomparison Project with available simulations for \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes agricultural crops and pasture.}
     \label{tab:models}
 \end{table}
 
@@ -230,7 +236,7 @@ ACCESS-ESM and UKESM are roughly in the middle of the model spread.
 These models share the same atmospheric model component and therefore share many of the same climate physics, however UKESM has a greater transient climate response to forestation and atmospheric CO$_2$ changes.
 
 For vegetation related pools (cLand and cVeg) models tend to diminish in productivity by the end of the century.
-The models  either maintain a draw-down potential of ~20-30PgC by 2100, or the gains from the middle of the century have been lost by the end of the century.
+The models  either maintain a draw-down potential of ~20–30PgC by 2100, or the gains from the middle of the century have been lost by the end of the century.
 Soil carbon shows varied response to forestation. ACCESS and UKESM show decreases in soil carbon, while other models show increases.
 
 \begin{figure}
@@ -253,57 +259,40 @@ No appreciable difference in climate variables at the global scale.
 
 \subsection{Regional land carbon and climate responses in ACCESS-ESM1.5}
 
-\subsubsection{Changes to the Global Carbon Cycle}
+\subsubsection{overview of ACCESS-ESM1.5 response to forestation}
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
-    \end{subfigure}
-\begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_diff.png}
-    \end{subfigure}
-    \caption{ACCESS-ESM1-5 carbon pools. Left: \textit{esm-ssp585-ssp126Lu} relative to the 2005–2025 period. Right: difference between the \textit{esm-ssp585-ssp126Lu and esm-ssp585}.}
-    \label{fig:access_cpools}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/CO2_atm_ppm_diff.png}
-    \end{subfigure}
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/esm-ssp585-ssp126Lu_budget.png}
     \end{subfigure}
-    \caption{Top left: Difference in atmospheric CO$_2$ concentration between the forestation scenario and ssp585. Shading indicates the ensemble range. Top right: ensemble mean of carbon flux budget in the forestation scenario.}
-    \label{fig:atmosphere_carbon}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+    \end{subfigure}
+    \caption{Top left: Difference in atmospheric CO$_2$ concentration between the forestation scenario and ssp585. Shading indicates the ensemble range. Top right: ensemble mean of carbon flux budget in the forestation scenario. Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux. Shading indicates the ensemble range.}
+    \label{fig:global_carbon_budget}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+        \includegraphics[width=\linewidth]{../plots/cLand_amazonia_diff.png}
     \end{subfigure}
-    \caption{Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux. Shading indicates the ensemble range.}
-    \label{fig:ocean_carbon}
+
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_easternnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_eastasia_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_borealnorthamerica_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_centralafrica_diff.png}
+    \end{subfigure}
+    \caption{Experiment differences for each region in \ref{fig:box_regions}}
+    \label{fig:aus_region_cveg_tas}
 \end{figure}
 
 \begin{table}[H]
@@ -320,30 +309,11 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \label{tab:cpools_table}
 \end{table}
 
-\subsubsection{Climate response and internal claimte variability}
 
 \begin{itemize}
     \item Climate warms about 4 \textcelsius{} by 2100 and precipitation increases by 0.25e-5 kg m-2 s-1 \footnote{Need to change the units of this to something more human readable}
     \item There isn't much difference between the forestation scenario and ssp585.
 \end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1.5_esm-ssp585_ensembles.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
-    \end{subfigure}
-    \caption{Climate in \textit{esm-ssp585-ssp126Lu}. Left: Absolute values from the forestation simulation (\textit{esm-ssp585-ssp126Lu}). Right: difference between the \textit{esm-ssp585-ssp126Lu} simulation and \textit{esm-ssp585}}
-    \label{fig:climate}
-\end{figure}
 
 \subsubsection{Regional/local changes in vegetation and extremes}
 
@@ -382,28 +352,6 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
     \item Increases in cVeg for all regions except Boreal North America, where some ensemble members show decreases in cVeg by the end of the century.
     \item Decreases in cSoil for Australia, Amazonia, Eastern North America. Western Eurasia, East Asia, Boreal Eurasia, Boreal North America, generally also show decreases in cSoil but there are a few ensemble members that show increases by the end of the century.
 \end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_amazonia_diff.png}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_easternnorthamerica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_eastasia_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_borealnorthamerica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_centralafrica_diff.png}
-    \end{subfigure}
-    \caption{Experiment differences for each region in \ref{fig:box_regions}}
-    \label{fig:aus_region_cveg_tas}
-\end{figure}
 
 \begin{itemize}
     \item The lack of climate warming mitigation potential in the forestation scenario may be due to redistribution of the global carbon budget into the natural sinks. An increase in vegetation uptake would lead to a decrease in atmospheric CO$_2$ accumulation, which would result in a reduction of partial CO$_2$ pressure on the ocean and hence lead to a reduction of CO$_2$ in the ocean sink.
@@ -520,7 +468,25 @@ Forest management may also provide the potential to grow trees that have a highe
     \label{fig:models_absolute}
 \end{figure}
 
-\subsection{ACCESS-ESM1-5 global fluxes}
+\subsection{ACCESS-ESM1-5 global pools and fluxes}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cVeg_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLitter_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cSoil_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+    \end{subfigure}
+\begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_ACCESS-ESM1.5_esm-ssp585-ssp126Lu_ensembles_anomalies.png}
+    \end{subfigure}
+    \caption{ACCESS-ESM1-5 carbon pools. \textit{esm-ssp585-ssp126Lu} relative to the 2005–2025 period.}
+    \label{fig:access_cpools}
+\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -556,6 +522,24 @@ Forest management may also provide the potential to grow trees that have a highe
     \end{subfigure}
     \caption{Carbon fluxes in esm-ssp585-ssp126Lu.  Left: relative to 2005–2025. Right: relative to ssp-585.}
     \label{fig:access_cflux}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1.5_esm-ssp585_ensembles.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tas_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
+    \end{subfigure}
+    \caption{Climate in \textit{esm-ssp585-ssp126Lu}. Left: Absolute values from the forestation simulation (\textit{esm-ssp585-ssp126Lu}). Right: difference between the \textit{esm-ssp585-ssp126Lu} simulation and \textit{esm-ssp585}}
+    \label{fig:climate}
 \end{figure}
 
 \subsection{Regional analysis}
