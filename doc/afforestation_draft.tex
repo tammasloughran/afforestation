@@ -141,14 +141,14 @@ Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members a
 Model         & Fire & N   & P   & Dyn. & PFTs & Nat. PFT & Res. & Ref.                                         \\ \hline
 ACCESS-ESM1-5 & No   & Yes & Yes & No    & 10       & 9       & 1.8758×1.258°   & \cite{ziehn_australian_2020}   \\
 BCC-CSM2-MR   & No   & Yes & No  & No    & 14       & 11      & 110×110km       & \cite{li_development_2019}     \\
-CanESM5       & No   & No  & No  & Yes   & 9        & 7       & ~2.8×2.8°       & \cite{swart_canadian_2019}     \\
+CanESM5       & No   & No  & No  & No*   & 9        & 7       & ~2.8×2.8°       & \cite{swart_canadian_2019}     \\
 GFDL-ESM4     & Yes  & No  & No  & No    & 7        & 5       & 100×100km       & \cite{dunne_gfdl_2020}         \\
 MIROC-ES2L    & No   & Yes & No  & No    & 14       & 13      & 2.8×2.8°        & \cite{hajima_development_2020} \\
 MPI-ESM1-2-LR & Yes  & Yes & No  & Yes   & 13       & 12      & 1.9°            & \cite{giorgetta_climate_2013}  \\
 NorESM2-LM    & Yes  & Yes & No  & No    & 22       & 14      & 2×2°            & \cite{seland_norwegian_2020}   \\
 UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°     & \cite{sellar_ukesm1_2019}      \\ \hline
     \end{tabular}
-    \caption{Models participating in both Land-Use Mmodel Intercomparison Project and Coupled Climate-Carbon model Intercomparison Project with available simulations for \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes agricultural crops and pasture.}
+    \caption{Models participating in both Land-Use Mmodel Intercomparison Project and Coupled Climate-Carbon model Intercomparison Project with available simulations for \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, nutrients, dynamical vegetation and the number of plant functional types. Natural plant functional types excludes agricultural crops and pasture. *Can-ESM5 does have plant dynamics in the sense of plant demographics but not dynamical plant type compertition.}
     \label{tab:models}
 \end{table}
 
@@ -374,19 +374,21 @@ cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 
 \section{Conclusion}
 
-\begin{itemize}
-    \item Models show no significant impact of forestation on global climate under a high emissions and high global warming scenario. Of the two models that do show significant impact of foretation on global temperature, they disgree on sign.
-    \item Evidence in a shift in the global carbon balance; increased uptake of carbon on the land of ~25 PgC by 2100 and a decrease in the uptake of carbon by the ocean.
-    \item Evidence of some increase in local scale warm extremes. Gridpoints that have strong forestationshow decreases in number of cool days and increase in number of extreme hot days. Suggests dominance of the effect of increased albedo from forestation in ACCESS-ESM1-5.
-   \item For forestation to be viable as a carbon dioxide strategy it must also exist in conjunction with other strategies.
-   \item Forestation also provide aditional benefits such as increased habitat, biodiversity and decreased runoff and soil erosion (features that are not modeled by Earth system models).
-\end{itemize}
+In this study we conduct an multi-model intercomparison of a plausible scnario for forestation as a means of carbon dioxide removal.
+Models show a diverse interpretation of the forestation patters and as a result show a large range of outcomes for long term carbon storage in forests.
+4 models show that a stable but limited carbon sink by the end of the century while 3 models show that the mitigation gains from forestation are completely lost by the end of the century.
+
+Models show no significant impact of forestation on global climate under a high emissions and high global warming scenario. Of the two models that do show significant impact of foretation on global temperature, they disgree on sign.
+Forestation causes a shift in the global carbon balance, whereby increased uptake of carbon on the land of ~25 PgC by 2100 results in a decrease in the uptake of carbon by the ocean.
+There are some increase in local scale warm extremes. Gridpoints that have strong forestationshow decreases in number of cool days and increase in number of extreme hot days. Suggests dominance of the effect of increased albedo from forestation in ACCESS-ESM1-5.
 
 While it is clear that most models show that growing trees under a warmer (and sometimes drier) climate is not an effective climate mitigation strategy, this does not mean that forestation should not be done.
+For forestation to be viable as a carbon dioxide strategy it must also exist in conjunction with other strategies.
 None of the models in this study account for the potential of forests to be used for other carbon dioxide removal strategies such as for bioenergy with carbon capture and storage.
 If forests are sustainably harvested and regrown, then the removal of CO$_2$ from the atmosphere accumulates over time, and while vegetation may be lost in individual natural disturbance events such as fires, the historically removed carbon remains locked.
 Forestation increases the natural land-based carbon, which opens the way for other forest management strategies to remove carbon dioxide.
-Forest management may also provide the potential to grow trees that have a higher albedo
+Forest management may also provide the potential to grow trees that have a higher albedo.
+Forestation also provide aditional benefits such as increased habitat, biodiversity and decreased runoff and soil erosion (features that are not modeled by Earth system models
 
 \printbibliography
 
@@ -394,6 +396,15 @@ Forest management may also provide the potential to grow trees that have a highe
 \setcounter{figure}{0}
 
 \subsection{PFTs}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tree_frac_deltat_ssp585.png}
+    \end{subfigure}
+    \caption{LUH2 tree cover fractions in SSP5-8.5 scenario.}
+    \label{fig:LUH2_tree_frac_ssp585}
+\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -410,6 +421,7 @@ Forest management may also provide the potential to grow trees that have a highe
     \label{fig:ACCESS_land_cover}
 \end{figure}
 
+% Also put the SSP585 cover fraction maps for each model here.
 
 \begin{figure}[H]
     \centering
@@ -464,7 +476,25 @@ Forest management may also provide the potential to grow trees that have a highe
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/pr_model_intercomparison_esm-ssp585-ssp126Lu.png}
     \end{subfigure}
-    \caption{Absolute values of the global mean carbon pools, 2m surface air temperature and precipitation for each model. The solid line for ACCESS ESM-1-5 is the ensemble mean and the shading indicates the ensemble range.}
+    \caption{Absolute values of the forestation scenario's global mean carbon pools, 2m surface air temperature and precipitation for each model. The solid line for ACCESS ESM-1-5 is the ensemble mean and the shading indicates the ensemble range.}
+    \label{fig:models_absolute}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_model_intercomparison_esm-ssp585.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_esm-ssp585.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLitter_model_intercomparison_esm-ssp585.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cSoil_model_intercomparison_esm-ssp585.png}
+    \end{subfigure}
+    \caption{Absolute values of the SSP5-8.5 scenario's global mean carbon pools, 2m surface air temperature and precipitation for each model. The solid line for ACCESS ESM-1-5 is the ensemble mean and the shading indicates the ensemble range.}
     \label{fig:models_absolute}
 \end{figure}
 
