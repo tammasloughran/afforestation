@@ -5,7 +5,7 @@
 # esm-ssp585 simulation (high fossil fuel emisssions scenario).
 import glob
 import os
-import pdb
+import ipdb
 import sys
 
 import cdo as cdo_module
@@ -23,6 +23,7 @@ if __name__ == 'analysis.plot_afforestation':
             DPI,
             ENSEMBLES,
             KG_IN_PG,
+            NENS,
             PLOTS_DIR,
             SEC_IN_DAY,
             TABLES,
@@ -35,6 +36,7 @@ else:
             DPI,
             ENSEMBLES,
             KG_IN_PG,
+            NENS,
             PLOTS_DIR,
             SEC_IN_DAY,
             TABLES,
@@ -375,6 +377,7 @@ def make_model_plots()->None:
                 plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
                 plt.legend()
                 plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_diff.png', dpi=DPI)
+                plt.close()
 
             # Plot the trends for tas and pr.
             if var=='tas' or var=='pr':
@@ -383,17 +386,32 @@ def make_model_plots()->None:
                 years = list(range(2015, 2015 + ens_mean.shape[0]))
                 axes[0].plot(years, ens_mean, label='ACCESS-ESM1-5')
                 axes[0].fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
-                trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
-                        diff.mean(axis=0), # ACCESS-ESM1.5
-                        alpha=0.05,
-                        )
-                print(f'    - ACCESS-ESM1-5 trend={trend}, p={p}, h={h}')
-                trend_line = slope*np.arange(len(years)) + intercept
-                if h:
+                trend = np.array(['']*NENS)
+                h = np.ones(NENS).astype(bool)
+                p = np.ones(NENS)*np.nan
+                z = p.copy()
+                tau = p.copy()
+                s = p.copy()
+                var_s = p.copy()
+                slope = p.copy()
+                intercept = p.copy()
+                for e in range(10):
+                    trend[e], h[e], p[e], z[e], tau[e], s[e], var_s[e], slope[e], intercept[e] = \
+                                pmk.original_test(
+                                        diff[e,:], # ACCESS-ESM1.5
+                                        alpha=0.05,
+                                        )
+                trend_line = slope.mean()*np.arange(len(years)) + intercept.mean()
+                trend_lines = slope[:,None]*np.arange(len(years))[None,:] + intercept[:,None]
+                if h.all():
+                    print("    - All ACCESS trends are significant")
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'])
                 else:
+                    print("    - Not all ACCESS trends are significant")
+                    print("        - They are:", h)
+                    print("        - deltas: ", trend_lines[:,-1])
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'], linestyle='dotted')
-                if slope>0: sign = '+'
+                if (slope>0).all(): sign = '+'
                 else: sign = '-'
                 axes[0].annotate(
                         f'ACCESS-ESM1-5 ({sign})',
@@ -404,14 +422,17 @@ def make_model_plots()->None:
                 axes[0].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 for i,m in enumerate(MODELS.keys()):
                     diff_model = aff_data[m] - ssp585_data[m]
+                    if m=='CCma' and var=='tas':
+                        # CanESM5 has a large initial bias. Remove this bias.
+                        diff_model = diff_model - diff_model[0]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
                     axes[i+1].plot(years, diff_model, color=COLORS[m], label=MODELS[m])
                     trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
                             diff_model,
                             alpha=0.05,
                             )
-                    print(f'    - {MODELS[m]} trend={trend}, p={p}, h={h}')
                     trend_line = slope*np.arange(len(years)) + intercept
+                    print(f'    - {MODELS[m]} trend={trend}, p={p}, h={h}, delta={trend_line[-1]}')
                     if h: # Hypothesis that there exists a trend is true.
                         axes[i+1].plot(years, trend_line, color=COLORS[m])
                     else:
@@ -449,6 +470,7 @@ def make_model_plots()->None:
                 #plt.tight_layout()
                 #plt.subplots_adjust(left=0.15,) # tight_layout leaves some extra space on the left.
                 plt.savefig(f'{PLOTS_DIR}/models/{var}_trends.png', dpi=DPI)
+                plt.close()
 
             # Plot only the afforestation scenario for absolute values.
             plt.figure()
@@ -486,6 +508,44 @@ def make_model_plots()->None:
             plt.legend()
             plt.savefig(
                     f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png',
+                    dpi=DPI,
+                    )
+            # Plot only the reference scenario for absolute values.
+            plt.figure()
+            # Plot ACCESS ensemble mean and range
+            ens_mean = np.mean(access_ssp585, axis=0)
+            years = list(range(2015, 2015 + ens_mean.shape[0]))
+            plt.plot(years, ens_mean, color=COLORS['CSIRO'], label='ACCESS-ESM1-5')
+            plt.fill_between(
+                    years,
+                    access_ssp585.max(axis=0),
+                    access_ssp585.min(axis=0),
+                    color='lightblue',
+                    )
+            # The following plots individual ensemble members as grey lines.
+            #for e in range(10):
+            #    plt.plot(years, access_ssp585[e,:], color='gray', alpha=0.4)
+            for m in MODELS.keys():
+                if m=='MOHC' and var=='cLitter': continue # Skip missing data.
+                if m=='BCC' and var=='nbp': continue # Skip missing data.
+                if m=='NOAA-GFDL' and var not in ['tas', 'pr']: continue # GFDL only has pr and tas
+                years = list(range(2015, 2015 + ssp585_data[m].shape[0]))
+                plt.plot(years, ssp585_data[m], color=COLORS[m], label=MODELS[m])
+            # Plot features.
+            plt.xlim(left=years[0], right=years[-1])
+            if var=='tas':
+                plt.ylabel('Temperature (°C)')
+            elif var=='pr':
+                plt.ylabel('Precipitation (mm/day)')
+            elif var in ['gpp','npp','ra','rh','nbp']:
+                plt.ylabel('Pg(C)/year')
+            else:
+                plt.ylabel('Pg(C)')
+            plt.xlabel('Year')
+            plt.title(f"{var} esm-ssp585-ssp126Lu")
+            plt.legend()
+            plt.savefig(
+                    f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585.png',
                     dpi=DPI,
                     )
 
@@ -528,6 +588,7 @@ def make_model_plots()->None:
     plt.title(f"cSoil+cLitter for esm-ssp585-ssp126Lu - esm-ssp585")
     plt.legend()
     plt.savefig(f'{PLOTS_DIR}/models/cSoil+cLitter_model_intercomparison_diff.png', dpi=DPI)
+    plt.close()
 
 if __name__ != 'analysis.plot_models':
     make_model_plots()
