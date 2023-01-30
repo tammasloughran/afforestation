@@ -81,7 +81,7 @@ MODELS = { # ACCESS is excluded here. Needs separate plotting for ensembles.
         'NOAA-GFDL':'GFDL-ESM4',
         'MIROC':'MIROC-ES2L',
         'MPI-M':'MPI-ESM1-2-LR',
-        'NCC':'NorESM2-LM',
+        #'NCC':'NorESM2-LM',
         'MOHC':'UKESM1-0-LL',
         }
 COLORS = {
@@ -91,7 +91,7 @@ COLORS = {
         'NOAA-GFDL':color_cycle[3],
         'MIROC':color_cycle[4],
         'MPI-M':color_cycle[5],
-        'NCC':color_cycle[6],
+        #'NCC':color_cycle[6],
         'MOHC':color_cycle[8],
         }
 ENSEMBLES = {
@@ -100,7 +100,7 @@ ENSEMBLES = {
         'MIROC':'r1i1p1f2',
         'MOHC':'r1i1p1f2',
         'MPI-M':'r1i1p1f1',
-        'NCC':'r1i1p1f1',
+        #'NCC':'r1i1p1f1',
         'NOAA-GFDL':'r1i1p1f1',
         }
 SSP585_ENSEMBLES = {
@@ -109,7 +109,7 @@ SSP585_ENSEMBLES = {
         'MIROC':'r1i1p1f2',
         'MOHC':'r1i1p1f2',
         'MPI-M':'r1i1p1f1',
-        'NCC':'r1i1p1f1',
+        #'NCC':'r1i1p1f1',
         'NOAA-GFDL':'r1i1p1f1',
         }
 VARIABLES = {
