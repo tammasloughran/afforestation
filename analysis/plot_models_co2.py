@@ -201,14 +201,14 @@ def make_co2_models_plot()->None:
         else:
             if model=='ACCESS-ESM1-5':
                 try:
-                    for_co2_data[model] = np.load(f'{DATA_DIR}/aff_co2_data.npy')
+                    access_for_co2 = np.load(f'{DATA_DIR}/aff_co2_data.npy')
                 except:
                     print('Need to create ACCESS-ESM1-5 co2 .npy file first.')
                     sys.exit(1)
-                for_co2_data[model] = for_co2_data[model].mean(axis=0)*KGKG_TO_MOLMOL
-                ssp585_co2_data[model] = np.load(f'{DATA_DIR}/ssp585_co2_data.npy')
-                ssp585_co2_data[model] = ssp585_co2_data[model].mean(axis=0)*KGKG_TO_MOLMOL
-
+                for_co2_data[model] = access_for_co2.mean(axis=0)*KGKG_TO_MOLMOL
+                access_ssp585_co2 = np.load(f'{DATA_DIR}/ssp585_co2_data.npy')
+                ssp585_co2_data[model] = access_ssp585_co2.mean(axis=0)*KGKG_TO_MOLMOL
+                access_diff_co2 = access_for_co2 - access_ssp585_co2
             else:
                 for_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_for.npy')
                 ssp585_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_ssp585.npy')
@@ -260,6 +260,13 @@ def make_co2_models_plot()->None:
                 color=COLORS[INSTIT[model]],
                 label=model,
                 )
+    plt.fill_between(
+            np.arange(2015, 2015+len(access_for_co2[0,:])),
+            access_diff_co2.min(axis=0)*TO_PPM*KGKG_TO_MOLMOL,
+            access_diff_co2.max(axis=0)*TO_PPM*KGKG_TO_MOLMOL,
+            color=COLORS['CSIRO'],
+            alpha=0.5,
+            )
     plt.hlines(0, 2015, 2100, color='black', linewidth=0.5)
     plt.xlim(2015, 2100)
     plt.xlabel('Years')
