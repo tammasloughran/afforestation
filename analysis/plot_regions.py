@@ -67,16 +67,16 @@ COLORS = {
         'pr':'blue',
         }
 REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
-        'Australia': ([-45,-10],[110,155]), # Neutral
+        #'Australia': ([-45,-10],[110,155]), # Neutral
         'Amazonia': ([-19.63,12.70],[-81.81,-31.31]), # Forestation
         'Eastern North America': ([24.94, 48.85],[-96.75,-51.87]), # Forestation & deforestaion
         'Boreal North America': ([49.05,71.35],[-167.77,-53.81]), # Forestation
         'Central Africa': ([-16.79,12.87],[-17.65,53.25]), # Low forestation
-        'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
+        #'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
         'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
         'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
-        'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
-        'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
+        #'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
+        #'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
         'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
         'Asia Gridpoint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
         }
@@ -380,8 +380,8 @@ def make_regional_plots()->None:
 
 
 if __name__ != 'analysis.plot_regions':
-    #plot_regions_map()
-    make_regional_plots()
+    plot_regions_map()
+    #make_regional_plots()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
