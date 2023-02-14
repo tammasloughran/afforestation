@@ -81,6 +81,7 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         'Amazon Gridpoint': ([-12.6,-12.4],[311.24,311.26]), # Forestation ONLY gridpoint. as anomaly of tree frac 2015-2100.
         'Asia Gridopint': ([32.4,32.6],[99.374,99.376]), # Forestation in the latter half of century.
         'Asia Boxpoint': ([31.24,33.76],[97.4,101.26]), # Forestation in the latter half of century. As a box region
+        'North America Gridpoint': ([37,38],[273,274]), # Eastern North america, forestation but cooling.
         }
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
 ARCHIVE_DIR = '/g/data/p66/tfl561/archive_data'
