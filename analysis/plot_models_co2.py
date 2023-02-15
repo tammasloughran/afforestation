@@ -67,8 +67,9 @@ MODELS = [ # Some models have missing co2 data for one of the experiments.
         #'GFDL-ESM4',
         'MIROC-ES2L',
         'MPI-ESM1-2-LR',
-        'NorESM2-LM',
+        #'NorESM2-LM', # NorESM has been removed because it was run in concentration driven mode.
         #'UKESM1-0-LL',
+        'CESM2',
         ]
 INSTIT = {
         'ACCESS-ESM1-5':'CSIRO',
@@ -77,8 +78,9 @@ INSTIT = {
         'GFDL-ESM4':'NOAA-GFDL',
         'MIROC-ES2L':'MIROC',
         'MPI-ESM1-2-LR':'MPI-M',
-        'NorESM2-LM':'NCC',
+        #'NorESM2-LM':'NCC',
         'UKESM1-0-LL':'MOHC',
+        'CESM2':'NCAR',
         }
 ENSEMBLES = {
         'ACCESS-ESM1-5':'r1i1p1f1',
@@ -87,8 +89,9 @@ ENSEMBLES = {
         'MIROC-ES2L':'r1i1p1f2',
         'UKESM1-0-LL':'r1i1p1f2',
         'MPI-ESM1-2-LR':'r1i1p1f1',
-        'NorESM2-LM':'r1i1p1f1',
+        #'NorESM2-LM':'r1i1p1f1',
         'GFDL-ESM4':'r1i1p1f1',
+        'CESM2':'r1i1p1f1',
         }
 A_OR_AER = {
         'ACCESS-ESM1-5':'Amon',
@@ -97,8 +100,9 @@ A_OR_AER = {
         'GFDL-ESM4':'Amon',
         'MIROC-ES2L':'AERmon',
         'MPI-ESM1-2-LR':'Amon',
-        'NorESM2-LM':'AERmon',
+        #'NorESM2-LM':'AERmon',
         'UKESM1-0-LL':'Amon',
+        'CESM2':'Amon',
         }
 COLORS = {
         'CSIRO':color_cycle[0],
@@ -107,7 +111,8 @@ COLORS = {
         'NOAA-GFDL':color_cycle[3],
         'MIROC':color_cycle[4],
         'MPI-M':color_cycle[5],
-        'NCC':color_cycle[6],
+        #'NCC':color_cycle[6],
+        'NCAR':color_cycle[6],
         'MOHC':color_cycle[8],
         }
 TO_PPM = 1000000
