@@ -32,12 +32,15 @@ warnings.filterwarnings('ignore', category=mpl.MatplotlibDeprecationWarning)
 
 cdo = Cdo()
 
+color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
 # Constants
 # Some models are missing treeFrac variables on the ESGF.
 MODELS = [
         'ACCESS-ESM1-5',
         #'BCC-CSM2-MR',
         'CanESM5',
+        'CESM2',
         'GFDL-ESM4',
         #'MIROC-ESL2',
         'MPI-ESM1-2-LR',
@@ -52,7 +55,19 @@ INSTIT = {
         'MIROC-ES2L':'MIROC',
         'MPI-ESM1-2-LR':'MPI-M',
         'NorESM2-LM':'NCC',
+        'CESM2':'NCAR',
         'UKESM1-0-LL':'MOHC',
+        }
+COLORS = {
+        'CSIRO':color_cycle[0],
+        'BCC':color_cycle[1],
+        'CCma':color_cycle[2],
+        'NOAA-GFDL':color_cycle[3],
+        'MIROC':color_cycle[4],
+        'MPI-M':color_cycle[5],
+        #'NCC':color_cycle[6],
+        'NCAR':color_cycle[6],
+        'MOHC':color_cycle[8],
         }
 ENSEMBLES = {
         'ACCESS-ESM1-5':'r1i1p1f1',
@@ -62,6 +77,7 @@ ENSEMBLES = {
         'UKESM1-0-LL':'r1i1p1f2',
         'MPI-ESM1-2-LR':'r1i1p1f1',
         'NorESM2-LM':'r1i1p1f1',
+        'CESM2':'r1i1p1f1',
         'GFDL-ESM4':'r1i1p1f1',
         }
 M2_TOMILKM2 = 1000000000000
@@ -87,13 +103,17 @@ def plot_global_sum_area()->None:
     plt.figure()
     for model in MODELS:
         cell_area = nc.Dataset(f'{DATA_DIR}/gridarea_{model}.nc', 'r').variables['cell_area'][:]
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
         files = sorted(get_filenames(
                 'LUMIP',
                 INSTIT[model],
                 model,
                 'esm-ssp585-ssp126Lu',
                 ENSEMBLES[model],
-                'Lmon',
+                table,
                 'treeFrac',
                 ))
         if len(files)>1:
@@ -105,7 +125,7 @@ def plot_global_sum_area()->None:
         global_tree_area = tree_area.sum(axis=(1,2))
         times = nc_tree_frac.variables['time']
         dates = my_num2date(times[:], times.units, times.calendar)
-        plt.plot(dates, global_tree_area, label=model)
+        plt.plot(dates, global_tree_area, color=COLORS[INSTIT[model]], label=model)
     plt.xlim(left=dates[0], right=dates[-1])
     plt.ylabel('Area (million km$^2$)')
     plt.title('Tree area')
@@ -116,13 +136,17 @@ def plot_global_sum_area()->None:
 def plot_global_mean_frac()->None:
     plt.figure()
     for model in MODELS:
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
         files = sorted(get_filenames(
                 'LUMIP',
                 INSTIT[model],
                 model,
                 'esm-ssp585-ssp126Lu',
                 ENSEMBLES[model],
-                'Lmon',
+                table,
                 'treeFrac',
                 ))
         if len(files)>1:
@@ -135,7 +159,7 @@ def plot_global_mean_frac()->None:
         global_tree_frac = np.ma.average(tree_frac, axis=(1,2), weights=coslats)
         times = nc_tree_frac.variables['time']
         dates = my_num2date(times[:], times.units, times.calendar)
-        plt.plot(dates, global_tree_frac, label=model)
+        plt.plot(dates, global_tree_frac, color=COLORS[INSTIT[model]], label=model)
     plt.xlim(left=dates[0], right=dates[-1])
     plt.ylabel('Fraction %')
     plt.title('Tree fraction')
@@ -150,13 +174,17 @@ def plot_area_by_lat()->None:
     for i,model in enumerate(MODELS):
         plt.sca(axes[i])
         cell_area = nc.Dataset(f'{DATA_DIR}/gridarea_{model}.nc', 'r').variables['cell_area'][:]
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
         files = sorted(get_filenames(
                 'LUMIP',
                 INSTIT[model],
                 model,
                 'esm-ssp585-ssp126Lu',
                 ENSEMBLES[model],
-                'Lmon',
+                table,
                 'treeFrac',
                 ))
         if len(files)>1:
@@ -204,13 +232,17 @@ def plot_frac_by_lat()->None:
     axes = axes.flatten()
     for i,model in enumerate(MODELS):
         plt.sca(axes[i])
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
         files = sorted(get_filenames(
                 'LUMIP',
                 INSTIT[model],
                 model,
                 'esm-ssp585-ssp126Lu',
                 ENSEMBLES[model],
-                'Lmon',
+                table,
                 'treeFrac',
                 ))
         if len(files)>1:
@@ -263,13 +295,17 @@ def plot_map_tree_area_change()->None:
     axes = axes.flatten()
     for i,model in enumerate(MODELS):
         plt.sca(axes[i])
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
         files = sorted(get_filenames(
                 'LUMIP',
                 INSTIT[model],
                 model,
                 'esm-ssp585-ssp126Lu',
                 ENSEMBLES[model],
-                'Lmon',
+                table,
                 'treeFrac',
                 ))
         if len(files)>1:
@@ -311,13 +347,17 @@ def plot_map_tree_area_change()->None:
 def make_tree_frac_plots()->None:
     # Calculate model grid cell areas.
     for model in MODELS:
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
         files = sorted(get_filenames(
             'LUMIP',
             INSTIT[model],
             model,
             'esm-ssp585-ssp126Lu',
             ENSEMBLES[model],
-            'Lmon',
+            table,
             'treeFrac',
             ))
         if f'gridarea_{model}.nc' not in os.listdir(DATA_DIR):
