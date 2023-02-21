@@ -79,6 +79,7 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         #'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
         'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
         'Asia Gridpoint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
+        'North America Gridpoint': ([37,38],[273,274]), # Eastern North america, forestation but cooling.
         }
 
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'

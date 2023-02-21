@@ -76,18 +76,18 @@ load_npy_files = False # Uncomment to override previous check.
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 MODELS = { # ACCESS is excluded here. Needs separate plotting for ensembles.
-        'BCC':'BCC-CSM2-MR',
+        #'BCC':'BCC-CSM2-MR', # BCC has been excluded.
+        #'NCC':'NorESM2-LM', # NorESM has been excluded.
         'CCma':'CanESM5',
-        'NOAA-GFDL':'GFDL-ESM4',
         'MIROC':'MIROC-ES2L',
-        'MPI-M':'MPI-ESM1-2-LR',
-        #'NCC':'NorESM2-LM',
-        'NCAR':'CESM2',
         'MOHC':'UKESM1-0-LL',
+        'MPI-M':'MPI-ESM1-2-LR',
+        'NCAR':'CESM2',
+        'NOAA-GFDL':'GFDL-ESM4',
         }
 COLORS = {
         'CSIRO':color_cycle[0],
-        'BCC':color_cycle[1],
+        #'BCC':color_cycle[1],
         'CCma':color_cycle[2],
         'NOAA-GFDL':color_cycle[3],
         'MIROC':color_cycle[4],
@@ -97,22 +97,22 @@ COLORS = {
         'MOHC':color_cycle[8],
         }
 ENSEMBLES = {
-        'BCC':'r1i1p1f1',
+        #'BCC':'r1i1p1f1',
+        #'NCC':'r1i1p1f1',
         'CCma':'r1i1p2f1',
         'MIROC':'r1i1p1f2',
         'MOHC':'r1i1p1f2',
         'MPI-M':'r1i1p1f1',
-        #'NCC':'r1i1p1f1',
         'NCAR':'r1i1p1f1',
         'NOAA-GFDL':'r1i1p1f1',
         }
 SSP585_ENSEMBLES = {
-        'BCC':'r1i1p1f1',
+        #'BCC':'r1i1p1f1',
+        #'NCC':'r1i1p1f1',
         'CCma':'r1i1p1f1',
         'MIROC':'r1i1p1f2',
         'MOHC':'r1i1p1f2',
         'MPI-M':'r1i1p1f1',
-        #'NCC':'r1i1p1f1',
         'NCAR':'r1i1p1f1',
         'NOAA-GFDL':'r1i1p1f1',
         }

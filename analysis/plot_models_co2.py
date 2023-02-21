@@ -62,7 +62,7 @@ CO2_VARIABLES = {
         }
 MODELS = [ # Some models have missing co2 data for one of the experiments.
         'ACCESS-ESM1-5',
-        'BCC-CSM2-MR',
+        #'BCC-CSM2-MR', # BCC-CSM2 has beed excluded at the request of BCC due to a bug.
         #'CanESM5',
         #'GFDL-ESM4',
         'MIROC-ES2L',
@@ -73,7 +73,7 @@ MODELS = [ # Some models have missing co2 data for one of the experiments.
         ]
 INSTIT = {
         'ACCESS-ESM1-5':'CSIRO',
-        'BCC-CSM2-MR':'BCC',
+        #'BCC-CSM2-MR':'BCC',
         'CanESM5':'CCma',
         'GFDL-ESM4':'NOAA-GFDL',
         'MIROC-ES2L':'MIROC',
@@ -100,13 +100,13 @@ A_OR_AER = {
         'GFDL-ESM4':'Amon',
         'MIROC-ES2L':'AERmon',
         'MPI-ESM1-2-LR':'Amon',
-        #'NorESM2-LM':'AERmon',
+        'NorESM2-LM':'AERmon',
         'UKESM1-0-LL':'Amon',
         'CESM2':'Amon',
         }
 COLORS = {
         'CSIRO':color_cycle[0],
-        'BCC':color_cycle[1],
+        #'BCC':color_cycle[1],
         'CCma':color_cycle[2],
         'NOAA-GFDL':color_cycle[3],
         'MIROC':color_cycle[4],
