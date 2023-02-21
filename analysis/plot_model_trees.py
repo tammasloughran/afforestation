@@ -37,25 +37,25 @@ color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 # Constants
 # Some models are missing treeFrac variables on the ESGF.
 MODELS = [
+        #'BCC-CSM2-MR', # BCC has been excluded.
+        #'MIROC-ESL2', # MIROC has missing data.
+        #'NorESM2-LM', # NorESM has been excluded.
         'ACCESS-ESM1-5',
-        #'BCC-CSM2-MR',
-        'CanESM5',
         'CESM2',
+        'CanESM5',
         'GFDL-ESM4',
-        #'MIROC-ESL2',
         'MPI-ESM1-2-LR',
-        #'NorESM2-LM',
         'UKESM1-0-LL',
         ]
 INSTIT = {
+        #'BCC-CSM2-MR':'BCC',
+        #'NorESM2-LM':'NCC',
         'ACCESS-ESM1-5':'CSIRO',
-        'BCC-CSM2-MR':'BCC',
+        'CESM2':'NCAR',
         'CanESM5':'CCma',
         'GFDL-ESM4':'NOAA-GFDL',
         'MIROC-ES2L':'MIROC',
         'MPI-ESM1-2-LR':'MPI-M',
-        'NorESM2-LM':'NCC',
-        'CESM2':'NCAR',
         'UKESM1-0-LL':'MOHC',
         }
 COLORS = {
@@ -70,15 +70,15 @@ COLORS = {
         'MOHC':color_cycle[8],
         }
 ENSEMBLES = {
+        #'BCC-CSM2-MR':'r1i1p1f1',
+        #'NorESM2-LM':'r1i1p1f1',
         'ACCESS-ESM1-5':'r1i1p1f1',
-        'BCC-CSM2-MR':'r1i1p1f1',
-        'CanESM5':'r1i1p2f1',
-        'MIROC-ES2L':'r1i1p1f2',
-        'UKESM1-0-LL':'r1i1p1f2',
-        'MPI-ESM1-2-LR':'r1i1p1f1',
-        'NorESM2-LM':'r1i1p1f1',
         'CESM2':'r1i1p1f1',
+        'CanESM5':'r1i1p2f1',
         'GFDL-ESM4':'r1i1p1f1',
+        'MIROC-ES2L':'r1i1p1f2',
+        'MPI-ESM1-2-LR':'r1i1p1f1',
+        'UKESM1-0-LL':'r1i1p1f2',
         }
 M2_TOMILKM2 = 1000000000000
 #cdict = {'red':   [[0.0,  84/255, 84/255],
