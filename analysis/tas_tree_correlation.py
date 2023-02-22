@@ -54,7 +54,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = True # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 NTIMES = 1032
 
@@ -216,6 +216,10 @@ def make_ens_mean_first_correlation():
         # Save np files
         np.save(f'{DATA_DIR}/temp_diff_monthly.npy', temp_diff.data)
         np.save(f'{DATA_DIR}/tree_diff_monthly.npy', tree_diff.data)
+        lats = ncfile.variables['lat'][:]
+        lons = ncfile.variables['lon'][:]
+        np.save(f'{DATA_DIR}/access_lats.npy', np.array(lats))
+        np.save(f'{DATA_DIR}/access_lons.npy', np.array(lons))
     else:
         frac_file = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', 'Lmon', 'treeFrac')[0]
         ncfile = nc.Dataset(frac_file, 'r')
@@ -224,6 +228,8 @@ def make_ens_mean_first_correlation():
 
         temp_diff = np.load(f'{DATA_DIR}/temp_diff_monthly.npy')
         tree_diff = np.load(f'{DATA_DIR}/tree_diff_monthly.npy')
+        lats = np.load(f'{DATA_DIR}/access_lats.npy')
+        lons = np.load(f'{DATA_DIR}/access_lons.npy')
 
     # Do ensemble mean first
     temp_diff_ens_mean = temp_diff.mean(axis=0)
@@ -248,7 +254,7 @@ def make_ens_mean_first_correlation():
             )
     ax.coastlines()
     plt.colorbar(orientation='horizontal', pad=0.05)
-    plt.title('Correlation between TAS and treeFrac')
+    plt.title('Correlation between 2 m air temperature and tree fraction')
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/correlation_tree_tas_ens_mean_first.png', dpi=DPI)
 

@@ -468,7 +468,9 @@ def make_model_plots()->None:
                 #for m in MODELS.keys():
                 #    plt.plot([0], [0], color=COLORS[m], label=MODELS[m])
                 plt.xlabel('Year')
-                if var=='tas': plt.ylabel('Temperature (°C)')
+                if var=='tas':
+                    plt.ylabel('Temperature (°C)')
+                    plt.title('Global mean 2 m surface air temperature difference trends')
                 else: plt.ylabel('Precipitation (mm/day)')
                 fig.suptitle(f'{var} global mean trends')
                 #plt.tight_layout()
