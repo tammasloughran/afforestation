@@ -123,7 +123,10 @@ This is due to differences in the definition of tree cover in the integrated ass
     \begin{subfigure}[b]{\linewidth}
         \includegraphics[width=\linewidth]{../plots/tree_frac_deltat.png}
     \end{subfigure}
-    \caption{Change in tree fraction from the Land-use Harmonization 2 SSP1-2.6 scenario between the year 2100 and 2015. Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. THe black crosses marl the locations of large forestation changes that are used for daily temperature distributions.}
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tree_frac_deltat_ssp585.png}
+    \end{subfigure}
+    \caption{Change in tree fraction from the Land-use Harmonization 2 SSP1-2.6 (top) and SSP5-8.5 (bottom) scenario between the year 2100 and 2015. Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. The black crosses marl the locations of large forestation changes that are used for daily temperature distributions.}
     \label{fig:land_use}
 \end{figure}
 
@@ -162,8 +165,8 @@ UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°   
 
 \subsection{Data}
 
-FOr each model, we use the variables tree craction, cLand, cVeg, cLitter, cSoil, atmospheric CO$_2$ concentrations, ocean CO$_2$ flux, 1.5 m surface air temperature and monthly mean precipitation rate.
-For ACCESS-ESM1.5 we also examine daily maximum temperatures.
+For each model, we use the variables tree craction, cLand, cVeg, cLitter, cSoil, atmospheric CO$_2$ concentrations, ocean CO$_2$ flux, 1.5 m surface air temperature and monthly mean precipitation rate.
+From ACCESS-ESM1.5 we also use daily maximum temperatures.
 Tree fraction data for MIROC are not available.
 
 \subsection{Regional analysis}
@@ -217,10 +220,9 @@ Deciduous needle leaf forests only make up a small fraction of forests and do no
         \includegraphics[width=\linewidth]{../plots/tree_area_ssp126_all_models_global_sum.png}
     \end{subfigure}
     \begin{subfigure}[b]{0.9\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tree_area_map_2015-2100_delta.png}
+        \includegraphics[width=\linewidth]{../plots/tree_frac_map_2015-2100_diff.png}
     \end{subfigure}
-    \caption{Tree cover area changes between 2015 to 2100 in the forestation scenario for each model. Global mean tree cover fraction for each model. %and CABLE tree PFT areas for the SSP1-2.6 scenario. %(Several models are missing the treeFrac variable.)
-    MIROC data for tree fraction are not available.}
+    \caption{Global mean tree cover area changes between 2015 to 2100 in the forestation scenario (solid) and reference simulation (dashed) for each model. End of century maps of tree cover fraction difference between the simulations for each model. MIROC data for tree fraction are not available.}
     \label{fig:land_use_map}
 \end{figure}
 
@@ -277,6 +279,8 @@ The trend in the difference of the afforestation and reference simulations over 
 Furthermore, there is some disagreement in the sign of the change in global temperature among models and ensemble members, with CanESM5 showing a non-significant positive trend.
 The effect that internal climate variability can have on the trends is demonstrated by the ACCESS-ESM1-5 ensemble.
 While the ensemble mean trend showed no significant change, 3 members showed a significant positive trend.
+The temporal variance of temperature also varies accross the models.
+For example, MIROC features large decadal scale oscillations in global mean teperature in both the forestation scenario and the reference scenario (Fig. S\ref{fig:models_absolute}), which causes large oscillations in the difference as they drift out of phase in the latter half of the century.
 Similar to global mean surface air temperature, the response of global mean precipitation to forestation is also unclear from the models (Fig. S\ref{fig:models_pr_trends}).
 All models show no significant trends in global precipitation rate.
 
@@ -416,7 +420,7 @@ In ACCESS-ESM1-5, deciduous broadleaf forests have the highest reflectance of al
 %    \begin{subfigure}[b]{0.5\linewidth}
 %        \includegraphics[width=\linewidth]{../plots/correlation_tree_tas_significance.png}
 %    \end{subfigure}
-    \caption{Correlation of 2m surface air temperature (\textit{esm-ssp585-ssp126Lu}
+    \caption{Correlation of ensemble mean 2 m surface air temperature (\textit{esm-ssp585-ssp126Lu}
     \textit{esm-ssp585} difference) with tree fraction in ACCESS-ESM1-5. Only statistically significant correlations at the 5\% level are shown.}
     \label{fig:map_tas_tree_correlation}
 \end{figure}
