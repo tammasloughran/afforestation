@@ -95,38 +95,54 @@ CMAP = 'bwr'
 
 
 def my_num2date(times:np.ndarray, units:str, calendar:str)->list:
+    """Convert numbers to a list of datetime objects.
+    """
     dates = nc.num2date(times, units, calendar=calendar)
     return [dt.datetime(d.year, d.month, d.day, d.hour) for d in dates]
 
 
+def global_mean(data:np.ndarray, lats:np.ndarray)->np.ndarray:
+    """Calculate an area weighted global mean. weights are the cosine of lats.
+    """
+    coslats = np.cos(np.deg2rad(lats))[None,:,None]*np.ones(data.shape)
+    return np.ma.average(data, axis=(1,2), weights=coslats)
+
+
+def load_frac(file_names:list)->tuple:
+    """Load all required data.
+    """
+    if len(file_names)>1:
+        nc_tree_frac = nc.MFDataset(file_names, 'r')
+    else:
+        nc_tree_frac = nc.Dataset(file_names[0], 'r')
+    tree_frac = nc_tree_frac.variables['treeFrac'][:].squeeze()
+    lats = nc_tree_frac.variables['lat'][:]
+    lons = nc_tree_frac.variables['lon'][:]
+    times = nc_tree_frac.variables['time']
+    dates = my_num2date(times[:], times.units, times.calendar)
+    return tree_frac, dates, lats, lons
+
+
+def calc_tree_area(tree_frac:np.ndarray, area_file:str)->np.ndarray:
+    """Load gridcell area in units million km^2.
+    """
+    areas = nc.Dataset(area_file, 'r').variables['cell_area'][:]
+    return (tree_frac/100)*areas/M2_TOMILKM2
+
+
 def plot_global_sum_area()->None:
+    """Plot the global sum of tree areas.
+    """
     plt.figure()
     for model in MODELS:
-        cell_area = nc.Dataset(f'{DATA_DIR}/gridarea_{model}.nc', 'r').variables['cell_area'][:]
-        if model=='CESM2':
-            table = 'Eyr'
-        else:
-            table = 'Lmon'
-        files = sorted(get_filenames(
-                'LUMIP',
-                INSTIT[model],
-                model,
-                'esm-ssp585-ssp126Lu',
-                ENSEMBLES[model],
-                table,
-                'treeFrac',
-                ))
-        if len(files)>1:
-            nc_tree_frac = nc.MFDataset(files, 'r')
-        else:
-            nc_tree_frac = nc.Dataset(files[0], 'r')
-        tree_frac = nc_tree_frac.variables['treeFrac'][:].squeeze()/100
-        tree_area = tree_frac*cell_area/M2_TOMILKM2
-        global_tree_area = tree_area.sum(axis=(1,2))
-        times = nc_tree_frac.variables['time']
-        dates = my_num2date(times[:], times.units, times.calendar)
-        plt.plot(dates, global_tree_area, color=COLORS[INSTIT[model]], label=model)
-    plt.xlim(left=dates[0], right=dates[-1])
+        plt.plot(for_dates[model], for_global_sum[model], color=COLORS[INSTIT[model]], label=model)
+        plt.plot(
+                ssp585_dates[model],
+                ssp585_global_sum[model],
+                color=COLORS[INSTIT[model]],
+                linestyle='dashed',
+                )
+    plt.xlim(left=for_dates[model][0], right=for_dates[model][-1])
     plt.ylabel('Area (million km$^2$)')
     plt.title('Tree area')
     plt.legend()
@@ -134,33 +150,24 @@ def plot_global_sum_area()->None:
 
 
 def plot_global_mean_frac()->None:
+    """Plot the global mean of tree fractions.
+    """
     plt.figure()
+
     for model in MODELS:
-        if model=='CESM2':
-            table = 'Eyr'
-        else:
-            table = 'Lmon'
-        files = sorted(get_filenames(
-                'LUMIP',
-                INSTIT[model],
-                model,
-                'esm-ssp585-ssp126Lu',
-                ENSEMBLES[model],
-                table,
-                'treeFrac',
-                ))
-        if len(files)>1:
-            nc_tree_frac = nc.MFDataset(files, 'r')
-        else:
-            nc_tree_frac = nc.Dataset(files[0], 'r')
-        tree_frac = nc_tree_frac.variables['treeFrac'][:].squeeze()
-        lats = nc_tree_frac.variables['lat'][:]
-        coslats = np.cos(np.deg2rad(lats))[None,:,None]*np.ones(tree_frac.shape)
-        global_tree_frac = np.ma.average(tree_frac, axis=(1,2), weights=coslats)
-        times = nc_tree_frac.variables['time']
-        dates = my_num2date(times[:], times.units, times.calendar)
-        plt.plot(dates, global_tree_frac, color=COLORS[INSTIT[model]], label=model)
-    plt.xlim(left=dates[0], right=dates[-1])
+        plt.plot(
+                for_dates[model],
+                for_global_mean[model],
+                color=COLORS[INSTIT[model]],
+                label=model,
+                )
+        plt.plot(
+                ssp585_dates[model],
+                ssp585_global_mean[model],
+                color=COLORS[INSTIT[model]],
+                linestyle='dashed',
+                )
+    plt.xlim(left=for_dates[model][0], right=for_dates[model][-1])
     plt.ylabel('Fraction %')
     plt.title('Tree fraction')
     plt.legend()
@@ -168,38 +175,18 @@ def plot_global_mean_frac()->None:
 
 
 def plot_area_by_lat()->None:
+    """Plot the tree area by latitude.
+    """
+    global for_dates, for_tree_area
     fig, axes = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
     fig.set_size_inches(9, 7)
     axes = axes.flatten()
     for i,model in enumerate(MODELS):
         plt.sca(axes[i])
-        cell_area = nc.Dataset(f'{DATA_DIR}/gridarea_{model}.nc', 'r').variables['cell_area'][:]
-        if model=='CESM2':
-            table = 'Eyr'
-        else:
-            table = 'Lmon'
-        files = sorted(get_filenames(
-                'LUMIP',
-                INSTIT[model],
-                model,
-                'esm-ssp585-ssp126Lu',
-                ENSEMBLES[model],
-                table,
-                'treeFrac',
-                ))
-        if len(files)>1:
-            nc_tree_frac = nc.MFDataset(files, 'r')
-        else:
-            nc_tree_frac = nc.Dataset(files[0], 'r')
-        tree_frac = nc_tree_frac.variables['treeFrac'][:].squeeze()/100
-        tree_area = tree_frac*cell_area/M2_TOMILKM2
-        lat_tree_area = tree_area.sum(axis=-1)
-        times = nc_tree_frac.variables['time']
-        dates = my_num2date(times[:], times.units, times.calendar)
-        lats = nc_tree_frac.variables['lat'][:]
+        lat_tree_area = for_tree_area[model].sum(axis=-1)
         plt.pcolormesh(
-                dates,
-                lats,
+                for_dates[model],
+                lats[model],
                 (lat_tree_area - lat_tree_area[0]).T,
                 label=model,
                 vmin=-0.5,
@@ -221,42 +208,23 @@ def plot_area_by_lat()->None:
             )
     plt.xlabel('Year')
     plt.ylabel('Latitude °N')
-    cbar_ax = fig.add_axes([0.1, 0.085, 0.85, 0.04])
+    cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
     plt.colorbar(cax=cbar_ax, label='Area (million km$^2$)', orientation='horizontal', pad=0.05)
     plt.savefig(f'{PLOTS_DIR}/tree_area_ssp126_all_models_zonsum.png', dpi=DPI)
 
 
 def plot_frac_by_lat()->None:
+    """Plot the tree fraction by latitude.
+    """
     fig, axes = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
     fig.set_size_inches(9, 7)
     axes = axes.flatten()
     for i,model in enumerate(MODELS):
         plt.sca(axes[i])
-        if model=='CESM2':
-            table = 'Eyr'
-        else:
-            table = 'Lmon'
-        files = sorted(get_filenames(
-                'LUMIP',
-                INSTIT[model],
-                model,
-                'esm-ssp585-ssp126Lu',
-                ENSEMBLES[model],
-                table,
-                'treeFrac',
-                ))
-        if len(files)>1:
-            nc_tree_frac = nc.MFDataset(files, 'r')
-        else:
-            nc_tree_frac = nc.Dataset(files[0], 'r')
-        tree_frac = nc_tree_frac.variables['treeFrac'][:].squeeze()
-        lat_tree_frac = np.ma.average(tree_frac, axis=-1)
-        times = nc_tree_frac.variables['time']
-        dates = my_num2date(times[:], times.units, times.calendar)
-        lats = nc_tree_frac.variables['lat'][:]
+        lat_tree_frac = np.ma.average(for_tree_frac[model], axis=-1)
         plt.pcolormesh(
-                dates,
-                lats,
+                for_dates[model],
+                lats[model],
                 (lat_tree_frac - lat_tree_frac[0]).T,
                 label=model,
                 vmin=-40,
@@ -278,12 +246,14 @@ def plot_frac_by_lat()->None:
             )
     plt.xlabel('Year')
     plt.ylabel('Latitude °N')
-    cbar_ax = fig.add_axes([0.1, 0.085, 0.85, 0.04])
+    cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
     plt.colorbar(cax=cbar_ax, label='Fraction %', orientation='horizontal', pad=0.05)
     plt.savefig(f'{PLOTS_DIR}/tree_area_ssp126_all_models_zonmean.png', dpi=DPI)
 
 
-def plot_map_tree_area_change()->None:
+def plot_map_tree_area_change(indata:dict, name:str)->None:
+    """Plot maps of the tree area change.
+    """
     fig, axes = plt.subplots(
             nrows=3,
             ncols=2,
@@ -295,6 +265,126 @@ def plot_map_tree_area_change()->None:
     axes = axes.flatten()
     for i,model in enumerate(MODELS):
         plt.sca(axes[i])
+        # pcolormesh expects +1 lon.
+        llons = np.append(lons[model], [lons[model][-1] + lons[model][1] - lons[model][0]])
+        # Shift plotting to centre grid, align with coastlines.
+        llons = llons - (llons[1] - llons[0])/2
+        llats = lats[model] - (lats[model][1] - lats[model][0])/4
+        data = plt.pcolormesh(
+                llons,
+                llats,
+                indata[model][-1] - indata[model][0],
+                cmap=CMAP,
+                vmin=-0.025,
+                vmax=0.025,
+                transform=ccrs.PlateCarree(),
+                )
+        axes[i].coastlines()
+        plt.title(model, fontsize=8)
+    plt.sca(axes[-1])
+    fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
+    cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
+    plt.colorbar(
+            data,
+            cax=cbar_ax,
+            label='Area (million km$^2$)',
+            orientation='horizontal',
+            pad=0.05,
+            )
+    plt.savefig(f'{PLOTS_DIR}/tree_area_map_2015-2100_{name}_delta.png', dpi=DPI)
+
+
+def plot_map_tree_fraction_change(indata:dict, name:str)->None:
+    """Plot maps of the tree fraction change.
+    """
+    fig, axes = plt.subplots(
+            nrows=3,
+            ncols=2,
+            sharex=True,
+            sharey=True,
+            subplot_kw={'projection': ccrs.EckertIV()},
+            )
+    fig.set_size_inches(9, 7)
+    axes = axes.flatten()
+    for i,model in enumerate(MODELS):
+        plt.sca(axes[i])
+        # pcolormesh expects +1 lon.
+        llons = np.append(lons[model], [lons[model][-1] + lons[model][1] - lons[model][0]])
+        # Shift plotting to centre grid, align with coastlines.
+        llons = llons - (llons[1] - llons[0])/2
+        llats = lats[model] - (lats[model][1] - lats[model][0])/4
+        data = plt.pcolormesh(
+                llons,
+                llats,
+                indata[model][-1] - indata[model][0],
+                cmap=CMAP,
+                vmin=-100,
+                vmax=100,
+                transform=ccrs.PlateCarree(),
+                )
+        axes[i].coastlines()
+        plt.title(model, fontsize=8)
+    plt.sca(axes[-1])
+    fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
+    cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
+    plt.colorbar(
+            data,
+            cax=cbar_ax,
+            label='Tree fraction (%)',
+            orientation='horizontal',
+            pad=0.05,
+            )
+    plt.savefig(f'{PLOTS_DIR}/tree_frac_map_2015-2100_{name}_delta.png', dpi=DPI)
+
+
+def plot_map_tree_fraction_difference(indata:dict, indata2:dict)->None:
+    """Plot maps of the tree fraction change.
+    """
+    fig, axes = plt.subplots(
+            nrows=3,
+            ncols=2,
+            sharex=True,
+            sharey=True,
+            subplot_kw={'projection': ccrs.EckertIV()},
+            )
+    fig.set_size_inches(9, 7)
+    axes = axes.flatten()
+    for i,model in enumerate(MODELS):
+        plt.sca(axes[i])
+        # pcolormesh expects +1 lon.
+        llons = np.append(lons[model], [lons[model][-1] + lons[model][1] - lons[model][0]])
+        # Shift plotting to centre grid, align with coastlines.
+        llons = llons - (llons[1] - llons[0])/2
+        llats = lats[model] - (lats[model][1] - lats[model][0])/4
+        data = plt.pcolormesh(
+                llons,
+                llats,
+                indata[model][-1] - indata2[model][-1],
+                cmap=CMAP,
+                vmin=-100,
+                vmax=100,
+                transform=ccrs.PlateCarree(),
+                )
+        axes[i].coastlines()
+        plt.title(model, fontsize=8)
+    plt.sca(axes[-1])
+    fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
+    cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
+    plt.colorbar(
+            data,
+            cax=cbar_ax,
+            label='Tree fraction (%)',
+            orientation='horizontal',
+            pad=0.05,
+            )
+    plt.savefig(f'{PLOTS_DIR}/tree_frac_map_2015-2100_diff.png', dpi=DPI)
+
+
+def make_tree_frac_plots()->None:
+    """Main function to plot all tree area and fraction plots.
+    """
+    # Calculate model grid cell areas.
+    for model in MODELS:
         if model=='CESM2':
             table = 'Eyr'
         else:
@@ -308,58 +398,6 @@ def plot_map_tree_area_change()->None:
                 table,
                 'treeFrac',
                 ))
-        if len(files)>1:
-            nc_tree_frac = nc.MFDataset(files, 'r')
-        else:
-            nc_tree_frac = nc.Dataset(files[0], 'r')
-        tree_frac = nc_tree_frac.variables['treeFrac'][:].squeeze()/100
-        cell_area = nc.Dataset(f'{DATA_DIR}/gridarea_{model}.nc', 'r').variables['cell_area'][:]
-        tree_area = tree_frac*cell_area/M2_TOMILKM2
-        lats = nc_tree_frac.variables['lat'][:]
-        lons = nc_tree_frac.variables['lon'][:]
-        lons = np.append(lons, [lons[-1] + lons[1] - lons[0]]) # pcolormesh expects +1 lon.
-        lons = lons - (lons[1] - lons[0])/2 # Shift plotting to centre grid, align with coastlines.
-        lats = lats - (lats[1] - lats[0])/4
-        data = plt.pcolormesh(
-                lons,
-                lats,
-                tree_area[-1]-tree_area[0],
-                cmap=CMAP,
-                vmin=-0.025,
-                vmax=0.025,
-                transform=ccrs.PlateCarree(),
-                )
-        axes[i].coastlines()
-        plt.title(model, fontsize=8)
-    plt.sca(axes[-1])
-    fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
-    cbar_ax = fig.add_axes([0.1, 0.085, 0.85, 0.04])
-    plt.colorbar(
-            data,
-            cax=cbar_ax,
-            label='Area (million km$^2$)',
-            orientation='horizontal',
-            pad=0.05,
-            )
-    plt.savefig(f'{PLOTS_DIR}/tree_area_map_2015-2100_delta.png', dpi=DPI)
-
-
-def make_tree_frac_plots()->None:
-    # Calculate model grid cell areas.
-    for model in MODELS:
-        if model=='CESM2':
-            table = 'Eyr'
-        else:
-            table = 'Lmon'
-        files = sorted(get_filenames(
-            'LUMIP',
-            INSTIT[model],
-            model,
-            'esm-ssp585-ssp126Lu',
-            ENSEMBLES[model],
-            table,
-            'treeFrac',
-            ))
         if f'gridarea_{model}.nc' not in os.listdir(DATA_DIR):
             cdo.gridarea(input=files[0], output=f'{DATA_DIR}/gridarea_{model}.nc')
 
@@ -376,9 +414,85 @@ def make_tree_frac_plots()->None:
     plot_frac_by_lat()
 
     # Plot global maps of tree area change.
-    plot_map_tree_area_change()
+    plot_map_tree_area_change(for_tree_area, 'for')
+    plot_map_tree_area_change(ssp585_tree_area, 'ssp585')
+    plot_map_tree_fraction_change(for_tree_frac, 'for')
+    plot_map_tree_fraction_change(ssp585_tree_frac, 'ssp585')
+
+    # Plot the maps of differences between simulations.
+    plot_map_tree_fraction_difference(for_tree_frac, ssp585_tree_frac)
 
 
 if __name__ != 'analysis.plot_model_trees':
-    make_tree_frac_plots()
+    print("Creating tree fraction plots.")
+    # Load data:
+    for_tree_frac = {}
+    for_tree_area = {}
+    for_global_mean = {}
+    for_global_sum = {}
+    for_dates = {}
+    ssp585_tree_frac = {}
+    ssp585_tree_area = {}
+    ssp585_global_mean = {}
+    ssp585_global_sum = {}
+    ssp585_dates = {}
+    lons = {}
+    lats = {}
+    print("Loading:")
+    for model in MODELS:
+        print(f"    - {model}")
+        print(f"        - Fractions")
+        # Load the forestation experiment data.
+        if model=='CESM2':
+            table = 'Eyr'
+        else:
+            table = 'Lmon'
+        files = sorted(get_filenames(
+                'LUMIP',
+                INSTIT[model],
+                model,
+                'esm-ssp585-ssp126Lu',
+                ENSEMBLES[model],
+                table,
+                'treeFrac',
+                ))
+        for_tree_frac[model], for_dates[model], _, _, = load_frac(files)
 
+        # Load the SSP585 data.
+        if model=='CanESM5':
+            e = 'r1i1p1f1'
+        else:
+            e = ENSEMBLES[model]
+        files = sorted(get_filenames(
+                'C4MIP',
+                INSTIT[model],
+                model,
+                'esm-ssp585',
+                e,
+                'Lmon',
+                'treeFrac',
+                ))
+        ssp585_tree_frac[model], ssp585_dates[model], lats[model], lons[model] = load_frac(files)
+
+        # Calculate global mean cover fractions.
+        for_global_mean[model] = global_mean(for_tree_frac[model], lats[model])
+        ssp585_global_mean[model] = global_mean(ssp585_tree_frac[model], lats[model])
+
+        # Cacluate areas
+        print("        - Areas")
+        for_tree_area[model] = calc_tree_area(
+                for_tree_frac[model],
+                f'{DATA_DIR}/gridarea_{model}.nc',
+                )
+        ssp585_tree_area[model] = calc_tree_area(
+                ssp585_tree_frac[model],
+                f'{DATA_DIR}/gridarea_{model}.nc',
+                )
+
+        # Calculate global sum areas.
+        print("        - Sums")
+        for_global_sum[model] = np.nansum(for_tree_area[model], axis=(1,2))
+        ssp585_global_sum[model] = np.nansum(ssp585_tree_area[model], axis=(1,2))
+
+    make_tree_frac_plots()
+    plt.show()
