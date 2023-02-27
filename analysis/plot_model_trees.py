@@ -135,7 +135,12 @@ def plot_global_sum_area()->None:
     """
     plt.figure()
     for model in MODELS:
-        plt.plot(for_dates[model], for_global_sum[model], color=COLORS[INSTIT[model]], label=model)
+        plt.plot(
+                for_dates[model],
+                for_global_sum[model],
+                color=COLORS[INSTIT[model]],
+                label=model,
+                )
         plt.plot(
                 ssp585_dates[model],
                 ssp585_global_sum[model],
