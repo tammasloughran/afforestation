@@ -165,9 +165,9 @@ UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°   
 
 \subsection{Data}
 
-For each model, we use the variables tree craction, cLand, cVeg, cLitter, cSoil, atmospheric CO$_2$ concentrations, ocean CO$_2$ flux, 1.5 m surface air temperature and monthly mean precipitation rate.
+For each model, we use the variables tree craction, cLand, cVeg, cLitter, cSoil, atmospheric CO$_2$ concentrations, ocean CO$_2$ flux, 1.5 m surface air temperature (TAS) and monthly mean precipitation rate (PR).
 From ACCESS-ESM1.5 we also use daily maximum temperatures.
-Tree fraction data for MIROC are not available.
+Some variables are not available for particular models. These include: tree fraction data from MIROC, and atmospheric CO$_2$ concentration from CanESM, GFDL-ESM4 and UKESM1-0-LL.
 
 \subsection{Regional analysis}
 
@@ -207,6 +207,8 @@ Combined with differences in grid resolution, this results in a variety of chang
 UKESM1-0-LL, CanESM5 and MPI-ESM1-2-LR include vegetation dynamics that respond to changes in climate, and these are the models that deviate from the LUH2 forcing the most.
 CanESM5 in particular stands out as having a net loss of tree area by 2100.
 MPI-ESM features substantial Amazonian die-back, but large amounts of forest increase in semi-arid regions in Africa and Australia.
+
+The UKESM1-0-LL esm-ssp585-ssp126Lu scenario is known to have enhanced CO2 fertilisation and warming in the mid- to high-latitudes (resulting in increased tree cover fractions) and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
 
 ACCESS-ESM1-5 is an example that closely follows the spatial distribution of the LUH2 land-use forcing.
 By 2100, ACCESS-ESM1-5 has a forest expansion of 1.59 million km² and agricultural abandonment of 1.11 million km$^2$.
@@ -279,6 +281,8 @@ The trend in the difference of the afforestation and reference simulations over 
 Furthermore, there is some disagreement in the sign of the change in global temperature among models and ensemble members, with CanESM5 showing a non-significant positive trend.
 The effect that internal climate variability can have on the trends is demonstrated by the ACCESS-ESM1-5 ensemble.
 While the ensemble mean trend showed no significant change, 3 members showed a significant positive trend.
+The decrease in CO$_2$ concentration of these 3 members is not consistently greater than the other ensemble members, which indicates that the significance of the temperature decrease in these members is mostly driven by internal climate variability. \footnote{I have a figure showing this.}
+
 The temporal variance of temperature also varies accross the models.
 For example, MIROC features large decadal scale oscillations in global mean teperature in both the forestation scenario and the reference scenario (Fig. S\ref{fig:models_absolute}), which causes large oscillations in the difference as they drift out of phase in the latter half of the century.
 Similar to global mean surface air temperature, the response of global mean precipitation to forestation is also unclear from the models (Fig. S\ref{fig:models_pr_trends}).
@@ -414,14 +418,13 @@ In ACCESS-ESM1-5, deciduous broadleaf forests have the highest reflectance of al
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.5\linewidth}
+    \begin{subfigure}[b]{0.7\linewidth}
         \includegraphics[width=\linewidth]{../plots/correlation_tree_tas_ens_mean_first.png}
     \end{subfigure}
 %    \begin{subfigure}[b]{0.5\linewidth}
 %        \includegraphics[width=\linewidth]{../plots/correlation_tree_tas_significance.png}
 %    \end{subfigure}
-    \caption{Correlation of ensemble mean 2 m surface air temperature (\textit{esm-ssp585-ssp126Lu}
-    \textit{esm-ssp585} difference) with tree fraction in ACCESS-ESM1-5. Only statistically significant correlations at the 5\% level are shown.}
+    \caption{Correlation of ensemble mean 2 m surface air temperature (\textit{esm-ssp585-ssp126Lu} \textit{esm-ssp585} difference) with tree fraction in ACCESS-ESM1-5. Only statistically significant correlations at the 5\% level are shown.}
     \label{fig:map_tas_tree_correlation}
 \end{figure}
 
@@ -451,16 +454,30 @@ If some forests are sustainably harvested and regrown, then the removal of CO$_2
 \section{Supplementary Material}
 \setcounter{figure}{0}
 
-\subsection{PFTs}
+\subsection{Tree cover fractions}
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tree_frac_deltat_ssp585.png}
-    \end{subfigure}
-    \caption{Temporal anomaly in tree cover fractions in SSP5-8.5 scenario from LUH2.}
-    \label{fig:LUH2_tree_frac_ssp585}
+    \includegraphics[width=\linewidth]{../plots/tree_fraction_ssp126_all_models_globalmean.png}
+    \caption{Tree cover fractions for all models.}
+    \label{fig:tree_fractions_models}
 \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tree_frac_map_2015-2100_for_delta.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \includegraphics[width=\linewidth]{../plots/tree_frac_map_2015-2100_ssp585_delta.png}
+    \end{subfigure}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/tree_frac_map_2015-2100_diff.png}
+%    \end{subfigure}
+    \caption{Tree cover fractions map for all models expressed as a temporal anomaly. Left: Forestation esperiment. Right: SSP585.}
+    \label{fig:tree_area_maps_ssp126Lu}
+\end{figure}
+
 
 \begin{figure}[H]
     \centering
@@ -473,11 +490,11 @@ If some forests are sustainably harvested and regrown, then the removal of CO$_2
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/cropFrac_esm-ssp585_anomaly.png}
     \end{subfigure}
-    \caption{Temporal anomaly in area of trees, grass and crop between 2015 and 2100 for \textit{esm-ssp585} in ACCESS-ESM1.5}
+    \caption{Temporal anomaly in area of trees, grass and crop between 2015 and 2100 for \textit{esm-ssp585} in ACCESS-ESM1.5.
+    % This should probably be the LUH2 grass and crop plots for both scenarios.
+    }
     \label{fig:ACCESS_land_cover}
 \end{figure}
-
-% Also put the SSP585 cover fraction maps for each model here.
 
 \begin{figure}[H]
     \centering
@@ -494,16 +511,16 @@ If some forests are sustainably harvested and regrown, then the removal of CO$_2
     \label{fig:ACCESS_land_use}
 \end{figure}
 
+\subsection{CO2}
+
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/CABLE_forests_deciduous_needle.png}
-    \end{subfigure}
-    \caption{Global change in deciduous needleleaf forest in ACCESS-ESM1-5.}
-    \label{fig:ACCESS_dec_needle_cover}
+    \includegraphics[width=\linewidth]{../plots/models_co2.png}
+    \caption{Absolute CO2}
+    \label{fig:models_co2_absolute}
 \end{figure}
 
-\subsection{Model intercomparison}
+\subsection{Climate}
 
 \begin{figure}[H]
     \centering
