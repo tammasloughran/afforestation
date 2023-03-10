@@ -61,7 +61,7 @@ with the effects of albedo and evapotransiration having opposing impacts that mi
 Historically, there has been substantial deforestation in temperate forests of Eurasia and North America and in the last few decades deforestation has been focused on the tropics (\cite{goldewijk_estimating_2001}).
 The net effect of deforestation is to cool the climate globally due to an increase in albedo  (\cite{davin_climatic_2010}).
 \cite{boysen_global_2020} show a cooling of -0.22$\pm$0.2 \textcelsius{} among 9 climate models in idealized simulations.
-\cite{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incident of hot extremes by 5.5--0.9\%. \footnote{Still not sure which stat from this paper to include here.}
+\cite{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incident of hot extremes by 5.5--0.9\%.
 However, the effect of future afforestation may not necessarily be merely the inverse of the effect of future deforestation.
 
 There have been a number of previous studies on the potential of forestation to remove CO$_2$ from the atmosphere, each using different methods of quantification.
@@ -90,7 +90,7 @@ In particular, ACCESS-ESM1.5 contributed multiple single model ensembles to thes
 
 The CMIP6 experimental design specifies a set of standard simulations called the Diagnostic, Evaluation and Characterization of Klima (DECK) \parencite{eyring_overview_2016}, which are typically used as the foundation to study more specific research questions.
 The DECK includes a pre-industrial control simulation (\textit{piControl}) with constant greenhouse gas concentration forcing, and a historical (\textit{historical}) simulation with transient historical greenhouse gas concentration forcing.
-Furthermore, the DECK specifies corresponding simulations (\textit{esm-piControl} and \textit{esm-hist}) that are run in full ``Earth system model" mode with a fully interactive dynamical carbon cycle and for the historical period, fossil fuel and industrial greenhouse gas emissions forcings.
+Furthermore, the DECK specifies corresponding simulations (\textit{esm-piControl} and \textit{esm-hist}) that are run in ``Earth system model" mode (i.e. there is a fully interactive dynamical carbon cycle) with fossil fuel and industrial greenhouse gas emission forcings during the historical period.
 In order to capture the carbon cycle and dynamics of the entire Earth system in response to forestation, including biogeochemical and biogeophysical feedbacks of the land surface and climate system, we use only the Earth system model simulations from relevant intercomparison projects. These emissions-driven simulations are initialized at 2015 from the end of the \textit{esm-hist} experiment.
 
 The forestation scenario we use is the Land Use Model Intercomparison Project's \textit{esm-ssp585-ssp126Lu}, spanning the years 2015--2100 \parencite{lawrence_land_2016}.
@@ -126,7 +126,7 @@ This is due to differences in the definition of tree cover in the integrated ass
     \begin{subfigure}[b]{\linewidth}
         \includegraphics[width=\linewidth]{../plots/tree_frac_deltat_ssp585.png}
     \end{subfigure}
-    \caption{Change in tree fraction from the Land-use Harmonization 2 SSP1-2.6 (top) and SSP5-8.5 (bottom) scenario between the year 2100 and 2015. Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. The black crosses marl the locations of large forestation changes that are used for daily temperature distributions.}
+    \caption{Changes in tree fraction from the Land-use Harmonization 2 SSP1-2.6 (top) and SSP5-8.5 (bottom) scenario between the year 2100 and 2015. Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. The black crosses marl the locations of large forestation changes that are used for daily temperature distributions.}
     \label{fig:land_use}
 \end{figure}
 
@@ -138,11 +138,10 @@ A brief overview of these models is presented in Table \ref{tab:models}.
 ACCESS-ESM1-5 is the only model to include phosphorus limitation.
 Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members available for both simulations, of which there are 10 for each experiment.
 
-CanESM5 has differing ensemble methods for \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}.
-The former uses r1i1p1f1 and the latter uses r1i1p2f1.
-Therefore, there is some additional perturbation applied to one of those experiments.
-The CanESM5 model (green line in \ref{fig:models_cpools}) has been bias corrected by subtracting the difference in the carbon pools between the reference and forestation simulations at the start of the experiment (2015).
-This brings CanESM5 in line with other models for total land carbon.
+CanESM5 has differing ensemble initialisation methods for \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}.
+The former uses r1i1p1f1 and the latter uses r1i1p2f1, which features recent bugfixes in the model.
+To account for the slightly different initial conditions, the CanESM5 model (green line in \ref{fig:models_cpools}) has been bias corrected by subtracting the difference in the carbon pools between the reference and forestation simulations at the start of the experiment (2015).
+This makes the CanESM5 comparable with other models for all variables.
 
 \begin{table}[H]
     \centering
@@ -165,54 +164,48 @@ UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°   
 
 \subsection{Data}
 
-For each model, we use the variables tree craction, cLand, cVeg, cLitter, cSoil, atmospheric CO$_2$ concentrations, ocean CO$_2$ flux, 1.5 m surface air temperature (TAS) and monthly mean precipitation rate (PR).
-From ACCESS-ESM1.5 we also use daily maximum temperatures.
-Some variables are not available for particular models. These include: tree fraction data from MIROC, and atmospheric CO$_2$ concentration from CanESM, GFDL-ESM4 and UKESM1-0-LL.
+The data used in this study are avaialable from the Earth System Grid Federation.
+For each model, we use the monthly mean variables tree cover fraction (treeFrac), vegetation, litter, soil and total land carbon (cVeg, cLitter, cSoil, cLand), atmospheric CO$_2$ concentrations (co2), ocean CO$_2$ flux (fgco2), 1.5 m surface air temperature (tas) and precipitation rate (pr).
+From ACCESS-ESM1.5 we also use daily maximum temperatures (tasmax).
+Some variables are not available for particular models. These include: tree fraction data from MIROC, and atmospheric CO$_2$ concentration from CanESM and GFDL-ESM4.
 
-\subsection{Regional analysis}
+\subsection{Analysis and statistical methods}
 
-Regional analyses have been divided into 8 regions that feature substantial changes in tree cover.
-These regions are shown in Figure \ref{fig:land_use}.
-The temperature and precipitation values over the ocean are masked out to represent land only changes in these variables.
-The largest differences in tree cover between the two simulations occurs in various hot spots around the globe.
-To examine the local scale impact of large changes in tree cover on temperature and precipitation, histograms of the frequency distributions for specific grid-points are calculated, shown by the crosses in Figure \ref{fig:land_use}.
-Here, we focus only on ACCESS-ESM1-5, since it is the only model that contributed 10 ensemble members, and thus the statistics of the distribution are most robust for this model.
-
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics{../plots/regional_analysis_map.png}
-%    \caption{Box regions for regional analysis. Dots indicate grid-points that feature large transitions to forest cover and are used in the analysis of the temperature distributions in each simulation.}
-%    \label{fig:box_regions}
-%\end{figure}
-
-\subsection{Statistical methods}
-
-We calculate trends in the difference of global mean temperatures and precipitation to examine the change in temperature as forests expand.
+For the global analsysis accross all models, we calculate trends in the difference of global mean temperatures and precipitation to examine the change in temperature as forests expand.
 For this we use the Theil-Sen slope estimator and test its significance at the 5\% level using the Mann-Kendall trend test.
 
-We also calculate probability histograms to examine the distribution of daily temperatures for the ACCESS-ESM1-5.
-The difference in the temperature distribution in the two simulations in response to forestation is tested using the 2-sample Kolmogorov-Smirnov test for the equality of distributions at the 5\% level.
+The ACCESS-ESM1-5 regional analyses have been divided into 6 regions that feature notable changes in tree cover.
+These regions are shown in Figure \ref{fig:land_use}.
+The temperature and precipitation values over the ocean are masked out to represent changes only over the land surface.
 
-Finally, to examine the relationship of forestation on climate, correlations were done on ensemble mean surface air temperature and tree fraction using the Spearman rank correlation and the significance was tested at the 5\% level \parencite{kokoska2000crc}.
+Much of the tree cover changes between the two simulations occurs in a handful of concentrated regions.
+To examine the local scale impact of dramatic forestation on temperature and precipitation, histograms of the frequency distributions for specific grid-points are calculated for the locations shown by the crosses in Fig. \ref{fig:land_use}.
+These large forestation regions are in Eastern North America, East Asia and Amazonia.
+For these, we focus only on ACCESS-ESM1-5, since it is the only model that contributed 10 ensemble members, and thus the statistics of the distribution are most robust for this model.
+For the gridpoint maximum temperature frequency histograms, the difference in the temperature distribution in the two simulations in response to forestation is tested using the 2-sample Kolmogorov-Smirnov test for the equality of distributions at the 5\% level.
+
+Lastly, to examine the relationship of forestation on climate, correlations were done on ensemble mean surface air temperature and tree fraction using the Spearman rank correlation and the significance was tested at the 5\% level \parencite{kokoska2000crc}.
 
 \section{Results and discussion}
 
-\subsection{Global Multi-model Inter-comparison}
+\subsection{Global multi-model inter-comparison}
 
 \subsubsection{Carbon cycle}
 
 Each model has a unique internal representation of woody tree biomes and pre-industrial potential vegetation.
-It follows that each model interprets the allocation of natural lands from LUH2 to model-specific plant functional types (PFTs) differently.
-Combined with differences in grid resolution, this results in a variety of changes in global tree cover for each model (Fig. \ref{fig:land_use_map}).
-UKESM1-0-LL, CanESM5 and MPI-ESM1-2-LR include vegetation dynamics that respond to changes in climate, and these are the models that deviate from the LUH2 forcing the most.
-CanESM5 in particular stands out as having a net loss of tree area by 2100.
-MPI-ESM features substantial Amazonian die-back, but large amounts of forest increase in semi-arid regions in Africa and Australia.
+Therefore, each model interprets the allocation of natural lands from LUH2 to model-specific plant functional types (PFTs) differently.
+Combined with differences in grid resolution, this results in a variety of changes in global tree cover for each model. This is demonstrated in Fig. \ref{fig:land_use_map}, which shows the difference in tree cover fraction between the at 2100 (Fig. S\ref{fig:tree_area_maps_ssp126Lu} also shows the temporal change for each experiment).
+UKESM1-0-LL, CanESM5 and MPI-ESM1-2-LR include vegetation dynamics that respond to changes in climate, and these are the models that deviate from the LUH2 land-use forcing the most.
 
-The UKESM1-0-LL esm-ssp585-ssp126Lu scenario is known to have enhanced CO2 fertilisation and warming in the mid- to high-latitudes (resulting in increased tree cover fractions) and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
+To interepret the difference in tree cover response of the models, it is helpfull to be aware of some of the known climate and dynamic features of each model.
+Firstly, CanESM5 in particular stands out as having a net loss of tree area by 2100 (Fig. \ref{fig:land_use}a), however, this is due to CanESM5 lacking an explicit representation of shrubs and rangelands, which have been allocated as forest land use.
+CanESM5, MPI-ESM and UKESM1-0-LL also feature substantial Amazonian die-back in both scenarios, typically driven by localised drying.
+Secondly, MPI-ESM1-2-LR has large amounts of tree cover increase in semi-arid regions in Africa and Australia. \footnote{I've asked some MPI people why this occurs but still waiting a response.}
+Thirdly, the UKESM1-0-LL \textit{esm-ssp585-ssp126Lu} scenario is known to have enhanced CO$_2$ fertilisation and warming in the mid- to high-latitudes (resulting in increased tree cover fractions in Fig. S\ref{fig:tree_area_maps_ssp126Lu}) and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
 
 ACCESS-ESM1-5 is an example that closely follows the spatial distribution of the LUH2 land-use forcing.
 By 2100, ACCESS-ESM1-5 has a forest expansion of 1.59 million km² and agricultural abandonment of 1.11 million km$^2$.
-By mid-century, crops reach a minimum of 2.74 million km² less than in 2015, before rising again in the latter half of the century (Figure \ref{fig:ACCESS_land_use}).
+By mid-century, crops reach a minimum of 2.74 million km² less than in 2015, before rising again in the latter half of the century (Fig. S\ref{fig:ACCESS_land_use}).
 Forestation is dominated by growth of evergreen broad leaf forests, followed by evergreen needle leaf forests, then deciduous broad leaf forests.
 Deciduous needle leaf forests only make up a small fraction of forests and do not show any expansion.
 
@@ -239,26 +232,23 @@ Deciduous needle leaf forests only make up a small fraction of forests and do no
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/cSoil+cLitter_model_intercomparison_diff.png}
     \end{subfigure}
-    \caption{cLand, cVeg and cLitter+cSoil in the \textit{esm-ssp585-ssp126Lu} scenario for 6 CMIP6 models. ACCESS-ESM is plotted as the ensemble mean and the blue shading indicates the ACCESS-ESM1-5 ensemble range.}
+    \caption{Differences for cLand, cVeg and cLitter+cSoil between the \textit{esm-ssp585-ssp126Lu} and the \textit{esm-ssp585} scenario for 6 CMIP6 models. ACCESS-ESM is plotted as the ensemble mean and the blue shading indicates the ACCESS-ESM1-5 ensemble range.}
     \label{fig:models_cpools}
 \end{figure}
 
-% Moved
-%CanESM5 has differing ensemble methods for \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}.
-%One former uses r1i1p1f1 and the latter uses r1i1p2f1.
-%Therefore, there is some additional perturbation applied to one of those experiments.
-%The CanESM5 model (green line in \ref{fig:models_cpools}) has been bias corrected by subtracting the difference in %the carbon pools between the reference and forestation simulations at the start of the experiment (2015).
-%This brings CanESM5 in line with other models for total land carbon.
-CanESM has net deforestation by 2100 but increases in cVeg in the middle half of the century, which are transferred to the litter and soil carbon pools by 2100.
-It also has no significant change in global temperature by 2100.
+The diversity of increased tree cover fraction among the models corresponds to a range of carbon drawdown potentials into the terestrial system.
+Figure \ref{fig:model_cpools}, demonstrates the change in the model terrestrial carbon pools due to forestation.
+The increase in total land carbon tends to diminish towards the end of the century as new forest areas reach maturity.
+The models show a total CO$_2$ removal by the land surface of between 10--60 Pg C by 2100.
+The ACCESS-ESM1-5 ensemble spread indicates that the internal climate variability can constitute a considerable portion of this range (between 10--40 Pg C).
 
-ACCESS-ESM and UKESM are approximately in the middle of the model spread.
+For vegetation carbon, the models either maintain a draw-down potential of $\sim$20--50PgC by 2100 (ACCESS-ESM1-5, UKESM1-0-LL, MPI-ESM1-2-LR and CESM2), or the vegetation gains in the middle of the century have been lost by 2100 (CanESM5 and MIROC-ES2L).
+ACCESS-ESM1-5 and UKESM1-0-LL are approximately in the middle of the model spread.
 These models share the same atmospheric model component and therefore share many of the same climate physics, however UKESM has a greater transient climate response to forestation and atmospheric CO$_2$ changes.
 
-For vegetation related pools (cLand and cVeg) models tend to diminish in productivity by 2100.
-The models  either maintain a draw-down potential of $\sim$20--30PgC by 2100, or the gains from the middle of the century have been lost by 2100.
-Soil carbon shows varied response to forestation.
-ACCESS and UKESM show decreases in soil carbon, while other models show increases.
+Soil carbon shows varied response to forestation, but most models show that carbon accumulates in litter and carbon pools which is a long term sink.
+For example, for CanESM5, even though there is a net loss of tree cover by 2100, much of the land carbon is stored in soil and litter.
+On the other hand, ACCESS-ESM1-5 and UKESM1-0-LL show decreases in soil carbon. \footnote{Still working on the why of this.}
 
 \begin{figure}
     \centering
@@ -428,7 +418,7 @@ In ACCESS-ESM1-5, deciduous broadleaf forests have the highest reflectance of al
     \label{fig:map_tas_tree_correlation}
 \end{figure}
 
-\section{Concluding Remarks}
+\section{Concluding remarks}
 
 In this study, we conduct a multi-model intercomparison of a plausible scenario for forestation as a means of carbon dioxide removal.
 Models show a diverse interpretation of the forestation spatial patterns and as a result show a large range of outcomes for long term carbon storage in forests.
@@ -451,7 +441,7 @@ If some forests are sustainably harvested and regrown, then the removal of CO$_2
 
 \printbibliography
 
-\section{Supplementary Material}
+\section{Supplementary material}
 \setcounter{figure}{0}
 
 \subsection{Tree cover fractions}
