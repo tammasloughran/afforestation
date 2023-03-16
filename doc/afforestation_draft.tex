@@ -33,7 +33,7 @@
 \end{center}
 
 Forestation is a major component of future long-term emissions reduction and CO$_2$ removal strategies, but the viability of carbon stored in vegetation under future climates is highly uncertain.
-We analyse the results from 7 CMIP6 models of a scenario with high fossil fuel emissions and forest expansion.
+We analyze the results from 7 CMIP6 models of a scenario with high fossil fuel emissions and forest expansion.
 This scenario demonstrates the ability of forestation strategies to mitigate climate change under continued increasing CO$_2$ emissions and includes the potential impacts of increased CO$_2$ concentration and a warming climate on vegetation growth.
 Model intercomparison shows that relying only on forestation as a CO$_2$ removal strategy has limited impact on global climate under a high global warming scenario, despite generating a substantial long-term carbon sink.
 By using a single-model initial condition ensemble, we also show that there may be local increases in warm extremes in response to afforestation, particularly for decreases in the number of cool days.
@@ -56,11 +56,11 @@ And secondly by biogeophysical effects, i.e., changes in the physical properties
 In general, forestation causes a global cooling biogeochemical effect as carbon is taken from the atmosphere and stored in vegetation and soils.
 However, the biogeophysical impacts of forestation are more varied, %with a cooling effect in the low--mid latitudes via enhanced evapotranspiration and further increased cloud cover reflecting incoming shortwave radiation.
 %In the mid--high latitudes, the biogeophysical impacts are a net warming effect because of the decrease of albedo from dark vegetation relative to the surfaces that are seasonally covered in snow.
-with the effects of albedo and evapotransiration having opposing impacts that might dominate more or less at different latitudes.
+with the effects of albedo and evapotranspiration having opposing impacts that might dominate more or less at different latitudes.
 
 Historically, there has been substantial deforestation in temperate forests of Eurasia and North America and in the last few decades deforestation has been focused on the tropics (\cite{goldewijk_estimating_2001}).
 The net effect of deforestation is to cool the climate globally due to an increase in albedo (\cite{davin_climatic_2010}).
-In a modelling study of deforestation, \cite{boysen_global_2020} show a cooling of -0.22$\pm$0.2 \textcelsius{} among 9 climate models in idealized deforestation simulations with constant atmsospheric CO$_2$ concentration.
+In a modeling study of deforestation, \cite{boysen_global_2020} show a cooling of -0.22$\pm$0.2 \textcelsius{} among 9 climate models in idealized deforestation simulations with constant atmsospheric CO$_2$ concentration.
 \cite{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incidence of hot extremes by 5.5--0.9\%.
 However, the effect of future afforestation may not necessarily be merely the inverse of the effect of future deforestation.
 
@@ -69,7 +69,7 @@ For example, \cite{lenton_radiative_2009} used a simplified ``back-of-the-envelo
 They estimate a removal of 73 Pg(C) by forestation can result in a decrease of 0.37 W m$^{-2}$ radiative forcing by 2100.
 However, such simplified estimates assume that the land carbon storage is stable on long time scales, the decay of which under a future climate could only be estimated with an earth system model.
 
-More sophisticated modelling studies better represent the complexity of the net effects of biogeophysical and biogeochemical impacts.
+More sophisticated modeling studies better represent the complexity of the net effects of biogeophysical and biogeochemical impacts.
 For example, \cite{sonntag_reforestation_2016} quantified the CO$_2$ removal potential using and Earth System Model, where a high CO$_2$ emissions scenario is simulated (taken from RCP8.5) in combination with the ``forestation" land-use from a low emissions scenario (taken from RCP4.5).
 This previous study used the concentration driven CMIP5 (Coupled Model Intercomparison Project Phase 5) version of the MPI-ESM and the CMIP5 representative concentration pathways.
 They find that a decrease in 85 ppm (215 Pg(C)) of atmospheric CO$_2$ concentrations by 2100 from forestation results in a cooling of 0.27 K globally (also reiterated in \cite{sonntag_quantifying_2018}).
@@ -120,11 +120,11 @@ This is due to differences in the definition of tree cover in the integrated ass
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tree_frac_deltat.png}
+        \includegraphics[width=\linewidth]{../plots/Figure_1.png}
     \end{subfigure}
-    \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tree_frac_deltat_ssp585.png}
-    \end{subfigure}
+%    \begin{subfigure}[b]{\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/tree_frac_deltat_ssp585.png}
+%    \end{subfigure}
     \caption{Changes in tree fraction from the Land-use Harmonization 2 SSP1-2.6 (top) and SSP5-8.5 (bottom) scenario between the year 2100 and 2015. Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. The black crosses marl the locations of large forestation changes that are used for daily temperature distributions.}
     \label{fig:land_use}
 \end{figure}
@@ -137,7 +137,7 @@ A brief overview of these models is presented in Table \ref{tab:models}.
 ACCESS-ESM1-5 is the only model to include phosphorus limitation.
 Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members available for both simulations, of which there are 10 for each experiment.
 
-CanESM5 has differing ensemble initialisation methods for \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}.
+CanESM5 has differing ensemble initialization methods for \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}.
 The former uses r1i1p1f1 and the latter uses r1i1p2f1, which features recent bug-fixes in the model.
 To account for the slightly different initial conditions, the CanESM5 model (green line in \ref{fig:models_cpools}) has been bias corrected by subtracting the difference in the carbon pools between the reference and forestation simulations at the start of the experiment (2015).
 This makes the CanESM5 comparable with other models for all variables.
@@ -146,7 +146,7 @@ This makes the CanESM5 comparable with other models for all variables.
     \centering
     \begin{tabular}{lllllllll}
         \hline
-Model         & Fire & N   & P   & Dyn.  & PFTs     & Nat. PFT & Res.           & Reference                           \\ \hline
+Model         & Fire & N   & P   & Dyn.  & PFTs     & Natural & Res.           & Reference                           \\ \hline
 ACCESS-ESM1-5 & No   & Yes & Yes & No    & 10       & 9       & 1.8758×1.258°   & \cite{ziehn_australian_2020}   \\
 %BCC-CSM2-MR   & No   & Yes & No  & No    & 14       & 11      & 110×110km       & \cite{li_development_2019}     \\
 CanESM5       & No   & No  & No  & No*   & 9        & 7       & $\sim$2.8×2.8°  & \cite{swart_canadian_2019}     \\
@@ -163,14 +163,14 @@ UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°   
 
 \subsection{Data}
 
-The data used in this study are avaialable from the Earth System Grid Federation.
+The data used in this study are available from the Earth System Grid Federation.
 For each model, we use the monthly mean variables tree cover fraction (treeFrac), vegetation, litter, soil and total land carbon (cVeg, cLitter, cSoil, cLand), atmospheric CO$_2$ concentrations (co2), ocean CO$_2$ flux (fgco2), 1.5 m surface air temperature (tas) and precipitation rate (pr).
 From ACCESS-ESM1.5 we also use daily maximum temperatures (tasmax).
 Some variables are not available for particular models. These include: tree fraction data from MIROC, and atmospheric CO$_2$ concentration from CanESM and GFDL-ESM4.
 
 \subsection{Analysis and statistical methods}
 
-For the global analsysis accross all models, we calculate trends in the difference of global mean temperatures and precipitation to examine the change in temperature as forests expand.
+For the global analysis across all models, we calculate trends in the difference of global mean temperatures and precipitation to examine the change in temperature as forests expand.
 For this we use the Theil-Sen slope estimator and test its significance at the 5\% level using the Mann-Kendall trend test.
 
 The ACCESS-ESM1-5 regional analyses have been divided into 6 regions that feature notable changes in tree cover.
@@ -181,9 +181,9 @@ Much of the tree cover changes between the two simulations occurs in a handful o
 To examine the local scale impact of dramatic forestation on temperature and precipitation, histograms of the frequency distributions for specific grid-points are calculated for the locations shown by the crosses in Fig. \ref{fig:land_use}.
 These large forestation regions are in Eastern North America, East Asia and Amazonia.
 For these, we focus only on ACCESS-ESM1-5, since it is the only model that contributed 10 ensemble members, and thus the statistics of the distribution are most robust for this model.
-For the gridpoint maximum temperature frequency histograms, the difference in the temperature distribution in the two simulations in response to forestation is tested using the 2-sample Kolmogorov-Smirnov test for the equality of distributions at the 5\% level.
+For the grid point maximum temperature frequency histograms, the difference in the temperature distribution in the two simulations in response to forestation is tested using the 2-sample Kolmogorov-Smirnov test for the equality of distributions at the 5\% level.
 
-Lastly, to examine the relationship of forestation on climate, correlations were done on ensemble mean surface air temperature and tree fraction using the Spearman rank correlation and the significance was tested at the 5\% level \parencite{kokoska2000crc}.
+Lastly, to examine the relationship of forestation on climate, correlations were done on ensemble mean surface air temperature and tree fraction using the Spearman's rank correlation and the significance was tested at the 5\% level \parencite{kokoska2000crc}.
 
 \section{Results and discussion}
 
@@ -198,9 +198,9 @@ UKESM1-0-LL, CanESM5 and MPI-ESM1-2-LR include vegetation dynamics that respond 
 
 To interpret the difference in tree cover response of the models, it is helpful to be aware of some of the known climate and dynamic features of each model.
 Firstly, CanESM5 in particular stands out as having a net loss of tree area by 2100 (Fig. \ref{fig:land_use}a), however, this is due to CanESM5 lacking an explicit representation of shrubs and rangelands, which have been allocated as forest land use.
-CanESM5, MPI-ESM and UKESM1-0-LL also feature substantial Amazonian die-back in both scenarios, typically driven by localised drying.
+CanESM5, MPI-ESM and UKESM1-0-LL also feature substantial Amazonian die-back in both scenarios, typically driven by localized drying.
 Secondly, MPI-ESM1-2-LR has large amounts of tree cover increase in semi-arid regions in Africa and Australia. \footnote{I've asked some MPI people why this occurs but still waiting a response.}
-Thirdly, the UKESM1-0-LL \textit{esm-ssp585-ssp126Lu} scenario is known to have enhanced CO$_2$ fertilisation and warming in the mid- to high-latitudes (resulting in increased tree cover fractions in Fig. S\ref{fig:tree_area_maps_ssp126Lu}) and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
+Thirdly, the UKESM1-0-LL \textit{esm-ssp585-ssp126Lu} scenario is known to have enhanced CO$_2$ fertilization and warming in the mid- to high-latitudes (resulting in increased tree cover fractions in Fig. S\ref{fig:tree_area_maps_ssp126Lu}) and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
 
 ACCESS-ESM1-5 is an example that closely follows the spatial distribution of the LUH2 land-use forcing.
 By 2100, ACCESS-ESM1-5 has a forest expansion of 1.59 million km² and agricultural abandonment of 1.11 million km$^2$.
@@ -235,7 +235,7 @@ Deciduous needle leaf forests only make up a small fraction of forests and do no
     \label{fig:models_cpools}
 \end{figure}
 
-The diversity of increased tree cover fraction among the models corresponds to a range of carbon drawdown potentials into the terestrial system.
+The diversity of increased tree cover fraction among the models corresponds to a range of carbon draw-down potentials into the terrestrial system.
 Figure \ref{fig:models_cpools}, demonstrates the change in the model terrestrial carbon pools due to forestation.
 The increase in total land carbon tends to diminish towards the end of the century as new forest areas reach maturity.
 The models show a total CO$_2$ removal by the land surface of between 10--60 Pg C by 2100.
@@ -258,7 +258,7 @@ On the other hand, ACCESS-ESM1-5 and UKESM1-0-LL show decreases in soil carbon i
 
 The effect of an increased land surface sink is a corresponding decrease in atmospheric CO$_2$ concentrations as demonstrated by (Fig. \ref{fig:models_CO2}).
 The largest change in concentration is $\sim$22 ppm from MPI-ESM1-2-LR, which is much lower than the 85 ppm decrease in the scenario used by \cite{sonntag_reforestation_2016}.
-The ACCESS-ESM1-5 ensemble range demonstrates that atmospheric CO$_2$ is strongly sensitive to internal climate variability, encompasing 60\% of the multi model range.
+The ACCESS-ESM1-5 ensemble range demonstrates that atmospheric CO$_2$ is strongly sensitive to internal climate variability, encompassing 60\% of the multi model range.
 With concentrations projected to increase from 400 ppm 1050 ppm \ref{fig:models_co2_absolute} under SSP5-8.5, this represents only a fraction of the required decrease to fully mitigate greenhouse gas forcing.
 
 \subsubsection{Climate response}
@@ -269,8 +269,8 @@ The effect that internal climate variability can have on the trends is demonstra
 While the ensemble mean trend showed no significant change, 3 members showed a significant positive trend.
 The CO$_2$ concentration of these 3 members is not consistently greater than the other ensemble members throughout the experiment, which indicates that the significance of the temperature decrease in these members is mostly driven by internal climate variability. \footnote{I have a figure showing this.}
 
-The temporal variance of temperature also shows unique behaviour among the models.
-For example, MIROC-ES2L features large decadal scale oscillations in global mean teperature in both the forestation scenario and the reference scenario (Fig. S\ref{fig:models_absolute}), which causes large oscillations in the difference as they drift out of phase in the latter half of the century.
+The temporal variance of temperature also shows unique behavior among the models.
+For example, MIROC-ES2L features large decadal scale oscillations in global mean temperature in both the forestation scenario and the reference scenario (Fig. S\ref{fig:models_absolute}), which causes large oscillations in the difference as they drift out of phase in the latter half of the century.
 
 Similar to global mean surface air temperature, the response of global mean precipitation to forestation is also unclear from the models (Fig. S\ref{fig:models_pr_trends}), with all models showing no significant trends in global precipitation rate.
 
@@ -302,7 +302,9 @@ The climate in both the forestation and reference simulations are similar, with 
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
     \end{subfigure}
-    \caption{Left: Difference in atmospheric CO$_2$ concentration between the forestation scenario and ssp585. Shading indicates the ensemble range. Right: ensemble mean of carbon flux budget in the forestation scenario. Difference between the forestation scenario and ssp585 for the cumulative downward ocean carbon mass flux. Shading indicates the ensemble range.}
+    \caption{Left: Difference in atmospheric CO$_2$ concentration between the forestation scenario
+    and ssp585. Shading indicates the ensemble range. Right: ensemble mean of carbon flux budget in
+    the forestation scenario. Difference between the forestation scenario and SSP5-8.5 for the cumulative downward ocean carbon mass flux. Shading indicates the ensemble range.}
     \label{fig:global_carbon_budget}
 \end{figure}
 
@@ -316,7 +318,7 @@ The climate in both the forestation and reference simulations are similar, with 
 %cLitter & 0.4±0.3     & 0.8±0.6        & 0.9±0.7                \\
 %cSoil   & -4.3±2.3    & -0.5±0.3       & -0.5±0.3               \\ \hline
 %    \end{tabular}
-%    \caption{C pools expressed as a percentage of the present day carbon content or  as a percentage of the end of \textit{esm-ssp585}. This information can mostly be seen in Fig. 4 and is only presented here to show the options on how to present the data. Will likely be removed in favour of quoting in text.}
+%    \caption{C pools expressed as a percentage of the present day carbon content or  as a percentage of the end of \textit{esm-ssp585}. This information can mostly be seen in Fig. 4 and is only presented here to show the options on how to present the data. Will likely be removed in favor of quoting in text.}
 %    \label{tab:cpools_table}
 %\end{table}
 
@@ -329,22 +331,22 @@ The increased CO$_2$ draw-down from the combined effect of forestation and CO$_2
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_amazonia_diff.png}
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\linewidth]{../plots/cLand_all_reagions.png}
     \end{subfigure}
 
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_easternnorthamerica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_eastasia_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_borealnorthamerica_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_centralafrica_diff.png}
-    \end{subfigure}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cLand_easternnorthamerica_diff.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cLand_eastasia_diff.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cLand_borealnorthamerica_diff.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cLand_centralafrica_diff.png}
+%    \end{subfigure}
     \caption{Experiment differences of cLand for each region in Fig. \ref{fig:land_use}.}
     \label{fig:accesss_regional_cland}
 \end{figure}
@@ -354,7 +356,7 @@ For example, in Fig. \ref{fig:map_tas_tree_correlation}, the correlation of temp
 These correlations show high significance, with more than half the ensemble members agreeing that the correlations are significant at the 5\% level.
 Hence, increased tree cover fraction increases surface air temperatures and the effect of decreased surface albedo dominates.
 In contrast, the Central African region that surrounds the avoided deforestation in the reference simulations shows the opposite effect, whereby increased tree cover negatively correlates with air temperature and hence the cooling effect of evapotranspiration dominates.
-Furthermore, in the sub-tropcal and boreal regions of North America, Europe and Boreal Eurasia the correlation is negative, indicating that as forest cover increases, temperature decreases.
+Furthermore, in the sub-tropical and boreal regions of North America, Europe and Boreal Eurasia the correlation is negative, indicating that as forest cover increases, temperature decreases.
 However, these correlations show much less significance with only 2--3 ensemble members being significantly correlated.
 
 \begin{figure}[H]
@@ -379,7 +381,7 @@ The increase in the high end of the distribution in response to forestation is n
 For example, the large increase in forest cover for the grid point in Asia corresponds to a decrease in temperatures greater than 23 \textcelsius{}, while temperatures 17--23 \textcelsius{} increase (Fig. \ref{fig:tasmax_distribution}d).
 The changes in daily maximum temperature at the lower end of the distribution in response to forestation are much more regionally consistent, showing a decrease in cooler than average days.
 
-Some regions show decreases in sirface air temperature in response to increasing tree cover.
+Some regions show decreases in surface air temperature in response to increasing tree cover.
 Of particular not is Eastern North America which features a large transition from C3 crops to deciduous broadleaf (Fig. \ref{fig:tasmax_distribution} e).
 In ACCESS-ESM1-5, deciduous broadleaf forests have the highest reflectance of all the PFTs.
 The resulting distribution shows decreases in the number of warm and cool days in the forestation experiment (Fig. \ref{fig:tasmax_distribution} f).
@@ -432,7 +434,7 @@ However, many of these features are not yet simulated in Earth system models.
 While it is clear that most models show that growing trees under a warmer (and sometimes drier) climate is not a complete solution to climate mitigation, this does not mean that forestation should not be done.
 For forestation to be viable as a carbon dioxide strategy it must also exist in conjunction with other strategies.
 By first regrowing forests for the purpose of carbon dioxide removal, forestation increases the natural land-based carbon and enables further development and supply of feedstock for other strategies. 
-For example, none of the models in this study account for the potential of forests to be used for other carbon dioxide removal strategies such as for bioenergy with carbon capture and storage, and is a potential avenue for further research in the Earth System.
+For example, none of the models in this study account for the potential of forests to be used for other carbon dioxide removal strategies such as for bio-energy with carbon capture and storage, and is a potential avenue for further research in the Earth System.
 If some forests are sustainably harvested and regrown, then the removal of CO$_2$ from the atmosphere accumulates over time, and while vegetation may be lost in individual natural disturbance events such as fires, the historically removed carbon remains locked.
 
 \printbibliography
@@ -626,7 +628,7 @@ If some forests are sustainably harvested and regrown, then the removal of CO$_2
     \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[width=\linewidth]{../plots/pr_ACCESS-ESM1.5_esm-ssp585_ensembles_diff.png}
     \end{subfigure}
-    \caption{Climate in \textit{esm-ssp585-ssp126Lu}. Left: Absolute values from the forestation simulation (\textit{esm-ssp585-ssp126Lu}). Right: difference between the \textit{esm-ssp585-ssp126Lu} simulation and \textit{esm-ssp585}}
+    \caption{Climate in \textit{esm-ssp585-ssp126Lu}. Left: absolute values from the forestation simulation (\textit{esm-ssp585-ssp126Lu}). Right: difference between the \textit{esm-ssp585-ssp126Lu} simulation and \textit{esm-ssp585}}
     \label{fig:climate}
 \end{figure}
 
