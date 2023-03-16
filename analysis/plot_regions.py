@@ -77,9 +77,9 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
         #'Boreal Eurasia Gridpoint': ([63.74,63.76],[78.74,78.76]),
         #'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
-        'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
-        'Asia Gridpoint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
-        'North America Gridpoint': ([37,38],[273,274]), # Eastern North america, forestation but cooling.
+        ##'Amazon Gridpoint': ([-11.26,-11.24],[309.374,309.376]), # Forestation ONLY gridpoint
+        ##'Asia Gridpoint': ([29.75,30.25],[99,100]), # Forestation in the latter half of century.
+        ##'North America Gridpoint': ([37,38],[273,274]), # Eastern North america, forestation but cooling.
         }
 
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
@@ -182,13 +182,26 @@ def plot_clim_region(
     plt.close()
 
 
+def plot_all_regions(years:np.ndarray, data:np.ndarray, var:str, region:str)->None:
+    plt.figure(1)
+    line = plt.plot(years, data.mean(axis=0), label=region)
+    color = line[0].get_color()
+    plt.fill_between(years, data.min(axis=0), data.max(axis=0), alpha=0.5, color=color)
+    plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
+    plt.xlim(left=years[0], right=years[-1])
+    plt.ylabel('$\Delta$ Pg(C)')
+    plt.xlabel('Time (Year)')
+
+
 def make_regional_plots()->None:
     """Load data and generate regional analysis plots.
     """
     if not os.path.exists(f'{PLOTS_DIR}/regional'): os.mkdir(f'{PLOTS_DIR}/regional')
     stats_file = open('regions_stats.md', 'w')
     model = 'ACCESS-ESM1-5'
+    diff_data_dict = {}
     for region,box in REGIONS.items():
+        diff_data_dict[region] = {}
         # Create loader functions
         @cdod.cdo_cat(input2='') # Concatenate all files in input1.
         @cdo_mul_land_area
@@ -282,6 +295,7 @@ def make_regional_plots()->None:
 
                 # Clalculate the difference.
                 diff_data = aff_data - ssp585_data
+                diff_data_dict[region][var] = diff_data
 
                 # Plot.
                 plot_veg_region(
@@ -379,10 +393,22 @@ def make_regional_plots()->None:
             #        )
     stats_file.close()
 
+    for var in ['cVeg','cLand','cSoil','cLitter']:
+        for region in REGIONS.keys():
+            plot_all_regions(
+                    years,
+                    diff_data_dict[region][var],
+                    var,
+                    region,
+                    )
+        plt.legend()
+        plt.savefig(f'{PLOTS_DIR}/regional/{var}_all_reagions.png', dpi=DPI)
+        plt.close()
+
 
 if __name__ != 'analysis.plot_regions':
-    plot_regions_map()
-    #make_regional_plots()
+    #plot_regions_map()
+    make_regional_plots()
 
     # Clean up
     temp_files = glob.glob('./cdoPy*')
