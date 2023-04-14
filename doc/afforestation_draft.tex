@@ -118,7 +118,7 @@ There are only a few areas where there is deforestation in the \textit{esm-ssp58
 These occur in deciduous broad leaf forests in eastern North America, China and western Russia (Figure \ref{fig:land_use_map} is of primary and secondary forests changes).
 Furthermore, it is important to acknowledge that the LUH2 SSP1-2.6 scenario underestimates the tree cover that is originally dictated by IMAGE (the integrated assessment model that produces the SSP1-2.6 scenario).
 This is due to differences in the definition of tree cover in the integrated assessment models as well as the effects of harmonization of that data with observed historical cover fractions.
-Despite LUH2 providing additional forest cover data to match the forestation in IMAGE, none of the models in this study utilized it.
+Despite LUH2 providing additional forest cover data to match the forestation in IMAGE, only CESM utilized it of all the models in this study.
 Therefore we consider this scenario as having moderate forestation and would represent a lower end of the future mitigation potential.
 
 \begin{figure}[H]
@@ -155,10 +155,10 @@ This makes the CanESM5 comparable with other models for all variables.
 Model         & Fire & N   & P   & Dyn.  & PFTs     & Natural & Res.           & Reference                           \\ \hline
 ACCESS-ESM1-5 & No   & Yes & Yes & No    & 10       & 9       & 1.8758×1.258°   & \cite{ziehn_australian_2020}   \\
 %BCC-CSM2-MR   & No   & Yes & No  & No    & 14       & 11      & 110×110km       & \cite{li_development_2019}     \\
-CanESM5       & No   & No  & No  & No*   & 9        & 7       & $\sim$2.8×2.8°  & \cite{swart_canadian_2019}     \\
+CanESM5       & No   & No  & No  & No*   & 9        & 7       & 2.8×2.8°  & \cite{swart_canadian_2019}     \\
 GFDL-ESM4     & Yes  & No  & No  & No    & 7        & 5       & 100×100km       & \cite{dunne_gfdl_2020}         \\
 MIROC-ES2L    & No   & Yes & No  & No    & 14       & 13      & 2.8×2.8°        & \cite{hajima_development_2020} \\
-MPI-ESM1-2-LR & Yes  & Yes & No  & Yes   & 12       & 8      & 1.9°            & \cite{mauritsen_developments_2019}  \\
+MPI-ESM1-2-LR & Yes  & Yes & No  & Yes   & 12       & 8      & 1.8° ×1.8°       & \cite{mauritsen_developments_2019}  \\
 %NorESM2-LM    & Yes  & Yes & No  & No    & 22       & 14      & 2×2°            & \cite{seland_norwegian_2020}   \\
 CESM2         & Yes  & Yes & No  & No    & 22       & 14      & 1.25°×0.9°      & \cite{danabasoglu_community_2020} \\
 UKESM1-0-LL   & No   & Yes & No  & Yes   & 12       & 8       & 1.25×1.875°     & \cite{sellar_ukesm1_2019}      \\ \hline
@@ -275,20 +275,22 @@ by the end of the century due to an increase in forestation in the SSP585 scenar
 \end{figure}
 
 The effect of an increased land surface sink is a corresponding decrease in atmospheric CO$_2$ concentrations as demonstrated by (Fig. \ref{fig:models_CO2}).
-The multi-model range is -5--{-22} ppm, and with concentrations projected to increase from 400 ppm 1088 ppm under SSP5-8.5 (REMIND-MAGPIE in Fig. S\ref{fig:models_co2_absolute}), this represents 0.7–3\% of the reduction required to return concentrations at 2100 to those at 2010.
-The largest change in concentration is $\sim$22 ppm from MPI-ESM1-2-LR, which is much lower than the 85 ppm decrease in the scenario used by \cite{sonntag_reforestation_2016}.
+The multi-model range is -5 to -22 ppm, and with concentrations projected to increase from 400 ppm to 1088 ppm under SSP5-8.5 (REMIND-MAGPIE in Fig. S\ref{fig:models_co2_absolute}).
+This change represents 0.7–3\% of the reduction required to return the CO$_2$ concentration at 2100 to that of the level in 2010.
+The largest change in concentration is $\sim$22 ppm from MPI-ESM1-2-LR, which is still much lower than the 85 ppm decrease in the scenario used by \cite{sonntag_reforestation_2016}.
 The ACCESS-ESM1-5 ensemble range demonstrates that atmospheric CO$_2$ is strongly sensitive to internal climate variability, encompassing 60\% of the multi model range.
 
 \subsubsection{Climate response}
 
-Fig. \ref{fig:models_tas_trends} shows the forestation minus reference scenario difference in global mean surface air temperature, showing that the trend in temperature over the course of the century is not significant in all models.
+Fig. \ref{fig:models_tas_trends} shows that trends in global mean surface air temperature over the course of the century is not significant in all models.
 Furthermore, there is some disagreement in the sign of the change in global temperature among models and ensemble members, with CanESM5 and CESM2 showing non-significant positive trends.
 The effect that internal climate variability can have on the trends is demonstrated by the ACCESS-ESM1-5 ensemble.
-While the ensemble mean trend showed no significant change, 3 members showed a significant positive trend.
-The CO$_2$ concentration of these 3 members is not consistently greater than the other ensemble members throughout the experiment, which indicates that the significance of the temperature decrease in these members is mostly driven by internal climate variability. \footnote{I have a figure showing this.}
+While the ensemble mean trend showed no significant change, three members showed a significant positive trend.
+The CO$_2$ concentration of these three members is not consistently greater than the other ensemble members throughout the experiment, which indicates that the significance of the temperature decrease in these members is mostly driven by internal climate variability.
 
 The temporal variance of temperature also shows unique behavior among the models.
- occurs For example, MIROC-ES2L features large decadal scale oscillations in global mean temperature driven by large El Niño–Southern Oscillation amplitude that results in similar variability in global temperature (\cite{hajima_development_2020}). This occurs in both the forestation scenario and the reference scenario (Fig. S\ref{fig:models_absolute}), which causes large oscillations in the difference as they drift out of phase in the latter half of the century.
+For example, MIROC-ES2L features large decadal-scale oscillations in global mean temperature driven by large El Niño–Southern Oscillation amplitude that results in similar variability in global temperature (\cite{hajima_development_2020}).
+This occurs in both the forestation scenario and the reference scenario (Fig. S\ref{fig:models_absolute}), which causes large oscillations in the difference as they drift out of phase in the latter half of the century.
 
 Similar to global mean surface air temperature, the response of global mean precipitation to forestation is also unclear from the models (Fig. S\ref{fig:models_pr_trends}), with all models showing no significant trends in global precipitation rate.
 
@@ -320,9 +322,7 @@ The climate in both the forestation and reference simulations are similar, with 
     \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
     \end{subfigure}
-    \caption{Left: Difference in atmospheric CO$_2$ concentration between the forestation scenario
-    and ssp585. Shading indicates the ensemble range. Right: ensemble mean of carbon flux budget in
-    the forestation scenario. Difference between the forestation scenario and SSP5-8.5 for the cumulative downward ocean carbon mass flux. Shading indicates the ensemble range.}
+    \caption{Carbon budget of global fluxes of fossil fuel emissions and the natural sinks for the land (net-land-atmosphere exchange as the sum of the natural terrestrial sink and land-use change fluxes), ocean and atmospheric accumulation. The cumulative ocean carbon difference between the forestation and reference simulation.}
     \label{fig:global_carbon_budget}
 \end{figure}
 
@@ -344,7 +344,7 @@ The climate in both the forestation and reference simulations are similar, with 
 
 There are increases in land carbon for all regions and ensemble members except Amazonia, where some ensemble members show a small decrease in cVeg by 2100, due to internal climate variations.
 The region with the largest change in land carbon content is Central Africa (Fig. \ref{fig:accesss_regional_cland}e), however this difference is due to avoided deforestation that occurs in the reference simulation, rather than due to new forest growth in the forestation experiment (Fig. S\ref{fig:ACCESS_land_cover}b).
-This highlights the importance of including avoided deforestation in future long-term national climate strategies, since a considerable portion of land-use emissions comes from the loss of additional sink capacity from deforestation \parencite{gitz_amplifying_2003, pongratz_terminology_2014, obermeier_modelled_2021}.
+This highlights the importance of including avoided deforestation in future long-term national climate strategies, not just to avoid related CO2 emissions from the burning and decay of biomass and soil carbon, but also since a considerable portion of land-use emissions comes from the loss of additional sink capacity from deforestation \parencite{gitz_amplifying_2003, pongratz_terminology_2014, obermeier_modelled_2021}.
 The increased CO$_2$ draw-down from the combined effect of forestation and CO$_2$ fertilization are partially offset by the increase in soil respiration (a feature that only occurs in one other model, Fig. \ref{fig:access_cpools}), particularly in Australia where there is no increase in forest cover in the SSP1-2.6 scenario.
 
 \begin{figure}[H]
@@ -371,8 +371,8 @@ The increased CO$_2$ draw-down from the combined effect of forestation and CO$_2
 
 The relationship of surface air temperature and changes in total tree cover fraction varies substantially by region.
 For example, in Fig. \ref{fig:map_tas_tree_correlation}, the correlation of temperature and tree cover fraction is positive in the tropical regions of Central Africa, South America, the Maritime Continent, and East Asia.
-Hence, increased tree cover fraction increases surface air temperatures and the effect of decreased surface albedo dominates.
-In contrast, the Central African region that surrounds the avoided deforestation in the reference simulations shows the opposite effect, whereby increased tree cover negatively correlates with air temperature and hence the cooling effect of evapotranspiration dominates.
+Hence, increased tree cover fraction increases surface air temperature and the effect of decreased surface albedo dominates.
+In contrast, Central Africa, which surrounds the avoided deforestation in the reference simulations, shows the opposite effect, whereby increased tree cover negatively correlates with air temperature and hence the cooling effect of evapotranspiration dominates.
 Furthermore, in the sub-tropical and boreal regions of eastern North America, the correlation is negative, indicating that as forest cover increases, temperature decreases.
 
 \begin{figure}[H]
@@ -390,11 +390,11 @@ Furthermore, in the sub-tropical and boreal regions of eastern North America, th
 The biogeophysical impacts of growing trees cause localized warming at the extreme ends of the temperature distribution, especially in the higher latitudes where trees tend to be slow growing and the ground having a high albedo from snow cover.
 This warming may offset the biogeochemical climate mitigation potential of forestation.
 For specific grid-points with large changes from grass to tree biomes, the distribution of summer daily maximum surface air temperature for both the forestation and reference simulations are shown in Figure \ref{fig:tasmax_distribution}.
-The Amazon grid-point features changes in mostly C4 grass to Evergreen broad leaf forest, representing an increase in tree cover fraction of 60\%.
+The Amazon grid-point features changes in mostly C4 grass to evergreen broad leaf forest, representing an increase in tree cover fraction of 60\%.
 This corresponds to a statistically significant change in the distribution, particularly for temperatures greater than 50 \textcelsius{} (Fig. \ref{fig:tasmax_distribution}b).
 
 The increase in the high end of the distribution in response to forestation is not consistent for all regions.
-For example, the large increase in forest cover for the grid point in Asia corresponds to a decrease in temperatures greater than 23 \textcelsius{}, while temperatures 17--23 \textcelsius{} increase (Fig. \ref{fig:tasmax_distribution}d).
+For example, the large increase in forest cover for the grid point in Asia corresponds to a decrease in temperatures greater than 23 \textcelsius{}, while temperatures 17--23 \textcelsius{} increase (Fig. \ref{fig:tasmax_distribution}d), as the distribution gets narrower with forestation.
 The changes in daily maximum temperature at the lower end of the distribution in response to forestation are much more regionally consistent, showing a decrease in cooler than average days.
 
 Some regions show decreases in surface air temperature in response to increasing tree cover.
@@ -434,28 +434,31 @@ The resulting distribution shows decreases in the number of warm and cool days i
 
 \section{Concluding remarks}
 
-In this study, we conduct a multi-model intercomparison of a plausible scenario for forestation as a means of carbon dioxide removal.
+We conduct a multi-model intercomparison of a scenario for forestation as a means of carbon dioxide removal.
 This forestation scenario features high fossil fuel emissions, a much warmer climate and moderate forestation and agricultural abandonment.
-Models show a diverse interpretation of the spatial patterns of forestation, and as a result show a large range of outcomes for long term carbon storage in forests.
-4 models show a stable but limited carbon sink by 2100, while 2 models show that the mitigation gains from forestation in the middle of the century will be mostly lost by 2100.
+Models show a diverse interpretation of the spatial patterns of forestation, and as a result show a large range of outcomes for long-term carbon storage in forests.
+Four models show a stable but limited carbon sink by 2100, while two models show that the mitigation gains from forestation in the middle of the century will be mostly lost by 2100.
 
 The change in atmospheric CO$_2$ concentrations from forestation only accounts for 0.7--3\% of the reduction required to return the SSP5-8.5 concentrations at 2100 to those at 2010.
 As a result, the models show that forestation causes only a small impact on global climate under a high emissions and high global warming scenario.
-However, the forestation causes a shift in the global carbon balance, whereby increased uptake of carbon on the land of $\sim$25 Pg C by 2100 results in a decrease in the uptake of carbon by the ocean.
+The forestation also causes a shift in the global carbon balance, whereby increased uptake of carbon on the land of $\sim$25 Pg C by 2100 results in a decrease in the uptake of carbon by the ocean.
 There are some increases in local-scale temperatures in locations where forestation occurs, while other regions show cooling.
 
-The scenario used in this study is specific to a world of extreme carbon dioxide emissions, and does not consider the case where significant reduction in fossil fuel emissions does occur.
+The scenario used in this study is specific to a world of extreme CO$_2$ emissions, and does not consider the case where significant reduction in fossil fuel emissions occur.
 It is therefore still unclear how much more or less carbon would be sequestered by the terrestrial ecosystem under a cooler climate that would occur in conjunction with the expected emissions reduction efforts in the future.
-Therefore, future studies should aim to explore the effects of forestation for climate states under different target warming levels such as those suggested by \cite{king_studying_2021}.
+Therefore, future studies should aim to explore the effects of forestation for climate states under different target warming levels that are consistent with the Paris Agreement  (for example \cite{king_studying_2021}).
 
-While it is clear that most models show that growing new forests under a warmer climate is not a complete solution to climate mitigation, this does not mean that forestation should not be done.
-Forestation and forest management provides additional co-benefits such as increased habitat, biodiversity and decreased runoff and soil erosion, and many of these features are not yet simulated in Earth system models.
-For forestation to be viable as a carbon dioxide removal strategy, it must also exist in conjunction with other strategies.
-By first regrowing forests for the purpose of carbon dioxide removal, forestation increases the natural land-based carbon and enables further development and supply of feedstock for other strategies.
-If some forests are sustainably harvested and regrown, then the removal of CO$_2$ from the atmosphere accumulates over time, and while vegetation may be lost in individual natural disturbance events such as fires, the historically removed carbon remains locked.
+While it is clear that most models show that growing new forests under a very high emissions scenario has limited climate mitigation potential, this does not mean that forestation does not have a role in climate mitigation.
+In addition to climate benefits, forestation and forest management provides a broad range of co-benefits such as increased habitat, biodiversity and soil protection, and many of these features are not yet simulated in Earth system models, nor is the additional benefit of these ecosystem services accounted for in climate policies.
+For forestation to be an efficient long-term CO2 removal strategy, it must also exist in conjunction with other strategies.
+By first regrowing forests for the purpose of CO$_2$ removal, forestation increases the natural land-based carbon and enables further development and supply of feedstock for human activity, including for climate mitigation.
+Forests that are sustainably harvested and regrown to remove CO$_2$ act as long-term carbon sinks both in soils and in harvested wood products.
+Vegetation carbon may be lost in individual natural disturbance events such as fires, but the historically removed carbon remains locked.
 None of the models in this study (and very few in general) fully implement nature- and technology-based removal strategies, and therefore do not account for forests to be leveraged in bio-energy with carbon capture and storage.
 Since forestation and bio-energy usage is a key assumption of many low-emissions SSP scenarios to replace fossil fuels, implementing them in the Earth system modeling context is important for future research.
 
+\section{Acknowledgments}
+We would like to thank the support provided by the National Environmental Science Program - Climate Systems Hub.
 
 \printbibliography
 
