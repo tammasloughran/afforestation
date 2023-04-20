@@ -75,12 +75,12 @@ REGIONS = { # 'Name': ([lat1,lat2],[lon1,lon2]), # Forestation/deforesation
         #'Western Eruasia': ([46.21,60.23],[25.42,49.55]), # Deforrestation
         #'Boreal Eurasia': ([49.34,77.09],[50.9,175]), # Forestation
         #'East Asia': ([8.34,45.87],[96.25,148.87]), # Forestation and deforestation
-        'Boreal Eurasia Gridpoint': ([64.9,65.1],[71.24,71.26]),
+        #'Boreal Eurasia Gridpoint': ([64.9,65.1],[71.24,71.26]),
         #'Central Africa Gridpoint': ([-7.6,-7.4],[18.74,18.76]),
-        'Amazon Gridpoint as difference': ([-14.9,-15.1],[313.124,313.126]), # Forestation ONLY gridpoint. from difference of treeFrac between forestation and ssp585
+        #'Amazon Gridpoint as difference': ([-14.9,-15.1],[313.124,313.126]), # Forestation ONLY gridpoint. from difference of treeFrac between forestation and ssp585
         'Amazon Gridpoint': ([-12.6,-12.4],[311.24,311.26]), # Forestation ONLY gridpoint. as anomaly of tree frac 2015-2100.
-        'Asia Gridopint': ([32.4,32.6],[99.374,99.376]), # Forestation in the latter half of century.
-        'Asia Boxpoint': ([31.24,33.76],[97.4,101.26]), # Forestation in the latter half of century. As a box region
+        'Asia Gridpoint': ([32.4,32.6],[99.374,99.376]), # Forestation in the latter half of century.
+        #'Asia Boxpoint': ([31.24,33.76],[97.4,101.26]), # Forestation in the latter half of century. As a box region
         'North America Gridpoint': ([37,38],[273,274]), # Eastern North america, forestation but cooling.
         }
 LAND_GT_50 = f'{DATA_DIR}/land_gt_50.nc'
@@ -117,7 +117,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 years = list(range(2015, 2101))
 
@@ -128,7 +128,12 @@ def is_not_nan(array):
 
 def make_histogram_plots():
     if not os.path.exists(f'{PLOTS_DIR}/histograms'): os.mkdir(f'{PLOTS_DIR}/histograms')
+    # Create figure plot for paper.
+    fig_paper, axes_grid = plt.subplots(nrows=3, ncols=2, sharex=False, sharey=False, figsize=(8,12))
+    axes = axes_grid.flatten()
+
     model = 'ACCESS-ESM1-5'
+    j = 0
     for region,box in REGIONS.items():
         # If in the southern hemisphere, summer is DJF.  Otherwise, summer is JJA.
         if box[0][0]<0:
@@ -174,6 +179,15 @@ def make_histogram_plots():
         plt.xlabel('Year')
         plt.ylabel('%')
         plt.savefig(f'{PLOTS_DIR}/histograms/pfts_{rname}.png', dpi=DPI)
+
+        # Plot on figure for paper
+        for i,pft in PFTS.items():
+            if pfts_to_show[i-1]==True: axes_grid[j][0].plot(years, pfts[:,i-1]*100, label=pft)
+        axes_grid[j][0].legend(frameon=False)
+        axes_grid[j][0].set_title(region+' PFTs')
+        axes_grid[j][0].set_xlabel('Year')
+        axes_grid[j][0].set_ylabel('%')
+        #axes_grid[j][0].set_xlim(left=2015, right=2100)
 
         # Daily temperature variable
         table = 'day'
@@ -235,7 +249,7 @@ def make_histogram_plots():
             else:
                 plt.annotate(f'x', (0.1,0.9), xycoords='figure fraction')
             axin = ax.inset_axes([0.075,0.72,0.20,0.20])
-            axin.plot(years,for_treeFrac)
+            axin.plot(years, for_treeFrac)
             axin.set_title('Tree fraction')
             plt.xlabel('Temperature (°C)')
             plt.ylabel('Probablility')
@@ -243,6 +257,40 @@ def make_histogram_plots():
             plt.legend()
             plt.savefig(f'{PLOTS_DIR}/histograms/{var}_histogram_{rname}.png', dpi=DPI)
 
+            # Plot for paper figure
+            if var=='tasmax':
+                n, bins, patches = axes_grid[j][1].hist(
+                        for_data.flatten()[is_not_nan(for_data.flatten())],
+                        color='green',
+                        bins=50,
+                        density=True,
+                        histtype='step',
+                        label='esm-ssp585-ssp126Lu',
+                        )
+                axes_grid[j][1].hist(
+                        ssp585_data.flatten()[is_not_nan(ssp585_data.flatten())],
+                        color='orange',
+                        bins=bins,
+                        density=True,
+                        histtype='step',
+                        label='esm-ssp585',
+                        )
+                if ks_test.pvalue<0.05:
+                    plt.annotate(f'v', (0.1,0.9), xycoords='figure fraction')
+                else:
+                    plt.annotate(f'x', (0.1,0.9), xycoords='figure fraction')
+                axin = ax.inset_axes([0.075,0.72,0.20,0.20])
+                axin.plot(years, for_treeFrac)
+                axin.set_title('Tree fraction')
+                axes_grid[j][1].set_xlabel('Temperature (°C)')
+                axes_grid[j][1].set_ylabel('Probablility')
+                axes_grid[j][1].set_title(region+f' {var}')
+                axes_grid[j][1].legend(frameon=False)
+                #axes_grid[j][1].set_xlim(left=5, right=60)
+        j += 1
+    fig_paper.tight_layout(pad=1)
+    fig_paper.savefig('plots/histograms_and_PFTs.png', dpi=DPI)
+    plt.show()
 
 if __name__ != 'analysis.plot_regions':
     make_histogram_plots()

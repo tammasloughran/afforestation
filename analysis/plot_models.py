@@ -379,7 +379,7 @@ def make_model_plots()->None:
                     plt.ylabel('Pg(C)')
                 plt.xlabel('Year')
                 plt.title(f"{var} esm-ssp585-ssp126Lu - esm-ssp585")
-                plt.legend()
+                plt.legend(frameon=False)
                 plt.savefig(f'{PLOTS_DIR}/models/{var}_model_intercomparison_diff.png', dpi=DPI)
                 plt.close()
 
@@ -424,13 +424,15 @@ def make_model_plots()->None:
                         fontsize=8,
                         )
                 axes[0].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
+                axes[1].set_axis_off() # Disable top right axes for odd number of models.
                 for i,m in enumerate(MODELS.keys()):
+                    if m=='MPI-M' and var=='pr': aff_data[m] = aff_data[m][0:-1]
                     diff_model = aff_data[m] - ssp585_data[m]
                     if m=='CCma' and var=='tas':
                         # CanESM5 has a large initial bias. Remove this bias.
                         diff_model = diff_model - diff_model[0]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
-                    axes[i+1].plot(years, diff_model, color=COLORS[m], label=MODELS[m])
+                    axes[i+2].plot(years, diff_model, color=COLORS[m], label=MODELS[m])
                     trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
                             diff_model,
                             alpha=0.05,
@@ -438,20 +440,20 @@ def make_model_plots()->None:
                     trend_line = slope*np.arange(len(years)) + intercept
                     print(f'    - {MODELS[m]} trend={trend}, p={p}, h={h}, delta={trend_line[-1]}')
                     if h: # Hypothesis that there exists a trend is true.
-                        axes[i+1].plot(years, trend_line, color=COLORS[m])
+                        axes[i+2].plot(years, trend_line, color=COLORS[m])
                     else:
-                        axes[i+1].plot(years, trend_line, color=COLORS[m],
+                        axes[i+2].plot(years, trend_line, color=COLORS[m],
                                 linestyle='dotted')
                     if slope>0: sign = '+'
                     else: sign = '-'
-                    axes[i+1].annotate(
+                    axes[i+2].annotate(
                             f'{MODELS[m]} ({sign})',
                             (0,1),
                             xycoords='axes fraction',
                             fontsize=8,
                             )
-                    axes[i+1].set_xlim(left=years[0], right=years[-1])
-                    axes[i+1].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
+                    axes[i+2].set_xlim(left=years[0], right=years[-1])
+                    axes[i+2].hlines(0, years[0], years[-1], color='black', linewidth=0.5)
                 # This disables the lower right subfigure. Might need when adding/removing models.
                 #axes[7].set_axis_off()
                 # Add invisible subplot for common axes labels.
@@ -511,7 +513,7 @@ def make_model_plots()->None:
                 plt.ylabel('Pg(C)')
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu")
-            plt.legend()
+            plt.legend(frameon=False)
             plt.savefig(
                     f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585-ssp126Lu.png',
                     dpi=DPI,
@@ -549,7 +551,7 @@ def make_model_plots()->None:
                 plt.ylabel('Pg(C)')
             plt.xlabel('Year')
             plt.title(f"{var} esm-ssp585-ssp126Lu")
-            plt.legend()
+            plt.legend(frameon=False)
             plt.savefig(
                     f'{PLOTS_DIR}/models/{var}_model_intercomparison_esm-ssp585.png',
                     dpi=DPI,
@@ -592,7 +594,7 @@ def make_model_plots()->None:
     plt.ylabel('Pg(C)')
     plt.xlabel('Year')
     plt.title(f"cSoil+cLitter for esm-ssp585-ssp126Lu - esm-ssp585")
-    plt.legend()
+    plt.legend(frameon=False)
     plt.savefig(f'{PLOTS_DIR}/models/cSoil+cLitter_model_intercomparison_diff.png', dpi=DPI)
     plt.close()
 

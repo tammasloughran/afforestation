@@ -401,7 +401,7 @@ def make_regional_plots()->None:
                     var,
                     region,
                     )
-        plt.legend()
+        plt.legend(frameon=False)
         plt.savefig(f'{PLOTS_DIR}/regional/{var}_all_reagions.png', dpi=DPI)
         plt.close()
 
