@@ -104,7 +104,7 @@ We use this scenario because it represents a plausible future scenario that woul
 The reference simulation we use to compare to \textit{esm-ssp585-ssp126Lu} is the \textit{esm-ssp585} from the Coupled Climate-Carbon Cycle Model Intercomparison Project (C4MIP) \parencite{jones_c4mip_2016}.
 This is the emissions-driven Earth system model simulation corresponding to the SSP5-8.5 high greenhouse gas scenario that assumes that development is driven by fossil fuels \parencite{oneill_scenario_2016}.
 In general, the land use change in this scenario has less expansion of forested lands than \textit{esm-ssp585-ssp126Lu}, but is a mixture of moderate forestation and deforestation.
-The notable difference in land-use change compared to the forestation scenario is the deforestation in the central African region (Figure S\ref{fig:land_use}).
+The notable difference in land-use change compared to the forestation scenario is the deforestation in the central African region (Fig. S\ref{fig:land_use}).
 By taking the difference between the forestation simulation and the \textit{esm-ssp585} simulation for any variable X (Equation \ref{equ:diff}), we can examine the impact of forestation on the climate and the carbon cycle.
 
 \begin{equation}
@@ -113,11 +113,11 @@ By taking the difference between the forestation simulation and the \textit{esm-
 \end{equation}
 
 The land-use change data set used in all CMIP6 experiments is the Land-use Harmonization data set version 2 (LUH2; \cite{hurtt_harmonization_2020}), which is translated to model plant functional types by each model (for example \cite{di_vittorio_land_2014}).
-Figure \ref{fig:land_use_map} shows the combined primary and secondary forest cover fractions from LUH2 data.
+Fig. \ref{fig:land_use_map} shows the combined primary and secondary forest cover fractions from LUH2 data.
 \textit{esm-ssp585-ssp126Lu} is typically characterized with forestation, while the \textit{esm-ssp585} has a mixture of deforestation and forestation.
 The \textit{esm-ssp585-ssp126Lu} scenario has about 3 million km$^2$ more tree cover than the \textit{esm-ssp585} scenario (an area about the size of India), about 50\%  of which is avoided deforestation in the \textit{esm-ssp585} scenario (Fig. \ref{fig:land_use_map}a).
 There are only a few areas where there is deforestation in the \textit{esm-ssp585-ssp126Lu} experiment.
-These occur in deciduous broad leaf forests in eastern North America, China and western Russia (Figure \ref{fig:land_use_map}a).
+These occur in deciduous broad leaf forests in eastern North America, China and western Russia (Fig. \ref{fig:land_use_map}a).
 Furthermore, it is important to acknowledge that the LUH2 SSP1-2.6 scenario underestimates the tree cover that is originally dictated by IMAGE (the integrated assessment model that produces the SSP1-2.6 scenario).
 This is due to differences in the definition of tree cover in the integrated assessment models as well as the effects of harmonization of that data with observed historical cover fractions.
 Despite LUH2 providing additional forest cover data to match the forestation in IMAGE, only CESM utilized it of all the models in this study.
@@ -147,7 +147,7 @@ Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members a
 
 CanESM5 has different ensemble initialization methods for \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}.
 The former uses r1i1p1f1 and the latter uses r1i1p2f1, which features recent bug-fixes in the model.
-To account for the slightly different initial conditions, the CanESM5 model (green line in \ref{fig:models_cpools}) has been bias corrected by subtracting the difference in the carbon pools between the reference and forestation simulations at the start of the experiment (2015).
+To account for the slightly different initial conditions, the CanESM5 model (green line in Fig. \ref{fig:models_cpools}) has been bias corrected by subtracting the difference in the carbon pools between the reference and forestation simulations at the start of the experiment (2015).
 This makes the CanESM5 comparable with other models for all variables.
 
 \begin{table}[H]
@@ -188,7 +188,7 @@ For the global analysis across all models, we calculate trends in the difference
 For this we use the Theil-Sen slope estimator and test its significance at the 5\% level using the Mann-Kendall trend test.
 
 For a more detailed analysis of regional carbon uptakes and temperature impacts of forestation, the ACCESS-ESM1-5 regional analyses have been divided into 6 regions that feature notable changes in tree cover.
-These regions are shown in Figure \ref{fig:land_use}.
+These regions are shown in Fig. \ref{fig:land_use}.
 The temperature and precipitation values over the ocean are masked out to represent changes only over the land surface.
 
 Much of the tree cover changes between the two simulations occurs in a handful of concentrated regions.
@@ -224,11 +224,14 @@ Deciduous needle leaf forests only make up a small fraction of forests and do no
 
 \begin{figure}[H]
     \centering
+%    \begin{subfigure}[b]{0.8\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/tree_area_ssp126_all_models_global_sum.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.8\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/tree_frac_map_2015-2100_diff.png}
+%    \end{subfigure}
     \begin{subfigure}[b]{0.8\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tree_area_ssp126_all_models_global_sum.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.8\linewidth}
-        \includegraphics[width=\linewidth]{../plots/tree_frac_map_2015-2100_diff.png}
+        \includegraphics[width=\linewidth]{../plots/tree_area_frac_figure.png}
     \end{subfigure}
     \caption{Global mean tree cover area changes between 2015 to 2100 in the forestation scenario (solid) and reference simulation (dashed) for each model. 2100 maps of tree cover fraction difference between the simulations for each model. MIROC-ES2L data for tree fraction are not available.}
     \label{fig:land_use_map}
@@ -236,21 +239,24 @@ Deciduous needle leaf forests only make up a small fraction of forests and do no
 
 \begin{figure}[H]
     \centering
+%    \begin{subfigure}[b]{0.45\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cLand_model_intercomparison_diff.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.45\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.45\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/cSoil+cLitter_model_intercomparison_diff.png}
+%    \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cLand_model_intercomparison_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cVeg_model_intercomparison_diff.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{../plots/cSoil+cLitter_model_intercomparison_diff.png}
+        \includegraphics[width=\linewidth]{../plots/land_carbon_figure.png}
     \end{subfigure}
     \caption{Differences for cLand, cVeg and cLitter+cSoil between the forestation scenario and the reference simulation for 6 CMIP6 models. ACCESS-ESM1-5 is plotted as the ensemble mean and the blue shading indicates the ACCESS-ESM1-5 ensemble range.}
     \label{fig:models_cpools}
 \end{figure}
 
 The diversity of increased tree cover fraction among the models corresponds to a diversity of carbon draw-down potentials into the terrestrial system.
-Figure \ref{fig:models_cpools} shows the change in the model terrestrial carbon pools due to forestation.
+Fig. \ref{fig:models_cpools} shows the change in the model terrestrial carbon pools due to forestation.
 The increase in total land carbon tends to diminish towards the end of the century as new forest areas reach maturity.
 The models show a total CO$_2$ removal by the land surface of between 10--60 Pg C by 2100.
 The ACCESS-ESM1-5 ensemble spread indicates that the internal climate variability can constitute a considerable portion of this range (between 10--40 Pg C).
@@ -289,7 +295,7 @@ Fig. \ref{fig:models_tas_trends} shows that trends in global mean surface air te
 Furthermore, there is some disagreement in the sign of the change in global temperature among models and ensemble members, with CanESM5 and CESM2 showing non-significant positive trends.
 The effect that internal climate variability can have on the trends is demonstrated by the ACCESS-ESM1-5 ensemble.
 While the ensemble mean trend showed no significant change, three members showed a significant positive trend.
-The CO$_2$ concentration of these three members is not consistently greater than the other ensemble members throughout the experiment, which indicates that the significance of the temperature decrease in these members is mostly driven by internal climate variability.
+The CO$_2$ concentration of these three members is not consistently greater than the other ensemble members throughout the experiment (Fig. S\ref{fig:models_co2_access_members}), which indicates that the significance of the temperature decrease in these members is mostly driven by internal climate variability.
 
 The temporal variance of temperature also shows unique behavior among the models.
 For example, MIROC-ES2L features large decadal-scale oscillations in global mean temperature driven by large El Niño–Southern Oscillation amplitude that results in similar variability in global temperature (\cite{hajima_development_2020}).
@@ -319,11 +325,14 @@ The climate in both the forestation and reference simulations are similar, with 
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/esm-ssp585-ssp126Lu_budget.png}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.4\linewidth}
-        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/esm-ssp585-ssp126Lu_budget.png}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.4\linewidth}
+%        \includegraphics[width=\linewidth]{../plots/fgco2_ocean_carbon_aff_ssp585_cumulative.png}
+%    \end{subfigure}
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\linewidth]{../plots/budget_ocean_figure.png}
     \end{subfigure}
     \caption{Carbon budget of global fluxes of fossil fuel emissions and the natural sinks for the land (net-land-atmosphere exchange as the sum of the natural terrestrial sink and land-use change fluxes), ocean and atmospheric accumulation. The cumulative ocean carbon difference between the forestation and reference simulation.}
     \label{fig:global_carbon_budget}
@@ -391,7 +400,7 @@ Furthermore, in the sub-tropical and boreal regions of eastern North America, th
 \end{figure}
 
 The net effect of growing trees in the tropical regions is that it causes localized warming at the extreme ends of the temperature distributions.
-For specific grid-points with large changes from grass to tree biomes, the distribution of summer daily maximum surface air temperature for both the forestation and reference simulations are shown in Figure \ref{fig:tasmax_distribution}.
+For specific grid-points with large changes from grass to tree biomes, the distribution of summer daily maximum surface air temperature for both the forestation and reference simulations are shown in Fig. \ref{fig:tasmax_distribution}.
 The Amazon grid-point features changes in mostly C4 grass to evergreen broad leaf forest, representing an increase in tree cover fraction of 60\%.
 This corresponds to a statistically significant change in the distribution, particularly for temperatures greater than 50 \textcelsius{} (Fig. \ref{fig:tasmax_distribution}b).
 
@@ -400,9 +409,9 @@ For example, the large increase in forest cover for the grid point in Asia corre
 The changes in daily maximum temperature at the lower end of the distribution in response to forestation are much more regionally consistent, showing a decrease in cooler than average days for both the Amazon grid point and the Asia Grid point.
 
 Some regions show decreases in surface air temperature in response to increasing tree cover.
-Of particular note is North America which features a large transition from C3 crops to deciduous broadleaf (Fig. \ref{fig:tasmax_distribution} e).
+Of particular note is North America which features a large transition from C3 crops to deciduous broadleaf (Fig. \ref{fig:tasmax_distribution}e).
 In ACCESS-ESM1-5, deciduous broad leaf forests have the highest reflectance of all the PFTs.
-The resulting distribution shows decreases in the number of warm and cool days in the forestation experiment (Fig. \ref{fig:tasmax_distribution} f), suggesting that the increased albedo and surface roughness 
+The resulting distribution shows decreases in the number of warm and cool days in the forestation experiment (Fig. \ref{fig:tasmax_distribution}f), suggesting that the increased albedo and surface roughness 
 
 \begin{figure}[H]
     \centering
@@ -431,25 +440,35 @@ The resulting distribution shows decreases in the number of warm and cool days i
 
 \subsection{Comparison of climate impacts to other modeling studies}
 
-Paragraph one. other modeling studies. Sontagg et al.
+The sensitivity of the model's global temperature change per million km² ranges from -0.16 (GFDL-ESM4) to 0.8 (MIROC-ES2L) °K. 
+
+\begin{table}[]
+\begin{tabular}{ll|lll}
+\hline
+                     & Model         & Area (M km²) & $\Delta$T & $\Delta$T/Mkm² \\ \hline
+CMIP6 Forestation    & ACCESS-ESM1-5 & 1.6          & 0.03      & 0.019          \\
+                     & CESM2         & 4.4          & 0.06      & 0.014          \\
+                     & CanESM5       & -0.6         & 0.025     & -0.043         \\
+                     & MPI-ESM1-2-LR & 2            & -0.084    & -0.042         \\
+                     & MIROC-ES2L    & -0.6         & -0.049    & 0.082          \\
+                     & UKESM1-0-LL   & 1.7          & -0.011    & -0.006         \\
+                     & GFDL-ESM4     & 0.52         & -0.084    & -0.161         \\ \hline
+Sonntag et al. (2018)& MPI-ESM       & 9            & -0.27     & -0.03          \\ \hline
+Boysen et al. (2020) & MPI-ESM       & -20          & -0.04     & 0.002          \\
+                     & CESM2         & -20          & -0.02     & 0.001          \\
+                     & CanESM        & -20          & -0.55     & 0.0275         \\
+                     & MIROC         & -20          & -0.01     & 0.0005         \\
+                     & UKESM         & -20          & -0.51     & 0.0255         \\ \hline
+\end{tabular}
+    \caption{Table of model transient climate response and expected change in temperature. TCR is the transient climate response of each model taken from Aurora et al (2020), Preind. CO$_2$ is the simulated preindustrial concentration, For. CO$_2$ is the change in CO$_2$ from Figure 4., Net. T is the net change in temperature from the CMIP6 forestation experiment.}
+    \label{tab:expected_temperature}
+\end{table}
 
 Table 2 shows the transient climate response of the models taken from Aurora et al combined. In the following columns is the calculation of the expected change in temperature from only the change in atmospheric concentration shown in Figure 4.
 In the last column is the net change in global temperature from both biogeochemical and biogeophysical processes as taken from the trends in Figure 5.
 Most models have a smaller decrease in global temperatures in response to forestation than what would be expected from their TCR alone, which means that the biogeophysical effects of forestation increase global temperatures and offset the potential biogeochemical cooling.
 
-\begin{table}[]
-\begin{tabular}{llllll}
-\hline
-Model         & TCR (°K) & Preind. CO$_2$ (ppm) & For. $\Delta$CO$_2$ (ppm) & Expected $\Delta$T from TCR (°K) & Net $\Delta$T (°K) \\ \hline
-ACCESS-ESM1-5 & 2.15     & 284               & -9              & -0.068                    & -0.011      \\
-MPI-ESM1-2-LR & 1.86     & 278               & -22             & -0.147                    & -0.078      \\
-MIROC-ES2L    & 1.58     & 280.3             & -6              & -0.033                    & -0.066      \\
-CESM2         & 2.29     & 280               & -21             & -0.171                    & -0.009      \\
-UKESM         & 2.42     & 284               & -10             & -0.085                    & -0.070      \\ \hline
-\end{tabular}
-    \caption{Table of model transient climate response and expected change in temperature. TCR is the transient climate response of each model taken from Aurora et al (2020), Preind. CO$_2$ is the simulated preindustrial concentration, For. CO$_2$ is the change in CO$_2$ from Figure 4., Net. T is the net change in temperature from the CMIP6 forestation experiment.}
-    \label{tab:expected_temperature}
-\end{table}
+
 
 \begin{table}[]
 \begin{tabular}{ll|lll}
@@ -468,6 +487,8 @@ CMIP6 Forestation    & ACCESS-ESM1-5 & 1.6          & -0.011 & -0.007          \
                      & MIROC         & -0.6         & -0.066 & 0.11               \\
                      & UKESM         & 1.7          & -0.07  & -0.041 \\ \hline
 \end{tabular}
+\caption{Change in temperature from forestation normalized by the area of deforestation \parencite{boysen_global_2020}, compared to values taken from \parencite{sonntag_quantifying_2018} forestation study and the CMIP6 forestation presented in section 3.1.2.}
+    \label{tab:normalized_temperature}
 \end{table}
 
 Paragraph three. Limitations of experimental design and what processes are not included in the models.
@@ -569,6 +590,14 @@ We would like to thank the support provided by the National Environmental Scienc
 \end{figure}
 
 \subsection{CO$_2$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../plots/significant_ensemble_members.png}
+    \caption{Atmosphere CO2 concentration difference with three ACCESS-ESM1-5 ensemble members in gray that have significant global mean temperature trends.}
+    \label{fig:models_co2_access_members}
+\end{figure}
+
 
 \begin{figure}[H]
     \centering
