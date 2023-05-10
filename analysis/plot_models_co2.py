@@ -63,7 +63,7 @@ CO2_VARIABLES = {
 MODELS = [ # Some models have missing co2 data for one of the experiments.
         'ACCESS-ESM1-5',
         #'BCC-CSM2-MR', # BCC-CSM2 has beed excluded at the request of BCC due to a bug.
-        #'CanESM5',
+        'CanESM5',
         #'GFDL-ESM4',
         'MIROC-ES2L',
         'MPI-ESM1-2-LR',
@@ -85,7 +85,7 @@ INSTIT = {
 ENSEMBLES = {
         'ACCESS-ESM1-5':'r1i1p1f1',
         'BCC-CSM2-MR':'r1i1p1f1',
-        'CanESM5':'r1i1p2f1',
+        'CanESM5':'r1i1p1f1',
         'MIROC-ES2L':'r1i1p1f2',
         'UKESM1-0-LL':'r1i1p1f2',
         'MPI-ESM1-2-LR':'r1i1p1f1',
@@ -192,6 +192,16 @@ UKESM_ssp585 = [
         1076.763, 1089.8237, 1104.1278, 1119.0787, 1133.0673, 1146.7651,
         1159.7842, 1173.997,
         ]
+CanESM5_for = [
+        398.86, 401.59, 403.82, 406.59, 409.48, 412.67, 415.76, 417.95, 421.11, 424.80, 428.67,
+        431.86, 433.82, 437.76, 442.69, 446.11, 449.16, 453.16, 458.66, 463.42, 466.84, 469.81,
+        473.84, 478.93, 484.52, 487.80, 491.31, 496.70, 501.96, 506.75, 511.32, 516.78, 522.98,
+        530.46, 535.77, 540.30, 545.33, 550.92, 556.86, 562.94, 571.41, 578.85, 585.32, 593.04,
+        599.48, 605.32, 612.74, 619.51, 627.41, 635.36, 642.76, 650.40, 659.51, 668.86, 677.78,
+        687.04, 697.39, 706.45, 714.96, 724.45, 734.61, 743.10, 752.27, 762.36, 773.11, 783.87,
+        792.66, 801.54, 813.25, 824.13, 834.34, 844.55, 855.04, 865.47, 875.17, 885.38, 893.93,
+        904.13, 914.35, 925.03, 935.78, 947.10, 958.02, 967.03, 976.36, 986.65,
+        ]
 
 load_cdo = False
 load_npy = not load_cdo
@@ -223,17 +233,20 @@ def make_co2_models_plot()->None:
                 print(model, 'will not be loaded from cdo. Use .npy files.')
                 continue
             table = A_OR_AER[model]
-            for_co2_files = sorted(get_filenames(
-                    'LUMIP',
-                    INSTIT[model],
-                    model,
-                    'esm-ssp585-ssp126Lu',
-                    ENSEMBLES[model],
-                    table,
-                    'co2',
-                    ))
-            for_co2_files = '[ ' + ' '.join(for_co2_files) + ' ]'
-            for_co2_data[model] = global_average(var='co2', input=for_co2_files)
+            if model!='CanESM5':
+                for_co2_files = sorted(get_filenames(
+                        'LUMIP',
+                        INSTIT[model],
+                        model,
+                        'esm-ssp585-ssp126Lu',
+                        ENSEMBLES[model],
+                        table,
+                        'co2',
+                        ))
+                for_co2_files = '[ ' + ' '.join(for_co2_files) + ' ]'
+                for_co2_data[model] = global_average(var='co2', input=for_co2_files)
+            else:
+                for_co2_data['CanESM5'] = np.array(CanESM5_for)/TO_PPM
 
             ssp585_co2_files = sorted(get_filenames(
                     'C4MIP',
@@ -246,6 +259,7 @@ def make_co2_models_plot()->None:
                     ))
             ssp585_co2_files = '[ ' + ' '.join(ssp585_co2_files) + ' ]'
             ssp585_co2_data[model] = global_average(var='co2', input=ssp585_co2_files)
+            if model=='CanESM5': ssp585_co2_data[model] /= TO_PPM
 
             np.save(f'{DATA_DIR}/{model}_co2_for.npy', for_co2_data[model].data)
             np.save(f'{DATA_DIR}/{model}_co2_ssp585.npy', ssp585_co2_data[model].data)
@@ -265,7 +279,7 @@ def make_co2_models_plot()->None:
                 ssp585_co2_data[model] = np.load(f'{DATA_DIR}/{model}_co2_ssp585.npy')
 
     # Plot absolute values.
-    plt.figure
+    plt.figure()
     for model in MODELS:
         years = np.arange(2015, 2015+len(for_co2_data[model]))
         plt.plot(
@@ -282,6 +296,7 @@ def make_co2_models_plot()->None:
                 label=model+' esm-ssp585',
                 linestyle='dashed',
                 )
+    # Manually add the UKESM b/c since it was missing from the ESGF. Provided by Spencer Liddicoat.
     plt.plot(
             years,
             UKESM_for,
@@ -295,6 +310,13 @@ def make_co2_models_plot()->None:
             label='UKESM1-0-LL esm-ssp585',
             linestyle='dashed',
             )
+    # Manually add the CanESM5 data. Provided by Vivek Aurora.
+    #plt.plot(
+    #        years,
+    #        CanESM5_for,
+    #        color=COLORS['CCma'],
+    #        label='CanESM5 forestation',
+    #        )
     plt.plot(
             remind_magpie_years,
             remind_magpie_co2,
@@ -305,7 +327,7 @@ def make_co2_models_plot()->None:
     plt.xlim(2010, 2100)
     plt.xlabel('Years')
     plt.ylabel('CO$_2$ mixing ratio (ppm)')
-    plt.legend()
+    plt.legend(frameon=False)
     plt.savefig(f'{PLOTS_DIR}/models/models_co2.png', dpi=DPI)
 
     # Plot relative to ssp585
@@ -341,7 +363,7 @@ def make_co2_models_plot()->None:
     plt.xlim(2015, 2100)
     plt.xlabel('Years')
     plt.ylabel('$\Delta$ CO$_2$ mixing ratio (ppm)')
-    plt.legend()
+    plt.legend(frameon=False)
     plt.title('Difference between forestation and esm-ssp585')
     plt.savefig(f'{PLOTS_DIR}/models/models_co2_diff.png', dpi=DPI)
 
