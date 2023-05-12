@@ -27,6 +27,7 @@ def get_filename(mip:str, exp:str, ens:str, table:str, var:str):
     directory = f'/g/data/fs38/publications/CMIP6/{mip}/CSIRO/ACCESS-ESM1-5/{exp}/r{ens}i1p1f1/'\
             f'{table}/{var}/gn/latest/'
     files = os.listdir(directory)
+    files.sort()
     return [directory+f for f in files]
 
 
