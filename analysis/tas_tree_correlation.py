@@ -54,7 +54,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 NTIMES = 1032
 
@@ -237,7 +237,7 @@ def make_ens_mean_first_correlation():
     # Correlate.
     print('Correlating')
     correlation, pvalue = my_spearmanr2(temp_diff_ens_mean, tree_diff)
-    correlation[pvalue>0.05] = 0
+    correlation[pvalue>0.05] = 0 # Show only values significant at the 5% level
 
     # Plot
     plt.figure()
@@ -273,6 +273,7 @@ def make_ens_mean_first_correlation():
     plt.title('Is significant')
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/correlation_tree_tas_significance_ens_mean_first.png', dpi=DPI)
+    plt.show()
 
 
 if __name__=='__main__':

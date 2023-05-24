@@ -71,11 +71,12 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-load_npy_files = False # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 MODELS = { # ACCESS is excluded here. Needs separate plotting for ensembles.
+        #'CSIRO':'ACCESS-ESM1-5',
         #'BCC':'BCC-CSM2-MR', # BCC has been excluded.
         #'NCC':'NorESM2-LM', # NorESM has been excluded.
         'CCma':'CanESM5',
@@ -385,11 +386,6 @@ def make_model_plots()->None:
 
             # Plot the trends for tas and pr.
             if var=='tas' or var=='pr':
-                fig, axes = plt.subplots(nrows=4, ncols=2, sharex=True, sharey=True)
-                axes = axes.flatten()
-                years = list(range(2015, 2015 + ens_mean.shape[0]))
-                axes[0].plot(years, ens_mean, label='ACCESS-ESM1-5')
-                axes[0].fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
                 trend = np.array(['']*NENS)
                 h = np.ones(NENS).astype(bool)
                 p = np.ones(NENS)*np.nan
@@ -399,23 +395,73 @@ def make_model_plots()->None:
                 var_s = p.copy()
                 slope = p.copy()
                 intercept = p.copy()
+                # Regression of difference first
                 for e in range(10):
                     trend[e], h[e], p[e], z[e], tau[e], s[e], var_s[e], slope[e], intercept[e] = \
                                 pmk.original_test(
                                         diff[e,:], # ACCESS-ESM1.5
                                         alpha=0.05,
                                         )
+                # Regression of experiments first, then difference.
+                # It's not a good idea to do this because the temperature change for each
+                # experiment is not linear but the difference between them is.
+                #for e in range(10):
+                #    trenda, ha, pa, za, taua, sa, var_sa, slopea, intercepta = \
+                #                pmk.original_test(
+                #                        access_aff[e,:], # ACCESS-ESM1.5
+                #                        alpha=0.05,
+                #                        )
+                #    years = np.arange(ens_mean.shape[0])
+                #    aff_trend = slopea*years+intercepta
+                #    trendb, hb, pb, zb, taub, sb, var_sb, slopeb, interceptb = \
+                #                pmk.original_test(
+                #                        access_ssp585[e,:], # ACCESS-ESM1.5
+                #                        alpha=0.05,
+                #                        )
+                #    ssp585_trend = slopeb*years+interceptb
+                #
+                #    difference_of_trends = aff_trend - ssp585_trend
+                #
+                #    plt.figure()
+                #    plt.plot(years, access_aff[e,:], label='aff data')
+                #    plt.plot(years, access_ssp585[e,:], label='ssp585 data')
+                #    plt.plot(years, aff_trend, label='aff_trend')
+                #    plt.plot(years, ssp585_trend, label='ssp585_trend')
+                #    plt.plot(years, slopec*years+interceptc, label='regress first')
+                #    plt.plot(years, access_aff[e,:], label='aff')
+                #    plt.plot(years, access_ssp585[e,:], label='ssp585')
+                #    plt.plot(years, trend_line[e,:])
+                #    plt.plot(years, diff[e,:], color='grey')
+                #    plt.plot(years, slope[e]*years+intercept[e], label='diff first')
+                #    plt.legend()
+                #    plt.show()
+
+                years = list(range(2015, 2015 + ens_mean.shape[0]))
                 trend_line = slope.mean()*np.arange(len(years)) + intercept.mean()
                 trend_lines = slope[:,None]*np.arange(len(years))[None,:] + intercept[:,None]
+                plt.figure()
+                for e in range(10):
+                    if h[e]:
+                        plt.plot(years, diff[e,:], color='orange')
+                        plt.plot(years, trend_lines[e,:], color='red')
+                    else:
+                        plt.plot(years, diff[e,:], color='grey')
+                        plt.plot(years, trend_lines[e,:], color='black')
+                plt.show()
+
+                fig, axes = plt.subplots(nrows=4, ncols=2, sharex=True, sharey=True)
+                axes = axes.flatten()
+                axes[0].plot(years, ens_mean, label='ACCESS-ESM1-5')
+                axes[0].fill_between(years, diff.max(axis=0), diff.min(axis=0), color='lightblue')
                 if h.all():
                     print("    - All ACCESS trends are significant")
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'])
                 else:
                     print("    - Not all ACCESS trends are significant")
                     print("        - They are:", h)
-                    print("        - deltas: ", trend_lines[:,-1])
+                    print("        - deltas: ", trend_lines[:,-1] - trend_lines[:,0])
                     axes[0].plot(years, trend_line, color=COLORS['CSIRO'], linestyle='dotted')
-                if (slope>0).all(): sign = '+'
+                if slope.mean()>0: sign = '+'
                 else: sign = '-'
                 axes[0].annotate(
                         f'ACCESS-ESM1-5 ({sign})',
@@ -433,12 +479,28 @@ def make_model_plots()->None:
                         diff_model = diff_model - diff_model[0]
                     years = list(range(2015, 2015 + aff_data[m].shape[0]))
                     axes[i+2].plot(years, diff_model, color=COLORS[m], label=MODELS[m])
+                    #if m=='MIROC':
+                    #    trenda, ha, pa, za, taua, sa, var_sa, slopea, intercepta = \
+                    #            pmk.original_test(
+                    #                    aff_data[m],
+                    #                    alpha=0.05,
+                    #                    )
+                    #    trendb, hb, pb, zb, taub, sb, var_sb, slopeb, interceptb = \
+                    #            pmk.original_test(
+                    #                    ssp585_data[m],
+                    #                    alpha=0.05,
+                    #                    )
+                    #    trend_linea = slopea*np.arange(len(years)) + intercepta
+                    #    trend_lineb = slopeb*np.arange(len(years)) + interceptb
+                    #    trend_line = trend_linea - trend_lineb
+                    #    slope = slopea - slopeb
+                    #else:
                     trend, h, p, z, tau, s, var_s, slope, intercept = pmk.original_test(
                             diff_model,
                             alpha=0.05,
                             )
                     trend_line = slope*np.arange(len(years)) + intercept
-                    print(f'    - {MODELS[m]} trend={trend}, p={p}, h={h}, delta={trend_line[-1]}')
+                    print(f'    - {MODELS[m]} trend={trend}, p={p}, h={h}, delta={trend_line[-1]-trend_line[0]}')
                     if h: # Hypothesis that there exists a trend is true.
                         axes[i+2].plot(years, trend_line, color=COLORS[m])
                     else:
@@ -472,12 +534,13 @@ def make_model_plots()->None:
                 plt.xlabel('Year')
                 if var=='tas':
                     plt.ylabel('Temperature (°C)')
-                    plt.title('Global mean 2 m surface air temperature difference trends')
+                    plt.title('Global mean 2 m surface air temperature difference')
                 else: plt.ylabel('Precipitation (mm/day)')
-                fig.suptitle(f'{var} global mean trends')
+                #fig.suptitle(f'{var} global mean trends')
                 #plt.tight_layout()
                 #plt.subplots_adjust(left=0.15,) # tight_layout leaves some extra space on the left.
                 plt.savefig(f'{PLOTS_DIR}/models/{var}_trends.png', dpi=DPI)
+                plt.show()
                 plt.close()
 
             # Plot only the afforestation scenario for absolute values.

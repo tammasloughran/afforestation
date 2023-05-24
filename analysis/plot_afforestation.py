@@ -85,7 +85,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = True # Uncomment to override previous check.
+load_npy_files = False # Uncomment to override previous check.
 
 
 # Load data for only afforested grid cells.
@@ -315,7 +315,7 @@ def make_clim_plots()->None:
             np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585-ssp126Lu_global.npy', aff_data)
             np.save(f'{DATA_DIR}/{var}_{model}_esm-ssp585_global.npy', ssp585_data)
 
-        # Calculate mean and standar deviation
+        # Correct units
         if var == 'tas':
             aff_data -= 273.15
             ssp585_data -= 273.15

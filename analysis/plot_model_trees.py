@@ -147,6 +147,7 @@ def plot_global_sum_area()->None:
                 color=COLORS[INSTIT[model]],
                 linestyle='dashed',
                 )
+        print(model, "Delta F:", for_global_sum[model][-1] - ssp585_global_sum[model][-1])
     plt.xlim(left=for_dates[model][0], right=for_dates[model][-1])
     plt.ylabel('Area (million km$^2$)')
     plt.title('Tree area')
