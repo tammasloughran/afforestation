@@ -6,6 +6,7 @@ import sys
 
 import cdo as cdo_module
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import numpy as np
@@ -103,6 +104,8 @@ def make_tas_plots():
     fig.set_size_inches(9, 7)
     axes = axes.flatten()
 
+    discrete_bins = mpl.colors.BoundaryNorm(boundaries=np.linspace(-3.3, 3.3, 12), ncolors=256)
+
     for_data = {}
     ssp585_data = {}
     i = 0
@@ -134,12 +137,10 @@ def make_tas_plots():
 
         rng = 3
         plt.sca(axes[i])
-        mappable = axes[i].pcolormesh(
-                lons,
-                lats,
-                diff,
-                vmin=-rng,
-                vmax=rng,
+        mappable = axes[i].pcolormesh(lons, lats, diff,
+                norm=discrete_bins,
+                #vmin=-rng,
+                #vmax=rng,
                 cmap='seismic',
                 linewidth=0.2,
                 edgecolors='face',
@@ -153,8 +154,8 @@ def make_tas_plots():
     plt.sca(axes[-1])
     fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
     cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
-    cbar = plt.colorbar(
-            mappable,
+    cbar = plt.colorbar(mappable,
+            ticks=np.linspace(-3, 3, 11),
             cax=cbar_ax,
             label='Temperature difference (°C)',
             orientation='horizontal',

@@ -5,6 +5,7 @@ import glob
 import os
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import netCDF4 as nc
@@ -50,7 +51,7 @@ if any(['.npy' in f for f in files]):
     load_npy_files = True
 else:
     load_npy_files = False
-#load_npy_files = True # Uncomment to override previous check.
+load_npy_files = True # Uncomment to override previous check.
 
 
 def make_land_cover_plot():
@@ -71,8 +72,11 @@ def make_land_cover_plot():
         plt.plot(years, aff_areas[var], color=COLORS[var], label=LABELS['AFF'][var])
         frac_file = get_filename('C4MIP', 'esm-ssp585', '1', table, var)
         ssp585_areas[var] = cdo_cover_area_load(var, input=frac_file[0])/M2_IN_MILKM2
-        plt.plot(years, ssp585_areas[var], color=COLORS[var], linestyle='dashed',
-                label=LABELS['esm-ssp585'][var])
+        plt.plot(years, ssp585_areas[var],
+                color=COLORS[var],
+                linestyle='dashed',
+                label=LABELS['esm-ssp585'][var],
+                )
     plt.xlim(left=years[0], right=years[-1])
     plt.ylabel("Area (million km$^2$)")
     plt.xlabel("Year")
@@ -81,8 +85,10 @@ def make_land_cover_plot():
 
     plt.figure()
     for var in FRAC_VARIABLES[table]:
-        plt.plot(years, aff_areas[var]-ssp585_areas[var], color=COLORS[var],
-                label=f'{LABELS["AFF"][var]}-SSP585')
+        plt.plot(years, aff_areas[var]-ssp585_areas[var],
+                color=COLORS[var],
+                label=f'{LABELS["AFF"][var]}-SSP585',
+                )
     plt.xlim(left=years[0], right=years[-1])
     plt.ylabel("Area difference (million km$^2$)")
     plt.xlabel("Year")
@@ -156,14 +162,24 @@ def make_area_anomaly_map():
                 fig = plt.figure()
                 ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
                 abs_max = np.nanmax(np.abs(area_anomaly))
+                discrete_bins = mpl.colors.BoundaryNorm(
+                        boundaries=np.linspace(-1.1, 1.1, 12),
+                        ncolors=256,
+                        )
                 plt.pcolormesh(lons, lats, area_anomaly,
-                        vmax=abs_max/2, vmin=-abs_max/2,
+                        norm=discrete_bins,
+                        #vmax=abs_max/2, vmin=-abs_max/2,
                         #cmap='nipy_spectral',#'PRGn', # nipy_spectral has a sharp color change at 0
                         cmap=jaisnb,
                         transform=ccrs.PlateCarree())
                 ax.coastlines() # Drawing coastlines covers the coastal gridpoints.
                 # Only needed for diverging colormaps that have white in the centre.
-                plt.colorbar(label='Million km$^2$', orientation='horizontal', pad=0.05)
+                plt.colorbar(
+                        ticks=np.arange(-10, 11, 2)/10,
+                        label='Million km$^2$',
+                        orientation='horizontal',
+                        pad=0.05,
+                        )
                 plt.title(var.upper())
                 plt.tight_layout()
                 plt.savefig(f'{PLOTS_DIR}/fractions/{var}_{exp}_anomaly.png', dpi=DPI)

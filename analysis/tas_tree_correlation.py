@@ -9,6 +9,7 @@ import pdb
 import warnings
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import cartopy.crs as ccrs
 import numpy as np
 import netCDF4 as nc
@@ -151,17 +152,20 @@ def make_correlation_plot()->None:
     plt.figure()
     ax = plt.axes(projection=ccrs.Robinson())
     absmax = max(abs(np.nanmin(correlation)), np.nanmax(correlation))
-    plt.pcolormesh(
-            lons,
-            lats,
-            np.nanmean(correlation, axis=0),
-            vmin=-absmax,
-            vmax=absmax,
+    discrete_bins = mpl.colors.BoundaryNorm(boundaries=np.arange(-55, 65, 10)/100.0, ncolors=256)
+    plt.pcolormesh(lons, lats, np.nanmean(correlation, axis=0),
+            norm=discrete_bins,
+            #vmin=-absmax,
+            #vmax=absmax,
             cmap='bwr',
             transform=ccrs.PlateCarree(),
             )
     ax.coastlines()
-    plt.colorbar(orientation='horizontal', pad=0.05)
+    plt.colorbar(
+            ticks=np.arange(-5, 6, 1)/10,
+            orientation='horizontal',
+            pad=0.05,
+            )
     plt.title('Correlation between TAS and treeFrac')
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/correlation_tree_tas.png', dpi=DPI)
@@ -169,10 +173,7 @@ def make_correlation_plot()->None:
     plt.figure()
     ax = plt.axes(projection=ccrs.Robinson())
     absmax = max(abs(np.nanmin(correlation)), np.nanmax(correlation))
-    plt.pcolormesh(
-            lons,
-            lats,
-            np.nansum(pvalue<0.05, axis=0),
+    plt.pcolormesh(lons, lats, np.nansum(pvalue<0.05, axis=0),
             cmap='viridis',
             transform=ccrs.PlateCarree(),
             )
@@ -243,17 +244,20 @@ def make_ens_mean_first_correlation():
     plt.figure()
     ax = plt.axes(projection=ccrs.Robinson())
     absmax = max(abs(np.nanmin(correlation)), np.nanmax(correlation))
-    plt.pcolormesh(
-            lons,
-            lats,
-            correlation,
-            vmin=-absmax,
-            vmax=absmax,
+    discrete_bins = mpl.colors.BoundaryNorm(boundaries=np.arange(-55, 65, 10)/100.0, ncolors=256)
+    plt.pcolormesh(lons, lats, correlation,
+            norm=discrete_bins,
+            #vmin=-absmax,
+            #vmax=absmax,
             cmap='bwr',
             transform=ccrs.PlateCarree(),
             )
     ax.coastlines()
-    plt.colorbar(orientation='horizontal', pad=0.05)
+    plt.colorbar(
+            ticks=np.arange(-5, 6, 1)/10,
+            orientation='horizontal',
+            pad=0.05,
+            )
     plt.title('Correlation between 2 m air temperature and tree fraction')
     plt.tight_layout()
     plt.savefig(f'{PLOTS_DIR}/correlation_tree_tas_ens_mean_first.png', dpi=DPI)
@@ -261,10 +265,7 @@ def make_ens_mean_first_correlation():
     plt.figure()
     ax = plt.axes(projection=ccrs.Robinson())
     absmax = max(abs(np.nanmin(correlation)), np.nanmax(correlation))
-    plt.pcolormesh(
-            lons,
-            lats,
-            pvalue<0.05,
+    plt.pcolormesh(lons, lats, pvalue<0.05,
             cmap='viridis',
             transform=ccrs.PlateCarree(),
             )
