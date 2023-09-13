@@ -465,7 +465,7 @@ def make_model_plots()->None:
                 else: sign = '-'
                 axes[0].annotate(
                         f'ACCESS-ESM1-5 ({sign})',
-                        (0,1),
+                        (0.3,1),
                         xycoords='axes fraction',
                         fontsize=8,
                         )
@@ -510,7 +510,7 @@ def make_model_plots()->None:
                     else: sign = '-'
                     axes[i+2].annotate(
                             f'{MODELS[m]} ({sign})',
-                            (0,1),
+                            (0.3,1),
                             xycoords='axes fraction',
                             fontsize=8,
                             )
