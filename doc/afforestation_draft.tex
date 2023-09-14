@@ -16,6 +16,7 @@
 \usepackage{lineno}
 \usepackage[inline]{trackchanges} %for better track changes. finalnew option will compile document with changes incorporated.
 \usepackage{soul}
+\soulregister\cite7
 \linenumbers
 %%%%%%%
 % As of 2018 we recommend use of the TrackChanges package to mark revisions.
@@ -58,7 +59,7 @@
 %
 % ie, \journalname{Water Resources Research}
 
-\journalname{Global Biogeochemical Cycles}
+\journalname{JGR: Biogeosciences}
 
 
 \begin{document}
@@ -309,7 +310,7 @@ While the forestation in this scenario is not enough to substantially mitigate g
 
 Forests cover approximately 31\% of the global land surface \cite{luyssaert_land_2014,fao_global_2020} and the terrestrial biosphere is currently responsible for the removal of 30\% of total anthropogenic emissions from the atmosphere \cite{friedlingstein_global_2022}.
 Forestation is therefore often thought of as a viable strategy to remove CO$_2$ from the atmosphere and mitigate global warming \cite{house_maximum_2002, griscom_natural_2017, smith_long-term_2022}.
-Most decarbonization pathways to limit global warming to below 1.5 or 2 \textcelsius{}, consistent with the Paris Agreement, require not only a reduction of fossil fuel emissions, but also CO$_2$ removal to offset industrial and agricultural emissions that are difficult to abate \cite{babiker_crosssectoral_2022}.
+Most decarbonization pathways to limit global warming to below 1.5 or 2 \textcelsius{}\change{, }{ (}consistent with the Paris Agreement\change{,}{)} require not only a reduction of fossil fuel emissions, but also CO$_2$ removal to offset industrial and agricultural emissions that are difficult to abate \cite{babiker_crosssectoral_2022}.
 The most commonly used practice to remove CO$_2$ from the atmosphere in decarbonization pathways is forestation that includes a) reforestation: forest regrowth in abandoned agricultural and pasture lands, and direct tree planting, and b) afforestation: tree planting in areas not previously forested.
 
 Forestation and deforestation affect the climate in two main ways \cite{pongratz_biogeophysical_2010,ito_biogeophysical_2020,zhu_comparable_2023}.
@@ -363,7 +364,7 @@ The forestation scenario analyzed here is the Land Use Model Intercomparison Pro
 This simulation features the surface fossil fuel related CO$_{2}$ emissions from the SSP5-8.5 scenario, but the land-use trajectory is taken from the SSP1-2.6 scenario \cite{oneill_scenario_2016}.
 The SSP5-8.5 scenario represents a high emissions future pathway that results in a radiative forcing of 8.5 W m$^{-2}$ in 2100.
 The SSP1-2.6 scenario land-use change assumes a future of sustainable development \cite{van_vuuren_energy_2017}.
-This scenario assumes low population growth, low pressures on land-use, environmentally friendly changes in diets and increased agricultural efficiency and yields, which together drive abandonment of agricultural lands.
+This scenario assumes low population growth, low pressures on land-use,\add[TL]{ expansion of protected lands,} environmentally friendly changes in diets and increased agricultural efficiency and yields, which together drive abandonment of agricultural lands.
 This abandoned agricultural land allows for the expansion of natural lands and forest cover.
 We use this scenario because it represents a plausible future forestation scenario that would provide a lower bound on the survivability of vegetation and CO$_2$ removal potential of the land surface under a warmer climate.
 
@@ -377,14 +378,14 @@ By taking the difference between the forestation simulation and the \textit{esm-
 \end{equation}
 \end{linenomath*}
 
-The land-use change data set used in all CMIP6 experiments is the Land-use Harmonization data set version 2 \cite<LUH2;>{hurtt_harmonization_2020}, which is translated to changes in the fractional coverage of model plant functional types (PFTs) by each modelling group \cite <for example>{di_vittorio_land_2014}.
+The land-use change data \remove[TL]{set} used in all CMIP6 experiments \change[TL]{is}{are} the Land-use Harmonization data set version 2 \cite<LUH2;>{hurtt_harmonization_2020},\change[TL]{ which is}{ which for future scenarios is derived from integrated assessment models (IAMs). This data are} translated\add[TL]{by each modelling group} to changes in the fractional coverage of \change[TL]{model}{either specific} plant functional types (PFTs) \add[TL]{or more general land-use and land-cover types if PFT competition dynamics are simulated}\remove[TL]{by each modelling group} \cite <for example>{di_vittorio_land_2014}.
 Figure \ref{fig:land_use} shows the temporal change in combined primary and secondary forest cover fractions from LUH2 data.
 The SSP1-2.6 land-use change is typically characterized with forestation, while the SSP5-8.5 has a mixture of deforestation and forestation.
 SSP5-8.5 land-use change has no net change in global forest cover for most of the century with a small amount of forestation occurring in the last few decades, however, there is considerable deforestation in the central African region (Figure \ref{fig:land_use}b).
 The difference in forest area between the two scenarios (Figure S1) is about 3 million km$^2$ (an area about the size of India), about 50\% of which is avoided deforestation in the SSP5-8.5 scenario.
 There are only a few small areas where there is deforestation in the SSP1-2.6 experiment.
 These occur in deciduous broad leaf forests in eastern North America, China and western Russia (Figure \ref{fig:land_use}a).
-Furthermore, we acknowledge that the LUH2 SSP1-2.6 scenario underestimates the tree cover that is originally dictated by IMAGE (the integrated assessment model that produces the SSP1-2.6 scenario).
+Furthermore, we acknowledge that the LUH2 SSP1-2.6 scenario underestimates the tree cover that is originally dictated by IMAGE (the \change[TL]{integrated assessment model}{IAM} that produces the SSP1-2.6 scenario).
 This is due to differences in the definition of tree cover in the integrated assessment models as well as the effects of harmonization of that data with observed historical land cover fractions.
 LUH2 provided additional forest cover data to match the forestation estimated by IMAGE, only CESM2 utilized it of all the models in this study.
 Therefore, we consider \textit{esm-ssp585-ssp126Lu} as having moderate forestation and would be representative of the lower end of the future mitigation potential from forestation.
@@ -401,7 +402,7 @@ There are seven Earth system models that participated in both LUMIP and C4MIP wi
 NorESM5 contributed a simulation to LUMIP for the \textit{esm-ssp585-ssp126Lu} experiment, however we have excluded it since it was run in concentration driven mode.
 We also excluded BCC-CSM2-MR upon request of the developers due to a bug in the soil respiration.
 A brief overview of these models is presented in Table \ref{tab:models}.
-Two models included wildfire schemes, two models included PFT dynamics (i.e., the geographical distribution of the vegetation types changes in response to environmental changes), and six models included nitrogen limitation.
+Two models included wildfire schemes, two models included PFT dynamics (i.e., the geographical distribution of the vegetation types changes in response to environmental changes\add[tl]{ and competition modulated by physiological constraints})\add[TL]{, two models include plant demography (i.e., competition of vegetation age or height classes)} and six models included nitrogen limitation.
 ACCESS-ESM1-5 is the only model to include phosphorus limitation.
 Furthermore, ACCESS-ESM1-5 is the only model to have multiple ensemble members available for both simulations, of which there are ten for each experiment.
 The ACCESS-ESM1-5 ensemble members are generated by a branched initialization technique from the pre-industrial control simulation and which run throughout the historical period.
@@ -415,18 +416,16 @@ This makes the CanESM5 comparable with other models for all variables.
 \begin{sidewaystable}
     \caption{Models participating in both Land-Use Model Intercomparison Project and Coupled Climate-Carbon model Intercomparison Project with available simulations for \textit{esm-ssp585-ssp126Lu} and \textit{esm-ssp585}. The columns indicate whether the models land surface component have representations of wildfire, Nitrogen (N) and Phosphorus (P) cycles, plant functional types dynamics (PFT dyn.), plant demography and the number of plant functional types. Natural plant functional types exclude agricultural crops and pasture.}
     \label{tab:models}
-    \begin{tabular}{llllllllll}
+    \begin{tabular}{@{}lllllllp{0.07\textwidth}lp{0.15\textwidth}l@{}}
         \hline
-Model         & Fire & N   & P   & PFT dyn. & Demography  & PFTs     & Natural PFTs & Resolution           & Reference                           \\ \hline
-ACCESS-ESM1-5 & No   & Yes & Yes & No & No  & 10       & 9       & 1.8758×1.258°   & \citeA{ziehn_australian_2020}   \\
-%BCC-CSM2-MR   & No   & Yes & No  & No &   & 14       & 11      & 110×110km       & \cite{li_development_2019}     \\
-CanESM5       & No   & No  & No  & No & No & 9        & 7       & 2.8×2.8°  & \citeA{swart_canadian_2019}     \\
-GFDL-ESM4     & Yes  & No  & No  & Yes & Yes  & 7        & 5       & 100×100km       & \citeA{dunne_gfdl_2020}         \\
-MIROC-ES2L    & No   & Yes & No  & No  & No  & 14       & 13      & 2.8×2.8°        & \citeA{hajima_development_2020} \\
-MPI-ESM1-2-LR & Yes  & Yes & No  & Yes & No  & 12       & 8      & 1.8° ×1.8°       & \citeA{mauritsen_developments_2019}  \\
-%NorESM2-LM    & Yes  & Yes & No  & No &   & 22       & 14      & 2×2°            & \cite{seland_norwegian_2020}   \\
-CESM2         & Yes  & Yes & No  & No  & No  & 22       & 14      & 1.25°×0.9°      & \citeA{danabasoglu_community_2020} \\
-UKESM1-0-LL   & No   & Yes & No  & Yes & Yes & 12       & 8       & 1.25×1.875°     & \citeA{sellar_ukesm1_2019}      \\ \hline
+Model         & Fire & N   & P   & PFT dyn. & Demography & PFTs & Natural PFTs & Resolution    & \add[TL]{LSM Reference}                                                     & ESM Reference                       \\ \hline
+ACCESS-ESM1-5 & No   & Yes & Yes & No       & No         & 10   & 9            & 1.8758×1.258° & \citeA{Kowalczyk-csiro-2006, wang-global-2010, harman-cable-2019} & \citeA{ziehn_australian_2020}       \\
+CanESM5       & No   & No  & No  & No       & Yes        & 9    & 7            & 2.8×2.8°      & \citeA{Verseghy-canadian-2000, arora-parameterization-2005}       & \citeA{swart_canadian_2019}         \\
+GFDL-ESM4     & Yes  & No  & No  & Yes      & Yes        & 7    & 5            & 100×100km     & \citeA{Zhao-gfdl-2018}                                            & \citeA{dunne_gfdl_2020}             \\
+MIROC-ES2L    & No   & Yes & No  & No       & No         & 14   & 13           & 2.8×2.8°      & \citeA{Ito-water-use-2012}                                        & \citeA{hajima_development_2020}     \\
+MPI-ESM1-2-LR & Yes  & Yes & No  & Yes      & No         & 12   & 8            & 1.8° ×1.8°    & \citeA{reick-representation-2013}                                 & \citeA{mauritsen_developments_2019} \\
+CESM2         & Yes  & Yes & No  & No       & No         & 22   & 14           & 1.25°×0.9°    & \citeA{lawrence-community-2019}                                   & \citeA{danabasoglu_community_2020}  \\
+UKESM1-0-LL   & No   & Yes & No  & Yes      & Yes        & 12   & 9            & 1.25×1.875°   & \citeA{Best-joint-2011, Burton-representation-2019}               & \citeA{sellar_ukesm1_2019}          \\ \hline
     \end{tabular}
 \end{sidewaystable}
 
@@ -473,13 +472,17 @@ Firstly, each model has various combinations of evergreen/deciduous broadleaf/ne
 Modeling groups therefore must have diverse approaches to translating the natural lands from LUH2 into these model-specific PFTs differently.
 Secondly, each model has a different grid resolution, which causes large differences in forest areas when the cover fractions are remapped.
 Thirdly, each model may use a slightly different spatial distribution of potential vegetation, resulting in different forest areas when land-use changes are applied.
-Finally, UKESM1-0-LL and MPI-ESM1-2-LR include PFT dynamics that respond to changes in climate, and these are the models that deviate from the LUH2 land-use forcing the most.
+Finally, UKESM1-0-LL\add[TL]{, GFDL-ESM4} and MPI-ESM1-2-LR include PFT dynamics that respond to changes in climate, and these are the models that deviate from the LUH2 land-use forcing the most.
 
 To interpret the difference in tree cover response of the models, it is helpful to be aware of some of the known climate and dynamic features of each model.
 Firstly, CanESM5 particularly stands out as having a net loss of tree area by 2100 (Figure \ref{fig:land_use_map}a), however, this is due to CanESM5 lacking an explicit representation of shrubs and rangelands, which have been allocated as forest.
-CanESM5, MPI-ESM and UKESM1-0-LL also feature substantial Amazonian die-back in both scenarios (Figure S2), typically driven by localized drying.
+\add[TL]{A number of models show large scale forest loss in some regions.
+The mechanisms that drive such forest loss in CMIP6 models are typically model-dependent climate sensitivities for prolonged drying under which models with PFT dynamics would favor the expansion of savanna or grass biomes, as well as disturbances from deforestation and fires \cite{cano-abrupt-2022,parry-evidence-2022}.
+For example,} CanESM5, MPI-ESM and UKESM1-0-LL also feature substantial Amazonian die-back in both scenarios (Figure S2), typically driven by localized drying.
 Secondly, MPI-ESM1-2-LR has large amounts of tree cover increase in semi-arid regions in Africa and Australia.
-Thirdly, the UKESM1-0-LL \textit{esm-ssp585-ssp126Lu} scenario is known to have enhanced CO$_2$ fertilization compared to other models and warming in the mid- to high-latitudes (resulting in increased tree cover fractions in Figure S2 and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
+Thirdly, the UKESM1-0-LL \textit{esm-ssp585-ssp126Lu} scenario is known to have enhanced CO$_2$ fertilization compared to other models and warming in the mid- to high-latitudes resulting in increased tree cover fractions in Figure S2 and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
+
+
 
 ACCESS-ESM1-5 is an example that closely follows the spatial distribution of the LUH2 land-use forcing.
 By 2100, ACCESS-ESM1-5 has a forest expansion of 1.59 million km$^2$ and agricultural abandonment of 1.11 million km$^2$.
@@ -489,13 +492,13 @@ Deciduous needle leaf forests only make up a small fraction of forests and do no
 
 \begin{figure}
     \includegraphics[width=\linewidth]{tree_area_frac_figure.png}
-    \caption{a) Global sum tree cover area (or global mean area fraction for the right axis) over the period 2015 to 2100 in the forestation scenario (solid) and reference simulation (dashed) for each model. b-g) 2100 maps of tree cover fraction difference between the simulations for each model. MIROC-ES2L data for tree fraction are not available.}
+    \caption{a) Global sum tree cover area (or global mean area fraction for the right axis) over the period 2015 to 2100 in \change[TL]{the forestation scenario}{\textit{esm-ssp585-ssp126Lu} (forestation)} (solid) and \change[TL]{reference simulation}{\textit{esm-ssp585} (reference)} (dashed) for each model. b-g) 2100 maps of tree cover fraction difference between the simulations for each model. MIROC-ES2L data for tree fraction are not available.}
     \label{fig:land_use_map}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=0.7\linewidth]{land_carbon_figure.png}
-    \caption{Differences for a) total land carbon, b) vegetation carbon and c) litter and soil carbon (cLitter+cSoil) between the forestation scenario and the reference simulation for 6 CMIP6 models. ACCESS-ESM1-5 is plotted as the ensemble mean and the blue shading indicates the ensemble range.}
+    \caption{Differences for a) total land carbon, b) vegetation carbon and c) litter and soil carbon (cLitter+cSoil) between \change[TL]{the forestation scenario}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{the reference simulation}{\textit{esm-ssp585} (reference)} for 6 CMIP6 models. ACCESS-ESM1-5 is plotted as the ensemble mean and the blue shading indicates the ensemble range.\add[TL]{Data for GFDL-ESM4 carbon pools are not available.}}
     \label{fig:models_cpools}
 \end{figure}
 
@@ -521,7 +524,7 @@ Much of the deforested wood is transferred to wood products, with less harvested
 
 \begin{figure}
     \includegraphics[width=\linewidth]{models_co2_diff.png}
-    \caption{Difference in atmospheric CO$_2$ concentration between \textit{esm-ssp585} and \textit{esm-ssp585-ssp126Lu}. The ACCESS-ESM1-5 is plotted as the ensemble mean with the blue shading representing the ensemble range. CanESM5 does not start at 0 because of the different physics members highlighted in section 2.2.}
+    \caption{Difference in atmospheric CO$_2$ concentration between \change[TL]{\textit{esm-ssp585}}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{\textit{esm-ssp585-ssp126Lu}}{\textit{esm-ssp585} (reference)}. The ACCESS-ESM1-5 is plotted as the ensemble mean with the blue shading representing the ensemble range. CanESM5 does not start at 0 because of the different physics members highlighted in section 2.2.}
     \label{fig:models_CO2}
 \end{figure}
 
@@ -548,7 +551,7 @@ Similar to global mean surface air temperature, the response of global mean prec
 
 \begin{figure}
     \includegraphics[width=\linewidth]{tas_trends.png}
-    \caption{Difference in surface air temperature between the forestation scenario and the reference scenario (solid lines) and the corresponding trends (dotted). The blue shading is the ACCESS-ESM1-5 esnemble range. All trends are not statistically significant at the 5\% level. The (+) and (-) symbols next to the model names denote the sign of the trend line.}
+    \caption{Difference in surface air temperature between \change[TL]{the forestation scenario}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{the reference scenario}{\textit{esm-ssp585} (reference)} (solid lines) and the corresponding trends (dotted). The blue shading is the ACCESS-ESM1-5 ensemble range. All trends are not statistically significant at the 5\% level. The (+) and (-) symbols next to the model names denote the sign of the trend line.}
     \label{fig:models_tas_trends}
 \end{figure}
 
@@ -611,7 +614,7 @@ The climate in both the forestation and reference simulations are similar, with 
 
 \begin{figure}
     \includegraphics[width=\linewidth]{budget_ocean_figure.png}
-    \caption{Carbon budget of global fluxes of fossil fuel emissions and the natural sinks for the land (net-land-atmosphere exchange as the sum of the natural terrestrial sink and land-use change fluxes), ocean and atmospheric accumulation. The cumulative ocean carbon difference between the forestation and reference simulation.}
+    \caption{\add[TL]{a)} Carbon budget of global fluxes of fossil fuel emissions and the natural sinks for the land (net-land-atmosphere exchange as the sum of the natural terrestrial sink and land-use change fluxes), ocean and atmospheric accumulation. \add[TL]{b)} The cumulative ocean carbon difference between \change[TL]{the forestation}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{reference simulation}{\textit{esm-ssp585} (reference)}.}
     \label{fig:global_carbon_budget}
 \end{figure}
 
@@ -625,7 +628,7 @@ The increased land sink from the combined effect of forestation and CO$_2$ ferti
 
 \begin{figure}
     \includegraphics[width=\linewidth]{cLand_all_reagions.png}
-    \caption{Differences between the forestation experiment and the reference simulation for total land carbon content for each region in Figure \ref{fig:land_use}, based on results from ACCESS-ESM1-5.}
+    \caption{Differences between \change[TL]{the forestation experiment}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{the reference simulation}{\textit{esm-ssp585} (reference)} for total land carbon content for each region in Figure \ref{fig:land_use}, based on results from ACCESS-ESM1-5.}
     \label{fig:accesss_regional_cland}
 \end{figure}
 
@@ -637,7 +640,7 @@ Furthermore, in the sub-tropical and boreal regions of eastern North America, th
 
 \begin{figure}
     \includegraphics[width=\linewidth]{correlation_tree_tas_ens_mean_first.png}
-    \caption{Correlation of ensemble mean 2 m surface air temperature (\textit{esm-ssp585-ssp126Lu} - \textit{esm-ssp585}) with the difference in tree cover fraction in ACCESS-ESM1-5. Only statistically significant correlations at the 5\% level are shown.}
+    \caption{Correlation of ensemble mean 2 m surface air temperature difference \remove[TL]{(\textit{esm-ssp585-ssp126Lu} - \textit{esm-ssp585})} with \remove[TL]{the difference in} tree cover fraction difference \add[TL]{(both \textit{esm-ssp585-ssp126Lu} - \textit{esm-ssp585})} in ACCESS-ESM1-5. Only statistically significant correlations at the 5\% level are shown.}
     \label{fig:map_tas_tree_correlation}
 \end{figure}
 
@@ -657,7 +660,7 @@ The resulting distribution shows decreases in the number of warm days and increa
 
 \begin{figure}
     \includegraphics[width=\linewidth]{histograms_and_PFTs.png}
-    \caption{a), c) and e) changes in plant functional types for select grid points in \textit{esm-ssp585-ssp126Lu} in ACCESS-ESM1-5. b), d) and f) distributions of summer time (June--August or December--February) maximum daily temperature for the last 20 years of \textit{esm-ssp585-ssp126Lu} (green) and \textit{esm-ssp585} (yellow).}
+    \caption{a), c) and e) changes in plant functional types cover fractions for one selected grid point for each of the locations shown in \textit{esm-ssp585-ssp126Lu} in ACCESS-ESM1-5. b), d) and f) distributions of summer time (June--August or December--February) maximum daily temperature for the last 20 years of \textit{esm-ssp585-ssp126Lu}\add[TL]{ (forestation)} (green) and \textit{esm-ssp585} \add[TL]{(reference) }(yellow).}
     \label{fig:tasmax_distribution}
 \end{figure}
 
