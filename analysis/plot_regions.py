@@ -11,7 +11,7 @@ import numpy as np
 import scipy.stats as stats
 import pymannkendall as pmk
 from cdo import Cdo
-import pdb
+import ipdb
 
 if __name__ == 'analysis.plot_regions':
     # plot_afforestation.py imported as a module of the analysis package.
@@ -186,9 +186,14 @@ def plot_all_regions(years:np.ndarray, data:np.ndarray, var:str, region:str)->No
     plt.figure(1)
     line = plt.plot(years, data.mean(axis=0), label=region)
     color = line[0].get_color()
-    plt.fill_between(years, data.min(axis=0), data.max(axis=0), alpha=0.5, color=color)
+    plt.fill_between(years, data.min(axis=0), data.max(axis=0),
+            alpha=0.5,
+            color=color,
+            linewidth=0,
+            )
     plt.hlines(0, years[0], years[-1], linestyle='dotted', color='black')
     plt.xlim(left=years[0], right=years[-1])
+    plt.ylim(bottom=-30, top=40)
     plt.ylabel('$\Delta$ Pg(C)')
     plt.xlabel('Time (Year)')
 
@@ -298,18 +303,10 @@ def make_regional_plots()->None:
                 diff_data_dict[region][var] = diff_data
 
                 # Plot.
-                plot_veg_region(
-                        years,
-                        anom_data,
-                        var,
-                        region,
+                plot_veg_region(years, anom_data, var, region,
                         label='anom',
                         )
-                plot_veg_region(
-                        years,
-                        diff_data,
-                        var,
-                        region,
+                plot_veg_region(years, diff_data, var, region,
                         label='diff',
                         )
 
@@ -393,16 +390,63 @@ def make_regional_plots()->None:
             #        )
     stats_file.close()
 
+    # Forest fraction variable.
+    for_filenames = get_filename('LUMIP', 'esm-ssp585-ssp126Lu', '1', 'Lmon', 'treeFrac')
+    for_filenames = '[ '+''.join(for_filenames)+' ]'
+    ssp585_filenames = get_filename('C4MIP', 'esm-ssp585', '1', 'Lmon', 'treeFrac')
+    ssp585_filenames = '[ '+''.join(ssp585_filenames)+' ]'
+    treeFrac_for = {}
+    treeFrac_ssp585 = {}
+    treeFrac_diff = {}
+    for region,box in REGIONS.items():
+
+
+        #@cdod.cdo_cat(input2='')
+        @cdod.cdo_sellonlatbox(str(box[1][0]), str(box[1][1]), str(box[0][0]), str(box[0][1]))
+        @cdod.cdo_divc('100')
+        @cdod.cdo_fldsum
+        @cdod.cdo_yearmonmean
+        def load_region_frac(var:str, input:str)->np.ma.MaskedArray:
+            """Custom cdo loader for current region. Divides by 100 and does a field sum.
+            """
+            return cdo.copy(input=input, options='-L', returnCdf=True).variables[var][:].squeeze()
+
+
+        treeFrac_for[region] = load_region_frac(var='treeFrac', input=for_filenames)
+        treeFrac_ssp585[region] = load_region_frac(var='treeFrac', input=ssp585_filenames)
+        treeFrac_diff[region] = treeFrac_for[region] - treeFrac_ssp585[region]
+
+
+    def minmax_norm(data:np.ndarray, xmin:float, xmax:float)->np.ndarray:
+        """Normalize data to [0,1] using xmin and xmax values.
+        """
+        return (data - xmin)/(xmax - xmin)
+
+
+    all_min = 1
+    all_max = 1
+    for region in REGIONS.keys():
+        all_min = min(treeFrac_diff[region].min(), all_min)
+        all_max = max(treeFrac_diff[region].max(), all_max)
+    normalization = {}
+    for region in REGIONS.keys():
+        normalization[region] = minmax_norm(treeFrac_diff[region], all_min, all_max)
+        plt.plot(normalization[region], label=region)
+    plt.legend(frameon=False)
+    plt.show()
+    #normalization['Boreal Eurasia'][-3:-1] = np.nan # normalization approaches /0
+
     for var in ['cVeg','cLand','cSoil','cLitter']:
         for region in REGIONS.keys():
             plot_all_regions(
                     years,
-                    diff_data_dict[region][var],
+                    #diff_data_dict[region][var], # No treeFrac normalization.
+                    diff_data_dict[region][var]/normalization[region], # treeFrac normalization.
                     var,
                     region,
                     )
         plt.legend(frameon=False)
-        plt.savefig(f'{PLOTS_DIR}/regional/{var}_all_reagions.png', dpi=DPI)
+        plt.savefig(f'{PLOTS_DIR}/regional/{var}_all_regions.png', dpi=DPI)
         plt.close()
 
 
