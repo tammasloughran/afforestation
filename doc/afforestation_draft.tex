@@ -323,8 +323,12 @@ Historically, there has been substantial deforestation in temperate forests of E
 The net effect of deforestation is to cool the climate globally due to an increase in albedo \cite{davin_climatic_2010}.
 While the albedo-induced cooling is a result of the changes in the global planetary energy balance, reinforced by the ocean, the biogeophysical effects at the site of the deforestation are generally a warming effect \cite{winckler_nonlocal_2019}: Locally, the reduction in absorbed energy is compensated for by a reduction in turbulent heat fluxes \cite{winckler_importance_2019}.
 As a result, the albedo changes have a minor influence on local temperatures.
-Instead, the reduction in roughness transforming forest to short, smooth grass or cropland vegetation leads to less efficient transfer of heat from the surface into the atmosphere, which induces a warming both in the annual mean and daily and seasonal warm extremes \cite{winckler_different_2019}; model results are confirmed by observation-based estimates (which by way of their setup capture only local effects;  \citeA{alkama_biophysical_2016,bright_local_2017} and see \citeA{pongratz_land_2021} for a review of the climatic effects of forest cover changes from local to global scale).
-In another modeling study of deforestation, \citeA{boysen_global_2020} show a cooling of -0.22$\pm$0.2 \textcelsius{} among nine climate models in idealized deforestation simulations with constant atmospheric CO$_2$ concentration; in the tropics, the warming effect of local surface property changes dominates over the global cooling signal in most models.
+Instead, the reduction in roughness transforming forest to short, smooth grass or cropland vegetation leads to less efficient transfer of heat from the surface into the atmosphere, which induces a warming both in the annual mean and daily and seasonal warm extremes \cite{winckler_different_2019}\add{.}
+\add[TL]{The amount of CO$_2$ removed from the atmosphere and the climate impacts can be simulated with earth system model projections.
+The land surface components of these models simulate vegetation dynamics to varying degrees and their interaction with the atmosphere can estimate a range of possible carbon cycle and climate impacts (for recent overview on the current state of land surface modeling dynamics see} \citeA{fisher-vegetation-2018} and \citeA{argles-dynamic-2022}).
+
+\change[TL]{m}{M}odel results are confirmed by observation-based estimates (which by way of their setup capture only local effects; \citeA{alkama_biophysical_2016,bright_local_2017} and see \citeA{pongratz_land_2021} for a review of the climatic effects of forest cover changes from local to global scale).
+In \change[TL]{one}{another} modeling study of deforestation, \citeA{boysen_global_2020} show a cooling of -0.22$\pm$0.2 \textcelsius{} among nine climate models in idealized deforestation simulations with constant atmospheric CO$_2$ concentration; in the tropics, the warming effect of local surface property changes dominates over the global cooling signal in most models.
 \citeA{hong_impacts_2022} also show that under a future deforestation scenario this cooling effect might reduce the incidence of hot extremes by 0.9--5.5\%.
 However, the effect of future forestation may not necessarily be merely the inverse of the effect of future deforestation.
 
@@ -392,7 +396,7 @@ Therefore, we consider \textit{esm-ssp585-ssp126Lu} as having moderate forestati
 
 \begin{figure}
     \includegraphics{Figure_1.png}
-    \caption{Temporal anomaly (2100 - 2015) in tree fraction from the Land-use Harmonization 2 for a) the SSP1-2.6 scenario and b) the SSP5-8.5 scenario between the year 2100 and 2015. c) Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. The regions are 1 Amazonia, 2 Northeast North America, 3 Boreal North America, 4 Central Africa, 5 Boreal Eurasia and 6 East Asia. The black crosses mark the locations of large forestation changes that are used for daily temperature distributions.}
+    \caption{Temporal anomaly (2100 - 2015) in tree fraction from the Land-use Harmonization 2 for a) the SSP1-2.6 scenario and b) the SSP5-8.5 scenario between the year 2100 and 2015. c) Boxes demark the areas used in the ACCESS-ESM1-5 regional analysis. The regions are 1 Amazonia, 2 Northeast North America, 3 Boreal North America, 4 Central Africa, 5 Boreal Eurasia and 6 East Asia. The black crosses mark the locations of large forestation changes that are used for daily temperature distributions in Eastern North America \add[TL]{(275$^\circ$E,37.5$^\circ$N)}, East Asia \add[TL]{(99.375$^\circ$E,32.5$^\circ$N)} and Amazonia \add[TL]{(311.25$^\circ$E,-12.5$^\circ$N)}.}
     \label{fig:land_use}
 \end{figure}
 
@@ -453,7 +457,7 @@ The temperature and precipitation values over the ocean are masked out to repres
 
 Much of the simulated tree cover changes between the two simulations occurs in a handful of concentrated regions.
 To examine the local scale impact of substantial forestation on temperature and precipitation, histograms of the frequency distributions for specific grid-points are calculated for the locations shown by the crosses in Figure \ref{fig:land_use}.
-These large forestation regions are in Eastern North America, East Asia and Amazonia.
+These large forestation regions are in Eastern North America \add[TL]{(275$^\circ$E,37.5$^\circ$N)}, East Asia \add[TL]{(99.375$^\circ$E,32.5$^\circ$N)} and Amazonia \add[TL]{(311.25$^\circ$E,-12.5$^\circ$N)}.
 For these, we focus only on ACCESS-ESM1-5, since it is the only model that contributed 10 ensemble members, and thus the statistics of the distribution are most robust for this model.
 For the grid point maximum temperature frequency histograms, the difference in the temperature distribution in the two simulations in response to forestation is tested using the 2-sample Kolmogorov-Smirnov test for the equality of distributions at the 5\% level.
 
@@ -467,7 +471,7 @@ Lastly, to examine the relationship of forestation on climate, correlations were
 
 Each model has a unique representation of forests which results in a variety of changes in simulated global tree cover.
 This is demonstrated in Figure \ref{fig:land_use_map}, which shows the difference in tree cover fraction between the two scenarios for each model at 2100 (Figure S2 also show the temporal change for each experiment).
-The unique representations of forests cover arrise from a variety of sources.
+The unique representations of forests cover ar\remove{r}ise from a variety of sources.
 Firstly, each model has various combinations of evergreen/deciduous broadleaf/needleleaf PFTs, sometimes at specific climates such as tropical, temperate and boreal regions.
 Modeling groups therefore must have diverse approaches to translating the natural lands from LUH2 into these model-specific PFTs differently.
 Secondly, each model has a different grid resolution, which causes large differences in forest areas when the cover fractions are remapped.
@@ -481,8 +485,10 @@ The mechanisms that drive such forest loss in CMIP6 models are typically model-d
 For example,} CanESM5, MPI-ESM and UKESM1-0-LL also feature substantial Amazonian die-back in both scenarios (Figure S2), typically driven by localized drying.
 Secondly, MPI-ESM1-2-LR has large amounts of tree cover increase in semi-arid regions in Africa and Australia.
 Thirdly, the UKESM1-0-LL \textit{esm-ssp585-ssp126Lu} scenario is known to have enhanced CO$_2$ fertilization compared to other models and warming in the mid- to high-latitudes resulting in increased tree cover fractions in Figure S2 and decreased tree cover fraction in tropical South America and southeast Asia, driven by a combination of land use change and regional drying trends.
-
-
+\add[TL]{Lastly, the tree cover changes in each model may not fully capture actual dynamics that may limit the expansion.
+For example, models that do not include PFT dynamics may not represent natural encroachment of forests onto natural grasslands.
+Also, no models have mechanisms for seed dispersal to limit forest expansion, or seedling planting on managed lands.
+}
 
 ACCESS-ESM1-5 is an example that closely follows the spatial distribution of the LUH2 land-use forcing.
 By 2100, ACCESS-ESM1-5 has a forest expansion of 1.59 million km$^2$ and agricultural abandonment of 1.11 million km$^2$.
@@ -620,20 +626,28 @@ The climate in both the forestation and reference simulations are similar, with 
 
 \subsubsection{Regional changes in vegetation and climate extremes}
 
-Figure \ref{fig:accesss_regional_cland} shows the change in total land carbon for each of the regions outlined in Figure \ref{fig:land_use}c.
+Figure \ref{fig:accesss_regional_cland}\add[TL]{a} shows the change in total land carbon for each of the regions outlined in Figure \ref{fig:land_use}c.
 There are increases in land carbon for all regions and ensemble members except Amazonia, where some ensemble members show a small decrease in cVeg by 2100, due to internal climate variations.
 The region with the largest change in land carbon content is Central Africa (Figure \ref{fig:accesss_regional_cland}), however this difference is due to avoided deforestation that occurs in the reference simulation, rather than due to new forest growth in the forestation experiment (Figure S3a and b).
 This highlights the importance of including avoided deforestation in future long-term national climate strategies, not just to avoid related CO$_2$ emissions from the burning and decay of biomass and soil carbon, but also since a considerable portion of land-use emissions comes from the loss of additional sink capacity from deforestation \cite{gitz_amplifying_2003, pongratz_terminology_2014, obermeier_modelled_2021}.
 The increased land sink from the combined effect of forestation and CO$_2$ fertilization are partially offset by the increase in soil respiration (Figure S10b), particularly in Australia where there is no increase in forest cover in the SSP1-2.6 scenario.
 
+\add[TL]{
+Figure {\ref{fig:accesss_regional_cland}}b shows the same sinks as Figure  {\ref{fig:accesss_regional_cland}}a except normalized by dividing by the change in cover fractions for each region.
+While the regional sinks are largely a function of the amount of forestation occurring within those regions, when accounting for the relative change in forest cover, the central African region remains the largest sink of carbon on average for most of the scenario.
+The Amazon region becomes slightly more productive per change in tree cover fraction relative to the Eastern North American region.
+The Boreal Eurasian region shows decreases in tree cover fraction by the end of the simulation and hence the normalization approaches a divide by zero, resulting in large values.
+The other regions remain low sinks in comparison.
+}
+
 \begin{figure}
-    \includegraphics[width=\linewidth]{cLand_all_reagions.png}
-    \caption{Differences between \change[TL]{the forestation experiment}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{the reference simulation}{\textit{esm-ssp585} (reference)} for total land carbon content for each region in Figure \ref{fig:land_use}, based on results from ACCESS-ESM1-5.}
+    \includegraphics[width=\linewidth]{cLand_all_regions_normalized.png}
+    \caption{Differences between \change[TL]{the forestation experiment}{\textit{esm-ssp585-ssp126Lu} (forestation)} and \change[TL]{the reference simulation}{\textit{esm-ssp585} (reference)} for \add[TL]{(a)} total land carbon content for each region in Figure \ref{fig:land_use}, based on results from ACCESS-ESM1-5. \add[TL]{In b) is the same data except each region is normalized by the change in cover fractions that occur in the respective region.}}
     \label{fig:accesss_regional_cland}
 \end{figure}
 
 The relationship of surface air temperature and changes in total tree cover fraction varies substantially by region.
-For example, in Figure \ref{fig:map_tas_tree_correlation}, the correlation of temperature and tree cover fraction is positive in the tropical regions of Central Africa, South America, the Maritime Contzinent, and East Asia.
+For example, in Figure \ref{fig:map_tas_tree_correlation}, the correlation of temperature and tree cover fraction is positive in the tropical regions of Central Africa, South America, the Maritime Cont\remove[TL]{z}inent, and East Asia.
 Hence, increased tree cover fraction increases surface air temperature and the effect of decreased surface albedo dominates.
 In contrast, some areas immediately surrounding the avoided deforestation region of Central Africa show the opposite effect, whereby increased tree cover negatively correlates with air temperature and hence the cooling effect of evapotranspiration dominates.
 Furthermore, in the sub-tropical and boreal regions of eastern North America, the correlation is negative, indicating that as forest cover increases, temperature decreases.
@@ -657,6 +671,12 @@ Some regions show decreases in surface air temperature in response to increasing
 Of particular note is North America which features a large transition from C3 crops to deciduous broadleaf (Figure \ref{fig:tasmax_distribution}e).
 In ACCESS-ESM1-5, deciduous broad leaf forests have the highest reflectance of all the PFTs.
 The resulting distribution shows decreases in the number of warm days and increased cool days in the forestation experiment (Figure \ref{fig:tasmax_distribution}f).
+
+\add[TL]{
+These results include both biogeochemical and biogeophysical effects of forestation on climate.
+Unfortunately, a biogeochemical-biogeophysical separation of the climate impacts of forestation cannot be made with the simulations available in LUMIP and C4MIP alone.
+To address this, future studies on forestation scenarios should include a corresponding concentration-driven simulation that uses the CO$_2$ concentrations from a forestation simulations with fully interactive carbon cycle, so that at least a biogeochemical-biogeophysical separation can be made.
+}
 
 \begin{figure}
     \includegraphics[width=\linewidth]{histograms_and_PFTs.png}
