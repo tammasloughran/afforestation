@@ -384,8 +384,7 @@ def plot_map_tree_fraction_change(indata:dict, name:str)->None:
     plt.sca(axes[-1])
     fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
     cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
-    plt.colorbar(
-            data,
+    plt.colorbar(data,
             ticks=np.arange(-90, 100, 10),
             cax=cbar_ax,
             label='Tree fraction (%)',
@@ -415,10 +414,7 @@ def plot_map_tree_fraction_difference(indata:dict, indata2:dict)->None:
         # Shift plotting to centre grid, align with coastlines.
         llons = llons - (llons[1] - llons[0])/2
         llats = lats[model] - (lats[model][1] - lats[model][0])/4
-        data = plt.pcolormesh(
-                llons,
-                llats,
-                indata[model][-1] - indata2[model][-1],
+        data = plt.pcolormesh(llons, llats, indata[model][-1] - indata2[model][-1],
                 norm=discrete_bins,
                 cmap=CMAP,
                 #vmin=-100,
@@ -430,8 +426,8 @@ def plot_map_tree_fraction_difference(indata:dict, indata2:dict)->None:
     plt.sca(axes[-1])
     fig.subplots_adjust(top=0.95, bottom=0.15, left=0.1, right=0.95, hspace=0.12, wspace=0.05)
     cbar_ax = fig.add_axes([0.1,0.085,0.85,0.04])
-    plt.colorbar(
-            data,
+    plt.colorbar(data,
+            ticks=np.arange(-90, 100, 10),
             cax=cbar_ax,
             label='Tree fraction (%)',
             orientation='horizontal',
